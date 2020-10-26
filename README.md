@@ -49,9 +49,6 @@ In order to use this Chat APP you must create a MongoDB Database and insert the 
 The **rooms** collection contains the **room ID** and the **user array** which will store the users who are currently inside of this chat room:
 ```javascript
 {
-    "_id": {
-        "$oid": "5f96ff15f7506c3864a7de63"
-    },
     "id": "4321",
     "user": [{
         "usertoken": "c",
@@ -73,9 +70,6 @@ All sended messages from this room will be later also imported to this object.
 The **user** collection contains the **user token**, **user name** and the **friends array** which will store the friendlist from this user.
 ```javascript
 {
-    "_id": {
-        "$oid": "5f9568f01a98c630e08ddc82"
-    },
     "token": "b",
     "name": "Lena Groß",
     "friends": [{
