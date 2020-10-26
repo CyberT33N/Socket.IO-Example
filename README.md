@@ -89,8 +89,10 @@ The friendlist currently must also contain the room ID because of the left sideb
 
 <br />
 <br />
+
 Currently you can open each person Chat Window by using the User Token inside of your URL Parameter like as example:
-<br />http://localhost:1337/?usertoken=a
+<br />- http://localhost:1337/?usertoken=a
+
 <br />
 <br />
 For further productions you should replace this with a cookie instead.
