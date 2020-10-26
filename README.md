@@ -29,8 +29,8 @@ ____________________________________________________________
 # Features
 - Friendlist for multiple Chats
 - Room Chats
-- Storage of Messages
-- Realtime
+- Storage of messages (MongoDB)
+- Realtime Chat
 
 
 <br />
