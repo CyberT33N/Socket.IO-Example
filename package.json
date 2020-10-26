@@ -1,0 +1,40 @@
+{
+  "name": "Socket.io-Chat-APP-Example",
+  "version": "1.0.0",
+  "description": "Example Node.js Chat APP based on socket.io",
+  "main": "app.js",
+  "dependencies": {
+    "assert": "^2.0.0",
+    "body-parser": "^1.19.0",
+    "chalk": "^4.1.0",
+    "chalk-animation": "^1.6.0",
+    "connect-timeout": "^1.9.0",
+    "express": "^4.17.1",
+    "express-rate-limit": "^5.1.3",
+    "fancy-log": "^1.3.3",
+    "gradient-string": "^1.2.0",
+    "helmet": "^4.1.1",
+    "mongodb": "^3.6.2",
+    "morgan": "^1.10.0",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CyberT33N/Socket.io-Chat-APP-Example.git"
+  },
+  "keywords": [
+    "Socket.io",
+    "Node.js",
+    "Express.js"
+  ],
+  "author": "Dennis Demand (CyberT33N)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CyberT33N/Socket.io-Chat-APP-Example/issues"
+  },
+  "homepage": "https://github.com/CyberT33N/Socket.io-Chat-APP-Example#readme"
+}
