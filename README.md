@@ -92,3 +92,11 @@ The **user** collection contains the **user token**, **user name** and the **fri
 <br />
 <br />
 The friendlist must also contain the room ID because of the left sidebar of the Chat APP which will later fetch the room details when we switch the friend chats.
+
+
+<br />
+<br />
+Currently you can open each person Chat Window by using the User Token inside of your URL Parameter like as example:
+- http://localhost:1337/?usertoken=a
+
+For further productions you should replace this with a cookie instead.
