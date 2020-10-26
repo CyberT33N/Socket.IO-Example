@@ -59,7 +59,6 @@ The **rooms** collection contains the **room ID** and the **user array** which w
     }]
 }
 ```
-<br />
 All sended messages from this room will be later also imported to this object.
 
 
@@ -85,7 +84,6 @@ The **user** collection contains the **user token**, **user name** and the **fri
     }]
 }
 ```
-<br />
 The friendlist currently must also contain the room ID because of the left sidebar of the Chat APP which will fetch the room ID when we switch the friend chats.
 
 
