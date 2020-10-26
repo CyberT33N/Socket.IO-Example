@@ -1,2 +1,2 @@
 # Socket.io Chat APP Example
-Example Node.js project for Socket.io with express.js
+Example Node.js Chat APP based on socket.io
