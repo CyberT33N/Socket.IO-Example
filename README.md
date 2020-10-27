@@ -23,7 +23,7 @@ Websocket: **Socket.io**<br />
 
 # Features
 - Friendlist for multiple Chats
-- Room Chats
+- Room Chats (Currently only works for 2 People! In future I will add multiple people support)
 - Storage of messages (MongoDB)
 - Realtime Chat
 
