@@ -175,7 +175,7 @@ In order to use Unit Test create aswell two testing user:
 
 # Run
 
-## How to start express Server
+## How to start express server
 ```bash
 # method #1
 app.bat # <-- Windows
