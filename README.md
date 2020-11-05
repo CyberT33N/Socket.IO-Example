@@ -49,6 +49,31 @@ In order to use this Chat APP you must create a MongoDB Database and insert the 
 
 <br>
 <br>
+In order to use Unit Test the **config.json** file already contains the two testing users. Make sure that they also included in your user collection as explained below.
+```javascript
+"test": {
+    "room":"mocha",
+    "user": [{
+      "token": "mocha",
+      "name": "mocha"
+    },{
+      "token": "mocha2",
+      "name": "mocha2"
+    }]
+  }
+```
+
+
+<br>
+<br>
+
+
+ _____________________________________________________
+ _____________________________________________________
+
+
+<br>
+<br>
 
 
 The **rooms** collection contains the **room ID** and the **user array** which will store the users who are currently inside of this chat room:
@@ -87,15 +112,17 @@ In order to use Unit Test create aswell this testing room:
 
 
 
+<br>
+<br>
 
 
-
+ _____________________________________________________
+ _____________________________________________________
 
 
 <br>
 <br>
-<br>
-<br>
+
 
 
 The **user** collection contains the **user token**, **user name** and the **friends array** which will store the friendlist from this user.
