@@ -187,7 +187,7 @@ nodemon app.js
 
 <br><br>
 
-# How to start Chat APP
+## How to start Chat APP
 Currently you can open each user chat window by using the **User Token** inside of your URL Parameter (For further productions you should replace this with a cookie instead):
 <br>- http://localhost:1337/?usertoken=a
 
@@ -196,7 +196,7 @@ Currently you can open each user chat window by using the **User Token** inside 
 <br><br>
 
 
-# How to start Unit Test
+## How to start Unit Test
 First start your express server and after this run:
 ```bash
 # method #1
