@@ -68,6 +68,11 @@ function connectChat(socket){
   socket.on('chat connect', (msg) => {(async () => {
   log('connectChat() - message: ' + JSON.stringify(msg, null, 4));
 
+    if(!msg?.usertoken){
+      socket.emit('connectChat result', {code: "NPE"});
+      return;
+    } // if(!msg?.usertoken){
+
     const UserDetails = await controllermongodb.getUserDetails(msg.usertoken);
     if( UserDetails ) {
     log('connectChat() - UserDetails was found..');
@@ -112,7 +117,8 @@ function getRoomDetails(socket){
   socket.on('chat getRoomDetails', (roomID) => {(async () => {
   log('getRoomDetails() - roomID: ' + roomID);
 
-    socket.emit('chat getRoomDetails result', await controllermongodb.getRoomDetails(roomID));
+    if(roomID) socket.emit('chat getRoomDetails result', await controllermongodb.getRoomDetails(roomID));
+    else socket.emit('chat getRoomDetails result', {code: "NPE"});
 
   })().catch((e) => {  console.log('ASYNC - chat getRoomDetails Error:' +  e )  })});
 
@@ -128,6 +134,11 @@ log( 'connectRoom();' );
 
   socket.on('room connect', (roomID) => {(async () => {
   log('connectRoom() - roomID: ' + JSON.stringify(roomID, null, 4));
+
+    if( !roomID ){
+      socket.emit('connectRoom result', {code : "NPE"});
+      return;
+    } // if( !roomID ){
 
     const r = await controllermongodb.getRoomDetails(roomID);
     if(r){

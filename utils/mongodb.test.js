@@ -45,19 +45,19 @@ describe('MongoDB Services', () => {
 
   describe('storeMessages()', () => {
 
-    it('NPE Test for msg object - Should return object where the value of msg key is "NPE"', async() => {
+    it('Simulate NPE - Should return {"msg": "NPE"}', async() => {
       expect( await storeMessages({"msg": null,"room": "1234", "usertoken": "a"}) ).toStrictEqual( {"msg": "NPE"} );
     });
 
-    it('Simulate not existing Room ID - Should return object where the value of msg key is "ROOM ID NOT FOUND"', async() => {
+    it('Simulate not existing Room ID - Should return {"msg": "ROOM ID NOT FOUND"}', async() => {
       expect( await storeMessages({"msg": "sample message..", "room": "wrong_room_ID", "usertoken": test_client1.token}) ).toStrictEqual( {"msg": "ROOM ID NOT FOUND"} );
     });
 
-    it('Successfully updating of field - Should return "obj.result.n = 1"', async() => {
+    it('Successfully updating of field - Should return { "result": {"n": 1} }', async() => {
       expect( await storeMessages({"msg": "sample message..", "room": test_room, "usertoken": test_client1.token}) ).toMatchObject({ "result": {"n": 1} });
     });
 
-    xit('Error while updating of field - Should return "obj.result.n = 0"', async() => {
+    xit('Simulate error while updating of field - Should return { "result": {"n": 0} }', async() => {
       expect( await storeMessages({"msg": "sample message..", "room": test_room, "usertoken": test_client1.token}) ).toMatchObject({ "result": {"n": 0} });
     });
 
@@ -77,6 +77,10 @@ describe('MongoDB Services', () => {
       expect( await getUserDetails('wrong_token') ).toBe(undefined);
     });
 
+    it('Simulate NPE - Should return undefined', async() => {
+      expect( await getUserDetails(null) ).toBe(undefined);
+    });
+
   }); // describe('getUserDetails()', () => {
 
 
@@ -94,6 +98,10 @@ describe('MongoDB Services', () => {
 
     it('Simulate User not found by token - Should return undefined', async() => {
       expect( await getRoomDetails('wrong_roomID') ).toBe(undefined);
+    });
+
+    it('Simulate NPE - Should return undefined', async() => {
+      expect( await getRoomDetails(null) ).toBe(undefined);
     });
 
   }); // describe('getRoomDetails()', () => {

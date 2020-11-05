@@ -134,6 +134,7 @@ log( 'getUserDetails() - token: ' + token );
 
   // search for token inside of user collections
   const r = await collection.findOne( {"token": token} );
+  log( 'getUserDetails() - result:' + JSON.stringify(r, null, 4) );
   if( r ){ return r; }
 
 }; // async function getUserDetails(token){
@@ -148,7 +149,8 @@ log( 'mongodb.js - getRoomDetails() - roomID: ' + roomID );
   const collection = MongoDB.collection('rooms');
 
   // search for Room ID inside of rooms collections
-  const r = await collection.findOne( {"id": roomID.toString()} );
+  const r = await collection.findOne( {"id": roomID?.toString()} );
+  log( 'getRoomDetails() - result:' + JSON.stringify(r, null, 4) );
   if( r ){ return r; }
 
 }; // async function getRoomDetails(token){

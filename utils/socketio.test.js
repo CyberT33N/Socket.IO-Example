@@ -49,7 +49,7 @@ describe('Socket.io Services', () => {
     it('Successfully connect - Should return object with _id', (done) => {
 
       socket.on('connectChat result', function(UserDetails) {
-      log('connectChat result - UserDetails: ' + JSON.stringify(UserDetails, null, 4));
+      log('connectChat result - Successfully connect - UserDetails: ' + JSON.stringify(UserDetails, null, 4));
 
         socket.off('connectChat result');
         expect( UserDetails ).toEqual(expect.objectContaining({ _id: expect.anything() }));
@@ -64,10 +64,10 @@ describe('Socket.io Services', () => {
 
 
 
-    it('Simulate wrong User Token - Should return "Can not find User Token in Database"', (done) => {
+    it('Simulate wrong User Token - Should return {code: "Can not find User Token in Database"}', (done) => {
 
       socket.on('connectChat result', function(UserDetails) {
-      log('connectChat result - UserDetails: ' + JSON.stringify(UserDetails, null, 4));
+      log('connectChat result - Simulate wrong User Token - UserDetails: ' + JSON.stringify(UserDetails, null, 4));
 
         socket.off('connectChat result');
         expect( UserDetails ).toMatchObject({code : "Can not find User Token in Database"});
@@ -80,7 +80,20 @@ describe('Socket.io Services', () => {
     }); // it('connectChat result', (done) => {
 
 
+    it('Simulate NPE - Should return {code: "NPE"}', (done) => {
 
+      socket.on('connectChat result', function(UserDetails) {
+      log('connectChat result - Simulate NPE - UserDetails: ' + JSON.stringify(UserDetails, null, 4));
+
+        socket.off('connectChat result');
+        expect( UserDetails ).toMatchObject({code : "NPE"});
+        done();
+
+      }); // socket.on('connectChat result', function(UserDetails) {
+
+      socket.emit('chat connect', {"usertoken": null});
+
+    }); // it('Simulate NPE - Should return {code: "NPE"}', (done) => {
 
   }); // describe('connectChat()', () => {
 
@@ -99,7 +112,7 @@ describe('Socket.io Services', () => {
     it('Successfully get Room Details - Should return object with _id', (done) => {
 
       socket.on('chat getRoomDetails result', function(roomDetails) {
-      //log('chat getRoomDetails result - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
+      log('chat getRoomDetails result - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
 
         socket.off('chat getRoomDetails result');
         expect( roomDetails ).toEqual(expect.objectContaining({ _id: expect.anything() }));
@@ -117,7 +130,7 @@ describe('Socket.io Services', () => {
     it('Simulate wrong Room ID - Should return null', (done) => {
 
       socket.on('chat getRoomDetails result', function(roomDetails) {
-      //log('chat getRoomDetails result - Simulate wrong Room ID - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
+      log('chat getRoomDetails result - Simulate wrong Room ID - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
 
         socket.off('chat getRoomDetails result');
         expect( roomDetails ).toBe(null);
@@ -130,6 +143,21 @@ describe('Socket.io Services', () => {
     }); // it('chat getRoomDetails result', (done) => {
 
 
+
+    it('Simulate NPE - Should return {code: "NPE"}', (done) => {
+
+      socket.on('chat getRoomDetails result', function(roomDetails) {
+      log('chat getRoomDetails result - Simulate NPE - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
+
+        socket.off('chat getRoomDetails result');
+        expect( roomDetails ).toMatchObject({code : "NPE"});
+        done();
+
+      }); // socket.on('connectChat result', function(UserDetails) {
+
+      socket.emit('chat getRoomDetails', null);
+
+    }); // it('Simulate NPE - Should return {code: "NPE"}', (done) => {
 
   }); // describe('getRoomDetails()', () => {
 
@@ -149,7 +177,7 @@ describe('Socket.io Services', () => {
     it('Successfully connect - Should return object with _id', (done) => {
 
       socket.on('connectRoom result', function(roomDetails) {
-      log('connectRoom result - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
+      log('connectRoom result - Successfully connect - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
 
         socket.off('connectRoom result');
         expect( roomDetails ).toEqual(expect.objectContaining({ _id: expect.anything() }));
@@ -163,10 +191,10 @@ describe('Socket.io Services', () => {
 
 
 
-    it('Simulate wrong Room ID - Should return "Can not find Room ID in Database"', (done) => {
+    it('Simulate wrong Room ID - Should return {code : "Can not find Room ID in Database"}', (done) => {
 
       socket.on('connectRoom result', function(roomDetails) {
-      log('connectRoom result - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
+      log('connectRoom result - Simulate wrong Room ID - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
 
         socket.off('connectRoom result');
         expect( roomDetails ).toMatchObject({code : "Can not find Room ID in Database"});
@@ -179,8 +207,20 @@ describe('Socket.io Services', () => {
     }); // it('Simulate wrong Room ID - Should return "Can not find Room ID in Database"', (done) => {
 
 
+    it('Simulate NPE - Should return {code: "NPE"}', (done) => {
 
+      socket.on('connectRoom result', function(roomDetails) {
+      log('connectRoom result - Simulate NPE - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
 
+        socket.off('connectRoom result');
+        expect( roomDetails ).toMatchObject({code : "NPE"});
+        done();
+
+      }); // socket.on('connectRoom result', function(roomDetails) {
+
+      socket.emit('room connect', null);
+
+    }); // it('Simulate NPE - Should return {code: "NPE"}', (done) => {
 
   }); // describe('connectRoom()', () => {
 
@@ -195,7 +235,7 @@ describe('Socket.io Services', () => {
 
   describe('messageRoom()', () => {
 
-    it('Should send message to chat partner and return object with key msg', (done) => {
+    it('Should send message to chat partner and return string', (done) => {
 
       socket.on('msg', function(msg) {
       log('messageRoom() - sucess message: ' + msg);
