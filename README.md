@@ -1,5 +1,5 @@
 # Socket.io Chat APP Example
-Example Node.js Chat APP based on Socket.io! The UI is currently not responsive and poorly designed because this project should only show the socket.io relevant parts.
+Example Node.js Chat APP based on Socket.io! The UI is currently not responsive and poorly designed because this project should only show the Socket.io relevant parts.
 
 
 <br>
