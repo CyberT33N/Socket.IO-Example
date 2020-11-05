@@ -1,7 +1,4 @@
 'use strict'
-
-
-
 /*
 ███████████████████████████████████████████████████████████████████████████████
 ██******************** PRESENTED BY t33n Software ***************************██
@@ -58,26 +55,9 @@ controllermongodb = require('./controller/controller-mongodb'),
 
             limit = json_config.request_limit;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
  ████████████████████████████████████████████████████████████████████████████████
  */
-
-
- // ADVERTISE
  var ads = gradient('red', 'white').multiline([
         '',
         'Presented by',
@@ -95,6 +75,16 @@ controllermongodb = require('./controller/controller-mongodb'),
 
 
 
+
+
+
+
+
+
+
+
+
+
  /*
  -----------------------------------------------------------------------------
 
@@ -105,21 +95,21 @@ controllermongodb = require('./controller/controller-mongodb'),
  ███████║   ██║   ██║  ██║██║  ██║   ██║       ███████║╚██████╗██║  ██║██║██║        ██║
  ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝       ╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝
  */
-
- log( 'Current working directory: ' + __dirname );
+log( 'Current working directory: ' + __dirname );
 
 
 
 // Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 // see https://expressjs.com/en/guide/behind-proxies.html
 // app.set('trust proxy', 1);
+/*
 log( 'rate limit value: ' + limit );
 const apiLimiter = rateLimit({
   windowMs: limit,
   message: "Too many POST requests created from this IP, please try again in " + limit + "ms",
   max: 1 //<-- max limit
 });
-
+*/
 
 
 
@@ -150,35 +140,43 @@ app.use(express.static(__dirname + '/website'));
 // log all requests..
 app.use(function (req, res, next) {
 
-    if( path.extname(path.basename(req.url)) ) log("The file " + path.basename(req?.url) + " was requested.");
-    else log("The endpoint " + path.basename(req?.url) + " was requested.");
+  if( path.extname(path.basename(req.url)) ) log("The file " + path.basename(req?.url) + " was requested.");
+  else log("The endpoint " + path.basename(req?.url) + " was requested.");
 
-    next();
+  next();
 
-});
+}); // app.use(function (req, res, next) {
 
 
 /*
 app.get('/', function(req, res){(async () => {
 log( 'chat ENDPOINT - SSL: ' + req?.secure + '\nRequest Body: ' + JSON.stringify(req?.body, null, 4) + '\nRequest Query: ' + JSON.stringify(req?.query, null, 4) + '\nHeader: ' + JSON.stringify(req?.headers, null, 4)  );
-
-
-
+//..
 })().catch((e) => {  log('ASYNC - GET - Error at chat ENDPOINT.. Error: ' + e)  })});
 */
 
 
 
 
+(async () => {
+
+  // connect to MongoDB Database
+  const r = await controllermongodb.connectMongoDB();
+  if( r?.e ) { return; }
+
+  // Start Socket.io
+  controller.rootConnect(http);
+
+})().catch((e) => {  log('ASYNC - Error at main function.. Error: ' + e)  });
 
 
 
-// Start Socket.io
-controller.rootConnect(http);
 
 
 
 
+
+// start server
 http.listen(port, () => {
-     log('Server was started.. Listening on port: ' + port);
+  log('Server was started.. Listening on port: ' + port);
 });
