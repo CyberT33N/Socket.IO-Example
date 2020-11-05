@@ -198,8 +198,9 @@ describe('Socket.io Services', () => {
     it('Should send message to chat partner and return object with key msg', (done) => {
 
       socket.on('msg', function(msg) {
-      log('unit testing - msg - message: ' + JSON.stringify(msg, null, 4));
+      log('messageRoom() - sucess message: ' + msg);
 
+        socket.off('msg');
         expect( typeof msg ).toBe( 'string' );
         done();
 
@@ -210,6 +211,24 @@ describe('Socket.io Services', () => {
 
 
     }); // it('Successfully connect - Should return object with _id', (done) => {
+
+
+
+    it('Simulate null message - Should return {code: "Message was null"}', (done) => {
+
+      socket.on('msg', function(msg) {
+      log('messageRoom() - error message: ' + JSON.stringify(msg, null, 4));
+
+        socket.off('msg');
+        expect( msg ).toStrictEqual( {code: "Message was null"} );
+        done();
+
+      }); // socket.on('msg', function(msg) {
+
+      // simulate chat partner with socket 2
+      socket2.emit('chat message', {msg: '', room: test_room, usertoken: test_client2.token});
+
+    }); // it('Should return {code: "Message was null"}', (done) => {
 
   }); // describe('messageRoom()', () => {
 

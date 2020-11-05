@@ -230,6 +230,9 @@ console.log( 'socketMSG()' );
   socket.on('msg', function(msg){
   console.log( 'message incoming.. msg: ' + msg );
 
+    // catch NPE
+    if( msg?.code ){ return; }
+
     // import messages from chat partner to chat
     bubble(msg, 'you');
 

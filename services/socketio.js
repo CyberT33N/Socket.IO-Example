@@ -154,9 +154,12 @@ function messageRoom(socket){
   socket.on('chat message', (msg) => {(async () => {
   log('messageRoom() - chat message - message: ' + JSON.stringify(msg, null, 4));
 
-    const r = await controllermongodb.storeMessages(msg);
-    log( 'storeMessages() done..' );
-    socket.to(msg.room).emit('msg', msg.msg);
+    if(msg?.msg){
+
+      const r = await controllermongodb.storeMessages(msg);
+      socket.to(msg.room).emit('msg', msg.msg);
+
+    } else socket.to(msg.room).emit('msg', {code: "Message was null"});
 
   })().catch((e) => {  console.log('ASYNC - chat message Error:' +  e )  })});
 
