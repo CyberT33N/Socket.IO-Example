@@ -49,7 +49,9 @@ In order to use this Chat APP you must create a MongoDB Database and insert the 
 
 <br>
 <br>
+
 In order to use Unit Test the **config.json** file already contains the two testing users. Make sure that they also included in your user collection as explained below.
+
 ```javascript
 "test": {
     "room":"mocha",
