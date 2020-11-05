@@ -1,6 +1,4 @@
-const {rootConnect} = require('../services/socketio'),
-
-            fs = require('fs'),
+      const fs = require('fs'),
    json_config = JSON.parse(  fs.readFileSync('./admin/config.json', 'utf8')  ),
   test_client1 = json_config.test.user[0],
   test_client2 = json_config.test.user[1],
