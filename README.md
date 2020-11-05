@@ -149,7 +149,7 @@ The friendlist currently must also contain the room ID because of the left sideb
 <br>
 <br>
 
-In order to use Unit Test create aswell this both testing user:
+In order to use Unit Test create aswell two testing user:
 ```javascript
 {
     "token": "mocha",
