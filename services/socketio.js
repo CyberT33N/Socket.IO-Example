@@ -8,13 +8,13 @@
 controllermongodb = require('../controller/controller-mongodb');
 
 
-const socketio = {
+const services = {
 
       rootConnect: async (http) => { return await rootConnect(http); }
 
 };
 
-module.exports = socketio;
+module.exports = services;
 
 
 
@@ -32,19 +32,12 @@ log( 'rootConnect();' );
   io.on('connection', (socket) => {
   log('User connected..');
 
-    // connect client to room
-    connectChat(socket);
-
-    // Create event to get User Details by token and send back to client side
-    getUserDetails(socket);
-
 
     // catch message from Chat Room
     messageRoom(socket);
 
-    // Create event to catch room id, fetch room details and send back to client
-    getRoomDetails(socket);
-
+    // start event to catch room enter request
+    connectRoom(socket);
 
     // Check when user disconnect from website
     disconnectUser(socket);
@@ -66,32 +59,14 @@ log( 'rootConnect();' );
 
 
 
-function connectChat(socket){
-//log( 'connectChat()' );
 
-  // we recieve user token & room name
-  socket.on('chat connect', (msg) => {(async () => {
-  log('connectChat() - message: ' + JSON.stringify(msg, null, 4));
 
-    if(!msg?.usertoken){
-      socket.emit('connectChat result', {code: "NPE"});
-      return;
-    } // if(!msg?.usertoken){
 
-    const UserDetails = await controllermongodb.getUserDetails(msg.usertoken);
-    if( UserDetails ) {
-    log('connectChat() - UserDetails was found..');
 
-      socket.emit('connectChat result', UserDetails);
-      connectRoom(socket);
 
-    } // if( UserDetails ) {
-    else socket.emit('connectChat result', {code: "Can not find User Token in Database"});
 
 
-  })().catch((e) => {  console.log('ASYNC - chat connect Error:' +  e )  })});
 
-}; // function connectChat(){
 
 
 
@@ -123,59 +98,14 @@ function connectChat(socket){
 
 
 
-function getUserDetails(socket){
-//log( 'getUserDetails()' );
 
-  socket.on('getUserDetails', (usertoken) => {(async () => {
-  log('getUserDetails() - usertoken: ' + usertoken);
 
-    if(!usertoken){
-      socket.emit('getUserDetails result', {code: "NPE"});
-      return;
-    } // if(!usertoken){
 
-    const UserDetails = await controllermongodb.getUserDetails(usertoken);
-    log('getUserDetails() - UserDetails: ' + JSON.stringify(UserDetails, null, 4));
 
-    if( UserDetails ) socket.emit('getUserDetails result', UserDetails);
-    else socket.emit('getUserDetails result', {code: "Can not find User Token in Database"});
 
-  })().catch((e) => {  console.log('ASYNC - getUserDetails - Error:' +  e )  })});
 
-} // function getUserDetails(){
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function getRoomDetails(socket){
-//log( 'connectChat()' );
-
-  // we recieve user token & room name
-  socket.on('chat getRoomDetails', (roomID) => {(async () => {
-  log('getRoomDetails() - roomID: ' + roomID);
-
-    if(roomID) socket.emit('chat getRoomDetails result', await controllermongodb.getRoomDetails(roomID));
-    else socket.emit('chat getRoomDetails result', {code: "NPE"});
-
-  })().catch((e) => {  console.log('ASYNC - chat getRoomDetails Error:' +  e )  })});
-
-} // function getRoomDetails(){
 
 
 

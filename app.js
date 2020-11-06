@@ -20,40 +20,41 @@
          \/|__|                        |__|             /_____/         \/     \/
 */
 
-    const express = require('express'),
-              app = express(),
+      const express = require('express'),
+                app = express(),
 
-       bodyParser = require('body-parser'),
+         bodyParser = require('body-parser'),
 
-             port = process.env.PORT || 1337,
-        rateLimit = require('express-rate-limit'),
-          timeout = require('connect-timeout'),
+               port = process.env.PORT || 1337,
+          rateLimit = require('express-rate-limit'),
+            timeout = require('connect-timeout'),
 
-             http = require('http').createServer(app),
+               http = require('http').createServer(app),
 
-           helmet = require('helmet'),
-           morgan = require('morgan'),
+             helmet = require('helmet'),
+             morgan = require('morgan'),
 
-       controller = require('./controller/controller'),
-controllermongodb = require('./controller/controller-mongodb'),
+         controller = require('./controller/controller'),
+  controllermongodb = require('./controller/controller-mongodb'),
+controllerEndpoints = require('./controller/controller-endpoints'),
 
 
 
-             path = require('path'),
-               os = require('os'),
-           osHOME = os.homedir(),
-       osPLATFORM = os.platform(),
+               path = require('path'),
+                 os = require('os'),
+             osHOME = os.homedir(),
+         osPLATFORM = os.platform(),
 
-   chalkAnimation = require('chalk-animation'),
-         gradient = require('gradient-string'),
-            chalk = require('chalk'),
+     chalkAnimation = require('chalk-animation'),
+           gradient = require('gradient-string'),
+              chalk = require('chalk'),
 
-               fs = require('fs'),
-              log = require('fancy-log'),
+                 fs = require('fs'),
+                log = require('fancy-log'),
 
-      json_config = JSON.parse(  fs.readFileSync('./admin/config.json', 'utf8')  ),
+        json_config = JSON.parse(  fs.readFileSync('./admin/config.json', 'utf8')  ),
 
-            limit = json_config.request_limit;
+              limit = json_config.request_limit;
 
 /*
  ████████████████████████████████████████████████████████████████████████████████
@@ -148,12 +149,63 @@ app.use(function (req, res, next) {
 }); // app.use(function (req, res, next) {
 
 
-/*
-app.get('/', function(req, res){(async () => {
-log( 'chat ENDPOINT - SSL: ' + req?.secure + '\nRequest Body: ' + JSON.stringify(req?.body, null, 4) + '\nRequest Query: ' + JSON.stringify(req?.query, null, 4) + '\nHeader: ' + JSON.stringify(req?.headers, null, 4)  );
-//..
-})().catch((e) => {  log('ASYNC - GET - Error at chat ENDPOINT.. Error: ' + e)  })});
-*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*
+  ███████╗███╗   ██╗██████╗ ██████╗  ██████╗ ██╗███╗   ██╗████████╗███████╗
+  ██╔════╝████╗  ██║██╔══██╗██╔══██╗██╔═══██╗██║████╗  ██║╚══██╔══╝██╔════╝
+  █████╗  ██╔██╗ ██║██║  ██║██████╔╝██║   ██║██║██╔██╗ ██║   ██║   ███████╗
+  ██╔══╝  ██║╚██╗██║██║  ██║██╔═══╝ ██║   ██║██║██║╚██╗██║   ██║   ╚════██║
+  ███████╗██║ ╚████║██████╔╝██║     ╚██████╔╝██║██║ ╚████║   ██║   ███████║
+  ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚═╝      ╚═════╝ ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝
+  */
+
+
+// POST request where we take User Token and send back Object with User Details to Client
+app.post('/api/getUserDetails', function(req, res){(async () => {  await controllerEndpoints.getUserDetails(req, res);  })().catch((e) => {  log('ASYNC - POST - Error at /api/getUserDetails - Error: ' + e)  })});
+
+// POST request where we take Room ID and send back Object with Room Details to Client
+app.post('/api/getRoomDetails', function(req, res){(async () => {  await controllerEndpoints.getRoomDetails(req, res);  })().catch((e) => {  log('ASYNC - POST - Error at /api/getRoomDetails - Error: ' + e)  })});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

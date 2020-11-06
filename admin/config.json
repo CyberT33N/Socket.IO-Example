@@ -1,6 +1,7 @@
 {
   "request_limit": 1000,
 
+
   "MongoDB_DB_URL":"mongodb://localhost:27017",
   "MongoDB_DB_HOST":"localhost",
   "MongoDB_DB_PORT":"27017",
@@ -9,6 +10,7 @@
   "MongoDB_DB_PASSWORD":"",
 
   "test": {
+    "host": "http://localhost:1337",
     "room":"mocha",
     "user": [{
       "token": "mocha",

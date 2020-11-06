@@ -1,16 +1,34 @@
-const socket = io(),
-     details = getParams();
-var ROOM;
+'use strict'
 
+const socket = io();
+var ROOM, details;
 
 $(function () {(async () => {
+console.log( 'document ready..' );
 
-  // first we send user token to server and get back the user details
-  socket.emit('chat connect', {"usertoken": details.usertoken});
+  details = getParams();
 
-  // connect to Chat and load friends
-  await connectChat();
-  console.log('connectChat() done..');
+  // start event to catch client user details and to load friends sidebar
+  const r = await getUserDetails(details.usertoken);
+  if( r?.msg ) {
+  console.log( 'getUserDetails() error: ' + r?.msg );
+
+    $('.wrapper').remove();
+    $('body').append(`<div class="error usertoken">${r?.msg}</div>`);
+
+  } // if( r?.msg ) ){
+
+  // set welcome back text to headline
+  $('.headline').html(`Welcome back <strong>${r.name}</strong>`);
+
+  // load friends sidebar
+  await getFriends(r);
+
+
+
+
+
+
 
   // start event to catch left sidebar contact choosing
   personClick();
@@ -52,48 +70,32 @@ $(function () {(async () => {
 
 
 
-function connectChat() {return new Promise(resolve => {
-console.log( 'connectChat()' );
+async function getUserDetails(token) {
+console.log( 'getUserDetails(token)' );
 
-  socket.on('connectChat result', function(userdetails){(async () => {
-  console.log( 'connectChat result - userdetails: ' + JSON.stringify(userdetails, null, 4) );
+  const r = await axios.post(  window.location.origin + '/api/getUserDetails', { usertoken: token  }, {
+    headers: { authorization: 'sample_auth_token..' }
+  });
+  //console.log( 'getUserDetails() - response: ' + JSON.stringify(r, null, 4) );
 
-    if(userdetails?.code){
-    console.log( 'Error was found while try to connect to Chat - error: ' + userdetails?.code );
+  if(!r?.data){ return {msg: "NPE"}; }
+  else return r.data;
 
-      $('.wrapper').remove();
-      $('body').append(`<div class="error usertoken">${e}</div>`);
-      resolve(false);
-      return;
-
-    } // if(userdetails?.code){
-    console.log( 'Successfully connected to Chat..' );
-
-    // set welcome back text to headline
-    $('.headline').html(`Welcome back <strong>${userdetails.name}</strong>`);
-
-    await getFriends(userdetails);
-    resolve(true);
-
-  })().catch((e) => {  console.log('ASYNC - connectChat result - Error:' +  e )  })});
-
-
-})}; // function connectChat() {
+}; // async function getUserDetails(token) {
 
 
 
 
 
-
-async function getFriends(userdetails) {
+async function getFriends(UserDetails) {
 console.log( 'getFriends()' );
 
-  for( const d of userdetails.friends ){
+  for( const d of UserDetails.friends ){
 
     const UserDetails = await getUserDetails(d.token);
     console.log( 'getFriends() - UserDetails: ' + JSON.stringify(UserDetails, null, 4) );
 
-    const roomDetails = await getLastTimeChat(d.room);
+    const roomDetails = await getRoomDetails(d.room);
     console.log( 'getFriends() - roomDetails: ' + JSON.stringify(roomDetails, null, 4) );
 
     $('.people').append(`<li class="person" data-room="${d.room}" data-user="${d.token}" data-active="false">
@@ -113,47 +115,23 @@ console.log( 'getFriends()' );
 
 
 
-function getLastTimeChat(roomID) {return new Promise(resolve => {
-console.log( 'getLastTimeChat() - roomID: ' + roomID );
+async function getRoomDetails(roomID) {
+console.log( 'getRoomDetails() - roomID: ' + roomID );
 
-  // catch result from roomdetails check
-  socket.on('chat getRoomDetails result', function(roomdetails){
-  console.log( 'chat getRoomDetails result - roomdetails: ' + JSON.stringify(roomdetails, null, 4) );
+  const r = await axios.post(  window.location.origin + '/api/getRoomDetails', { id: roomID  }, {
+    headers: { authorization: 'sample_auth_token..' }
+  });
+  console.log( 'getRoomDetails() - response: ' + JSON.stringify(r, null, 4) );
 
-    // clear socket for next usage.. maybe replace this socket with REST API Endpoint in future..
-    socket.off('chat getRoomDetails result');
-    if(roomdetails) resolve(roomdetails);
-    else resolve(false);
+  if(!r?.data){ return {msg: "NPE"}; }
+  else return r.data;
 
-  }); // socket.on('chat getRoomDetails result', function(roomdetails){
-
-  // send room ID to the server to recieve room Details
-  socket.emit('chat getRoomDetails', roomID);
-
-})}; // function getLastTimeChat(roomID) {
+}; // fasync function getRoomDetails(roomID) {
 
 
 
 
 
-
-function getUserDetails(token) {return new Promise(resolve => {
-console.log( 'getUserDetails()' );
-
-  socket.on('getUserDetails result', function(UserDetails){(async () => {
-  console.log( 'getUserDetails result - UserDetails: ' + JSON.stringify(UserDetails, null, 4) );
-
-    socket.off('getUserDetails result');
-    if(UserDetails) resolve(UserDetails);
-    else resolve(false);
-
-  })().catch((e) => {  console.log('ASYNC - getUserDetails result - Error:' +  e )  })});
-
-  // request UserDetails
-  socket.emit('getUserDetails', token);
-
-
-})}; // function getUserDetails() {
 
 
 
