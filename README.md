@@ -173,22 +173,10 @@ In order to use Unit Test create aswell two testing user:
 
 # Run
 
-## How to start express server
-```bash
-# method #1
-app.bat # <-- Windows
-app.sh # <--MAC/Linux
-
-# method #2
-nodemon app.js
-```
-
-<br><br>
 
 ## How to start Chat APP
 Currently you can open each user chat window by using the **User Token** inside of your URL Parameter (For further productions you should replace this with a cookie instead):
 <br>- http://localhost:1337/?usertoken=a
-
 
 
 <br><br>
