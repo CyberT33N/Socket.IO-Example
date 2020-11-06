@@ -106,6 +106,66 @@ describe('Socket.io Services', () => {
 
 
 
+  describe('getUserDetails()', () => {
+
+    it('Successfully get User Details - Should return object with _id', (done) => {
+
+      socket.on('getUserDetails result', function(UserDetails) {
+      log('getUserDetails result - UserDetails: ' + JSON.stringify(UserDetails, null, 4));
+
+        socket.off('getUserDetails result');
+        expect( UserDetails ).toEqual(expect.objectContaining({ _id: expect.anything() }));
+        done();
+
+      }); // socket.on('getUserDetails result', function(UserDetails) {
+
+      socket.emit('getUserDetails', test_client1.token);
+
+    }); // it('Successfully get User Details - Should return object with _id', (done) => {
+
+
+    it('Simulate wrong User Token - Should return {code: "Can not find User Token in Database"}', (done) => {
+
+      socket.on('getUserDetails result', function(UserDetails) {
+      log('getUserDetails result - UserDetails: ' + JSON.stringify(UserDetails, null, 4));
+
+        socket.off('getUserDetails result');
+        expect( UserDetails ).toMatchObject({code : "Can not find User Token in Database"});
+        done();
+
+      }); // socket.on('getUserDetails result', function(UserDetails) {
+
+      socket.emit('getUserDetails', 'wrong_token');
+
+    }); // it('Simulate wrong User Token - Should return {code: "Can not find User Token in Database"}', (done) => {
+
+
+    it('Simulate NPE - Should return {code: "NPE"}', (done) => {
+
+      socket.on('getUserDetails result', function(UserDetails) {
+      log('getUserDetails result - UserDetails: ' + JSON.stringify(UserDetails, null, 4));
+
+        socket.off('getUserDetails result');
+        expect( UserDetails ).toMatchObject({code : "NPE"});
+        done();
+    
+      }); // socket.on('getUserDetails result', function(UserDetails) {
+
+      socket.emit('getUserDetails', null);
+
+    }); // it('Simulate NPE - Should return {code: "NPE"}', (done) => {
+
+  }); // describe('getUserDetails()', () => {
+
+
+
+
+
+
+
+
+
+
   describe('getRoomDetails()', () => {
 
 

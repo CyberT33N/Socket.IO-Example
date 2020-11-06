@@ -12,8 +12,6 @@ $(function () {(async () => {
   await connectChat();
   console.log('connectChat() done..');
 
-
-
   // start event to catch left sidebar contact choosing
   personClick();
 
@@ -28,8 +26,6 @@ $(function () {(async () => {
 
   // start event to catch incoming messages from chat partner
   socketMSG();
-
-
 
   // click first person on chat list to show first chat
   $('.people li:nth-child(1)').click();
@@ -94,12 +90,15 @@ console.log( 'getFriends()' );
 
   for( const d of userdetails.friends ){
 
+    const UserDetails = await getUserDetails(d.token);
+    console.log( 'getFriends() - UserDetails: ' + JSON.stringify(UserDetails, null, 4) );
+
     const roomDetails = await getLastTimeChat(d.room);
-    console.log( 'getLastTimeChat() done..' );
+    console.log( 'getFriends() - roomDetails: ' + JSON.stringify(roomDetails, null, 4) );
 
     $('.people').append(`<li class="person" data-room="${d.room}" data-user="${d.token}" data-active="false">
       <img src="img/female.webp" alt="" />
-      <span class="name">${d.name}</span>
+      <span class="name">${UserDetails?.name}</span>
       <span class="time">${roomDetails?.msg?.slice(-1)[0]?.date?.replace(/(\d+)\/(\d+)\/(\d+),/gmi, '') || ''}</span>
       <span class="preview"></span>
     </li>`);
@@ -138,7 +137,23 @@ console.log( 'getLastTimeChat() - roomID: ' + roomID );
 
 
 
+function getUserDetails(token) {return new Promise(resolve => {
+console.log( 'getUserDetails()' );
 
+  socket.on('getUserDetails result', function(UserDetails){(async () => {
+  console.log( 'getUserDetails result - UserDetails: ' + JSON.stringify(UserDetails, null, 4) );
+
+    socket.off('getUserDetails result');
+    if(UserDetails) resolve(UserDetails);
+    else resolve(false);
+
+  })().catch((e) => {  console.log('ASYNC - getUserDetails result - Error:' +  e )  })});
+
+  // request UserDetails
+  socket.emit('getUserDetails', token);
+
+
+})}; // function getUserDetails() {
 
 
 
