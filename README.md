@@ -78,7 +78,9 @@ In order to use Unit Test the **config.json** file already contains the two test
 <br>
 
 
-The **rooms** collection contains the **room ID** and the **user array** which will store the users who are currently inside of this chat room:
+The **rooms** collection contains the **room ID** and the **user array** which will store the users who are currently inside of this chat room.
+<br><br>
+All sended messages from this room will be later also imported to this object.
 ```javascript
 {
     "id": "4321",
@@ -89,7 +91,7 @@ The **rooms** collection contains the **room ID** and the **user array** which w
     }]
 }
 ```
-All sended messages from this room will be later also imported to this object.
+
 
 
 
@@ -124,6 +126,9 @@ In order to use Unit Test create aswell this testing room:
 
 
 The **user** collection contains the **user token**, **user name** and the **friends array** which will store the friendlist from this user.
+
+<br><br>The friendlist currently must also contain the room ID because of the left sidebar of the Chat APP which will fetch the room ID when we switch the friend chats.
+
 ```javascript
 {
     "token": "b",
@@ -137,8 +142,6 @@ The **user** collection contains the **user token**, **user name** and the **fri
     }]
 }
 ```
-The friendlist currently must also contain the room ID because of the left sidebar of the Chat APP which will fetch the room ID when we switch the friend chats.
-
 
 <br>
 <br>
