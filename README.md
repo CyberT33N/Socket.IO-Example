@@ -83,11 +83,9 @@ The **rooms** collection contains the **room ID** and the **user array** which w
 {
     "id": "4321",
     "user": [{
-        "usertoken": "c",
-        "name": "Julia Lückertz"
+        "usertoken": "c"
     }, {
-        "usertoken": "b",
-        "name": "Lena Groß"
+        "usertoken": "b"
     }]
 }
 ```
@@ -103,11 +101,9 @@ In order to use Unit Test create aswell this testing room:
 {
     "id": "mocha",
     "user": [{
-        "usertoken": "mocha",
-        "name": "mocha"
+        "usertoken": "mocha"
     }, {
-        "usertoken": "mocha2",
-        "name": "mocha2"
+        "usertoken": "mocha2"
     }]
 }
 ```
