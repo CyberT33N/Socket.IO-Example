@@ -8,7 +8,7 @@ Example Node.js Chat APP based on Socket.io! The UI is currently not responsive 
 
 Database: **MongoDB**
 <br>Websocket: **Socket.io**
-<br>Unit Test: **Mocha.js**
+<br>TDD: **Mocha.js**
 
 <br>
 <br>
