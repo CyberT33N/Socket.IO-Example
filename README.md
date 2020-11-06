@@ -183,7 +183,7 @@ Currently you can open each user chat window by using the **User Token** inside 
 
 
 ## How to start Unit Test
-First start your express server and after this run:
+First start your express server (**app.js**) and after this run:
 ```bash
 # method #1
 test.bat # <-- Windows
