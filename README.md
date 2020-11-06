@@ -50,7 +50,7 @@ In order to use this Chat APP you must create a MongoDB Database and insert the 
 <br>
 <br>
 
-In order to use Unit Test the **config.json** file already contains the two testing user and the testing room. Make sure that the room and both user exist in your database as explained below.
+In order to use Unit Test the **config.json** file already contains the two testing user and the testing room. Make sure that the room and both user exist aswell in your database as explained in the next section.
 
 ```javascript
 "test": {
