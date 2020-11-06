@@ -53,12 +53,12 @@ describe('MongoDB Services', () => {
       expect( await storeMessages({"msg": "sample message..", "room": "wrong_room_ID", "usertoken": test_client1.token}) ).toStrictEqual( {"msg": "ROOM ID NOT FOUND"} );
     });
 
-    it('Successfully updating of field - Should return { "result": {"n": 1} }', async() => {
-      expect( await storeMessages({"msg": "sample message..", "room": test_room, "usertoken": test_client1.token}) ).toMatchObject({ "result": {"n": 1} });
+    it('Successfully updating of field - Should return {code : "SUCCESS"}', async() => {
+      expect( await storeMessages({"msg": "sample message..", "room": test_room, "usertoken": test_client1.token}) ).toStrictEqual( {code : "SUCCESS"} );
     });
 
-    xit('Simulate error while updating of field - Should return { "result": {"n": 0} }', async() => {
-      expect( await storeMessages({"msg": "sample message..", "room": test_room, "usertoken": test_client1.token}) ).toMatchObject({ "result": {"n": 0} });
+    xit('Simulate error while updating of field - Should return {code : "ERROR"}', async() => {
+      expect( await storeMessages({"msg": "sample message..", "room": test_room, "usertoken": test_client1.token}) ).toStrictEqual( {code : "ERROR"} );
     });
 
   }); // describe('storeMessages()', () => {

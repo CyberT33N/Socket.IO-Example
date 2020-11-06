@@ -44,7 +44,7 @@ log( 'getUserDetails() - SSL: ' + req?.secure + '\nRequest Body: ' + JSON.string
   if(!req?.body?.usertoken){
     res.status(404).json( { msg: "User Token can not be null" } );
     return;
-  } // if(!msg?.usertoken){
+  } // if(!req?.body?.usertoken){
 
   const UserDetails = await controllermongodb.getUserDetails(req?.body?.usertoken);
 
@@ -76,7 +76,7 @@ log( 'getRoomDetails() - SSL: ' + req?.secure + '\nRequest Body: ' + JSON.string
   if(!req?.body?.id){
     res.status(404).json( { msg: "Room ID can not be null" } );
     return;
-  } // if(!msg?.id){
+  } // if(!req?.body?.id){
 
   const roomDetails = await controllermongodb.getRoomDetails(req?.body?.id);
 

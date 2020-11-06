@@ -151,7 +151,7 @@ function messageRoom(socket){
     if(msg?.msg){
 
       const r = await controllermongodb.storeMessages(msg);
-      socket.to(msg.room).emit('msg', msg.msg);
+      if( r?.code == "SUCCESS" ) socket.to(msg.room).emit('msg', msg.msg);
 
     } else socket.to(msg.room).emit('msg', {code: "Message was null"});
 

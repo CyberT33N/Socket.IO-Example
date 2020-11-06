@@ -111,7 +111,8 @@ log( 'storeMessages() - msg: ' + JSON.stringify(msg, null, 4) );
 
   const r = await collection.updateOne(query, newValue);
   log( 'storeMessages() - result:' + JSON.stringify(r, null, 4) );
-  if( r.result.n ) return r;
+  if( r.result.n ) return {code : "SUCCESS"};
+  else return {code : "ERROR"};
 
 }; // async function storeMessages(token){
 
