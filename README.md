@@ -54,7 +54,8 @@ In order to use Unit Test the **config.json** file already contains the two test
 
 ```javascript
 "test": {
-    "room":"mocha",
+    "host": "http://localhost:1337",
+    "room": "mocha",
     "user": [{
       "token": "mocha",
       "name": "mocha"
