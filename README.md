@@ -130,11 +130,9 @@ The **user** collection contains the **user token**, **user name** and the **fri
     "name": "Lena Groß",
     "friends": [{
         "token": "a",
-        "name": "Lisa Wolscht",
         "room": 1234
     }, {
         "token": "c",
-        "name": "Julia Lückertz",
         "room": 4321
     }]
 }
