@@ -63,7 +63,7 @@ log( 'rootConnect();' );
 function connectRoom(socket){
 log( 'connectRoom();' );
 
-  socket.on('room connect', (roomID) => {(async () => {
+  socket.on('room connect', (roomID)=>{(async()=>{
   log('connectRoom() - roomID: ' + JSON.stringify(roomID, null, 4));
 
     if( !roomID ) return socket.emit('connectRoom result', {code : "NPE"});
@@ -78,7 +78,7 @@ log( 'connectRoom();' );
     } //  if(r){
     else socket.emit('connectRoom result', {code : "Can not find Room ID in Database"});
 
-  })().catch((e) => {  console.log('ASYNC - connectRoom Error:' +  e )  })});
+  })().catch((e)=>{  console.log('ASYNC - connectRoom Error:' +  e )  })});
 
 } //function connectRoom(socket){
 
@@ -90,7 +90,7 @@ function messageRoom(socket){
 //log( 'messageRoom()' );
 
   // {"msg": msg, "room": details.room, "usertoken": details.usertoken}
-  socket.on('chat message', (msg) => {(async () => {
+  socket.on('chat message', (msg)=>{(async()=>{
   log('messageRoom() - chat message - message: ' + JSON.stringify(msg, null, 4));
 
     if(msg?.msg){
@@ -100,7 +100,7 @@ function messageRoom(socket){
 
     } else socket.to(msg.room).emit('msg', {code: "Message was null"});
 
-  })().catch((e) => {  console.log('ASYNC - chat message Error:' +  e )  })});
+  })().catch((e)=>{  console.log('ASYNC - chat message Error:' +  e )  })});
 
 } // function messageRoom(socket){
 
