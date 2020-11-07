@@ -47,12 +47,7 @@ describe('Endpoints Services', () => {
 
     it('Send POST request with wrong User Token - Should return { msg: "User Token was not found in Database" }', async() => {
 
-      try{
-
-        const r = await axios.post(  host + '/api/getUserDetails', { usertoken: "wrong_token" }, {
-          headers: { authorization: 'sample_auth_token..' }
-        });
-
+      try{ await axios.post(  host + '/api/getUserDetails', { usertoken: "wrong_token" }, { headers: { authorization: 'sample_auth_token..' }});
       } catch (e){ expect( e.toString() ).toBe( 'Error: Request failed with status code 403' ); }
 
     }); // it('Send POST request with wrong User Token - Should return { msg: "User Token was not found in Database" }', async() => {
@@ -60,12 +55,7 @@ describe('Endpoints Services', () => {
 
     it('Simulate NPE - Should return { msg: "User Token can not be null" }', async() => {
 
-      try{
-
-        const r = await axios.post(  host + '/api/getUserDetails', { usertoken: null }, {
-          headers: { authorization: 'sample_auth_token..' }
-        });
-
+      try{ await axios.post(  host + '/api/getUserDetails', { usertoken: null }, { headers: { authorization: 'sample_auth_token..' }});
       } catch (e){ expect( e.toString() ).toBe( 'Error: Request failed with status code 404' ); }
 
     }); // it('Simulate NPE - Should return { msg: "User Token can not be null" }', async() => {
@@ -115,12 +105,7 @@ describe('Endpoints Services', () => {
 
     it('Send POST request with wrong Room ID - Should return { msg: "Room ID was not found in Database" }', async() => {
 
-      try{
-
-        const r = await axios.post(  host + '/api/getRoomDetails', { id: test_room }, {
-          headers: { authorization: 'sample_auth_token..' }
-        });
-
+      try{ await axios.post(  host + '/api/getRoomDetails', { id: test_room }, {headers: { authorization: 'sample_auth_token..' }});
       } catch (e){ expect( e.toString() ).toBe( 'Error: Request failed with status code 403' ); }
 
     }); // it('Send POST request with wrong Room ID - Should return { msg: "Room ID was not found in Database" }', async() => {
@@ -128,12 +113,7 @@ describe('Endpoints Services', () => {
 
     it('Simulate NPE - Should return { msg: "Room ID can not be null" }', async() => {
 
-      try{
-
-        const r = await axios.post(  host + '/api/getRoomDetails', { id: null }, {
-          headers: { authorization: 'sample_auth_token..' }
-        });
-
+      try{ await axios.post(  host + '/api/getRoomDetails', { id: null }, { headers: { authorization: 'sample_auth_token..' }});
       } catch (e){ expect( e.toString() ).toBe( 'Error: Request failed with status code 404' ); }
 
     }); // it('Simulate NPE - Should return { msg: "Room ID can not be null" }', async() => {
