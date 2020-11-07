@@ -58,15 +58,9 @@ log('connectMongoDB() - Database URL: ' + MongoDB_DB_URL);
     // connect to MongoDB Database and create global MongoDB variable
     const client = await MongoClient.connect(MongoDB_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
     MongoDB = client.db(MongoDB_DB_NAME);
-    log( 'Successfully connected to MongoDB Database' );
-    return {code : "SUCCESS"};
+    return true;
 
-  } catch (e) {
-
-    log( chalk.red.bold('❌ ERROR') + ' Error while try to connect to MongoDB Database - ' + chalk.white.bold('error:\n') + e );
-    return {code : "ERROR", e: e};
-
-  }
+  } catch (e) { log( chalk.red.bold('❌ ERROR') + ' Error while try to connect to MongoDB Database - ' + chalk.white.bold('error:\n') + e ); }
 
 }; // async function connectMongoDB(){
 
@@ -90,12 +84,12 @@ log( 'storeMessages() - msg: ' + JSON.stringify(msg, null, 4) );
 
 
   // check if msg object has NPE
-  if( !msg?.msg || !msg?.room || !msg?.usertoken ) { return {msg: 'NPE'}; }
+  if( !msg?.msg || !msg?.room || !msg?.usertoken ) return {msg: 'NPE'};
 
 
   // check if room can be found in collection
   const match = await collection.findOne( {"id": msg.room} );
-  if( !match ){ return {msg: 'ROOM ID NOT FOUND'}; }
+  if( !match ) return {msg: 'ROOM ID NOT FOUND'};
   //log( 'storeMessages() - match:' + JSON.stringify(match, null, 4) );
 
   // push our current msg object to the already existing one from our room field
@@ -112,7 +106,7 @@ log( 'storeMessages() - msg: ' + JSON.stringify(msg, null, 4) );
   const r = await collection.updateOne(query, newValue);
   log( 'storeMessages() - result:' + JSON.stringify(r, null, 4) );
   if( r.result.n ) return {code : "SUCCESS"};
-  else return {code : "ERROR"};
+  return {code : "ERROR"};
 
 }; // async function storeMessages(token){
 
@@ -134,9 +128,8 @@ log( 'getUserDetails() - token: ' + token );
   const collection = MongoDB.collection('user');
 
   // search for token inside of user collections
-  const r = await collection.findOne( {"token": token} );
-  log( 'getUserDetails() - result:' + JSON.stringify(r, null, 4) );
-  if( r ){ return r; }
+  if(!token) return false;
+  return await collection.findOne( {"token": token} );
 
 }; // async function getUserDetails(token){
 
@@ -150,8 +143,7 @@ log( 'mongodb.js - getRoomDetails() - roomID: ' + roomID );
   const collection = MongoDB.collection('rooms');
 
   // search for Room ID inside of rooms collections
-  const r = await collection.findOne( {"id": roomID?.toString()} );
-  //log( 'getRoomDetails() - result:' + JSON.stringify(r, null, 4) );
-  if( r ){ return r; }
+  if( !roomID ) return false;
+  return await collection.findOne( {"id": roomID?.toString()} );
 
 }; // async function getRoomDetails(token){

@@ -41,10 +41,7 @@ module.exports = services;
 async function getUserDetails(req, res){
 log( 'getUserDetails() - SSL: ' + req?.secure + '\nRequest Body: ' + JSON.stringify(req?.body, null, 4) + '\nRequest Query: ' + JSON.stringify(req?.query, null, 4) + '\nHeader: ' + JSON.stringify(req?.headers, null, 4)  );
 
-  if(!req?.body?.usertoken){
-    res.status(404).json( { msg: "User Token can not be null" } );
-    return;
-  } // if(!req?.body?.usertoken){
+  if(!req?.body?.usertoken) return res.status(404).json( { msg: "User Token can not be null" } );
 
   const UserDetails = await controllermongodb.getUserDetails(req?.body?.usertoken);
 
@@ -73,10 +70,7 @@ log( 'getUserDetails() - SSL: ' + req?.secure + '\nRequest Body: ' + JSON.string
 async function getRoomDetails(req, res){
 log( 'getRoomDetails() - SSL: ' + req?.secure + '\nRequest Body: ' + JSON.stringify(req?.body, null, 4) + '\nRequest Query: ' + JSON.stringify(req?.query, null, 4) + '\nHeader: ' + JSON.stringify(req?.headers, null, 4)  );
 
-  if(!req?.body?.id){
-    res.status(404).json( { msg: "Room ID can not be null" } );
-    return;
-  } // if(!req?.body?.id){
+  if(!req?.body?.id) return res.status(404).json( { msg: "Room ID can not be null" } );
 
   const roomDetails = await controllermongodb.getRoomDetails(req?.body?.id);
 

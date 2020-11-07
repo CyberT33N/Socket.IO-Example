@@ -31,8 +31,8 @@
 
                http = require('http').createServer(app),
 
-             helmet = require('helmet'),
-             morgan = require('morgan'),
+             //helmet = require('helmet'),
+             //morgan = require('morgan'),
 
          controller = require('./controller/controller'),
   controllermongodb = require('./controller/controller-mongodb'),
@@ -126,7 +126,7 @@ app.use( bodyParser.json() );
 // adding morgan to log HTTP requests
 //app.use( morgan('combined') );
 
-// set website..
+// set chat app website..
 app.use(express.static(__dirname + '/website'));
 
 
@@ -139,14 +139,14 @@ app.use(express.static(__dirname + '/website'));
 
 
 // log all requests..
-app.use(function (req, res, next) {
+app.use((req, res, next)=>{
 
   if( path.extname(path.basename(req.url)) ) log("The file " + path.basename(req?.url) + " was requested.");
   else log("The endpoint " + path.basename(req?.url) + " was requested.");
 
   next();
 
-}); // app.use(function (req, res, next) {
+}); // app.use((req, res, next)=>{
 
 
 
@@ -183,10 +183,10 @@ app.use(function (req, res, next) {
 
 
 // POST request where we take User Token and send back Object with User Details to Client
-app.post('/api/getUserDetails', function(req, res){(async () => {  await controllerEndpoints.getUserDetails(req, res);  })().catch((e) => {  log('ASYNC - POST - Error at /api/getUserDetails - Error: ' + e)  })});
+app.post('/api/getUserDetails', (req, res)=>{(async()=>{  await controllerEndpoints.getUserDetails(req, res);  })().catch((e)=>{  log('ASYNC - POST - Error at /api/getUserDetails - Error: ' + e)  })});
 
 // POST request where we take Room ID and send back Object with Room Details to Client
-app.post('/api/getRoomDetails', function(req, res){(async () => {  await controllerEndpoints.getRoomDetails(req, res);  })().catch((e) => {  log('ASYNC - POST - Error at /api/getRoomDetails - Error: ' + e)  })});
+app.post('/api/getRoomDetails', (req, res)=>{(async()=>{  await controllerEndpoints.getRoomDetails(req, res);  })().catch((e)=>{  log('ASYNC - POST - Error at /api/getRoomDetails - Error: ' + e)  })});
 
 
 
@@ -197,29 +197,6 @@ app.post('/api/getRoomDetails', function(req, res){(async () => {  await control
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-(async () => {
-
-  // connect to MongoDB Database
-  const r = await controllermongodb.connectMongoDB();
-  if( r?.e ) { return; }
-
-  // Start Socket.io
-  controller.rootConnect(http);
-
-})().catch((e) => {  log('ASYNC - Error at main function.. Error: ' + e)  });
 
 
 
@@ -229,6 +206,14 @@ app.post('/api/getRoomDetails', function(req, res){(async () => {  await control
 
 
 // start server
-http.listen(port, () => {
-  log('Server was started.. Listening on port: ' + port);
-});
+http.listen(port, (async()=>{
+log('Server was started.. Listening on port: ' + port);
+
+  // connect to MongoDB Database
+  if( !await controllermongodb.connectMongoDB() ) return false;
+  log( 'Successfully connected to MongoDB Database' );
+
+  // Start Socket.io
+  controller.rootConnect(http);
+
+})().catch((e)=>{  log('ASYNC - Error at main function.. Error: ' + e)  }));

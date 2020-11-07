@@ -32,7 +32,6 @@ log( 'rootConnect();' );
   io.on('connection', (socket) => {
   log('User connected..');
 
-
     // catch message from Chat Room
     messageRoom(socket);
 
@@ -61,67 +60,13 @@ log( 'rootConnect();' );
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function connectRoom(socket){
 log( 'connectRoom();' );
 
   socket.on('room connect', (roomID) => {(async () => {
   log('connectRoom() - roomID: ' + JSON.stringify(roomID, null, 4));
 
-    if( !roomID ){
-      socket.emit('connectRoom result', {code : "NPE"});
-      return;
-    } // if( !roomID ){
+    if( !roomID ) return socket.emit('connectRoom result', {code : "NPE"});
 
     const r = await controllermongodb.getRoomDetails(roomID);
     if(r){

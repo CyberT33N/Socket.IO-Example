@@ -27,12 +27,12 @@ describe('MongoDB Services', () => {
 
   describe('connectMongoDB()', () => {
 
-    it('Connect to MongoDB Database - Should return {code : "SUCCESS"}', async() => {
-      expect( await connectMongoDB() ).toMatchObject({code : "SUCCESS"});
+    it('Connect to MongoDB Database - Should return true', async() => {
+      expect( await connectMongoDB() ).toBe(true);
     });
 
-    xit('Error while try to connect to MongoDB Database - Should return {code : "ERROR"}', async() => {
-      expect( await connectMongoDB() ).toMatchObject({code : "ERROR"});
+    xit('Error while try to connect to MongoDB Database - Should return false', async() => {
+      expect( await connectMongoDB() ).toBe(false);
     });
 
   }); // describe('connectMongoDB()()', () => {
@@ -73,12 +73,12 @@ describe('MongoDB Services', () => {
       expect( typeof await getUserDetails(test_client1.token) ).toBe('object');
     });
 
-    it('Simulate User not found by token - Should return undefined', async() => {
-      expect( await getUserDetails('wrong_token') ).toBe(undefined);
+    it('Simulate User not found by token - Should return null', async() => {
+      expect( await getUserDetails('wrong_token') ).toBe(null);
     });
 
-    it('Simulate NPE - Should return undefined', async() => {
-      expect( await getUserDetails(null) ).toBe(undefined);
+    it('Simulate NPE - Should return false', async() => {
+      expect( await getUserDetails(null) ).toBe(false);
     });
 
   }); // describe('getUserDetails()', () => {
@@ -96,12 +96,12 @@ describe('MongoDB Services', () => {
       expect( typeof await getRoomDetails(test_room) ).toBe('object');
     });
 
-    it('Simulate User not found by token - Should return undefined', async() => {
-      expect( await getRoomDetails('wrong_roomID') ).toBe(undefined);
+    it('Simulate User not found by token - Should return null', async() => {
+      expect( await getRoomDetails('wrong_roomID') ).toBe(null);
     });
 
-    it('Simulate NPE - Should return undefined', async() => {
-      expect( await getRoomDetails(null) ).toBe(undefined);
+    it('Simulate NPE - Should return false', async() => {
+      expect( await getRoomDetails(null) ).toBe(false);
     });
 
   }); // describe('getRoomDetails()', () => {
