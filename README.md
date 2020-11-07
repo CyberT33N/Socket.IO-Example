@@ -90,17 +90,7 @@ All sended messages from this room will be later also imported to this object.
     }, {
         "usertoken": "b"
     }]
-}
-```
-
-
-
-
-<br>
-<br>
-
-In order to use Unit Test create aswell this testing room:
-```javascript
+},
 {
     "id": "mocha",
     "user": [{
@@ -109,6 +99,7 @@ In order to use Unit Test create aswell this testing room:
         "usertoken": "mocha2"
     }]
 }
+// In order to use Unit Test we aswell a testing room.
 ```
 
 
@@ -141,14 +132,7 @@ The **user** collection contains the **user token**, **user name** and the **fri
         "token": "c",
         "room": 4321
     }]
-}
-```
-
-<br>
-<br>
-
-In order to use Unit Test create aswell two testing user:
-```javascript
+},
 {
     "token": "mocha",
     "name": "mocha",
@@ -165,6 +149,7 @@ In order to use Unit Test create aswell two testing user:
         "room": "mocha"
     }]
 }
+// In order to use Unit Test create aswell two testing user.
 ```
 
 
