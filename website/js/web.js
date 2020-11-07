@@ -1,9 +1,23 @@
 'use strict'
 
-function getURLParams(){ return {"token": window.location.search.match( /usertoken=([a-z0-9]+)/gmi )[0].replace('usertoken=', '')}; };
+function getURLParams(){
 
-function getChatPartner(roomdetails){ for( const d of roomdetails.user ){ if( clientDetails.token !== d.usertoken ) return d; } };
+  let token = window.location.search.match( /usertoken=([a-z0-9]+)/gmi );
+  if(!token) return false;
+  return {"token": token[0].replace('usertoken=', '')};
 
+}; // function getURLParams(){
+
+
+function getChatPartner(roomDetails, userToken){
+
+  if(!roomDetails || !userToken ) return false;
+
+  for( const d of roomDetails.user ){
+    if( userToken !== d.usertoken ) return d;
+  } // for( const d of roomDetails.user ){
+
+}; // function getChatPartner(roomdetails){
 
 
 function errorPage(e){
@@ -26,21 +40,23 @@ function errorPage(e){
 async function getFriends(UserDetails) {
 console.log( 'getFriends()' );
 
+  if(!UserDetails?.friends) return false;
+
   for( const d of UserDetails.friends ){
 
     const UserDetails = await getUserDetails(d.token);
-    console.log( 'getFriends() - UserDetails: ' + JSON.stringify(UserDetails, null, 4) );
+    //console.log( 'getFriends() - UserDetails: ' + JSON.stringify(UserDetails, null, 4) );
 
     const roomDetails = await getRoomDetails(d.room);
-    console.log( 'getFriends() - roomDetails: ' + JSON.stringify(roomDetails, null, 4) );
+    //console.log( 'getFriends() - roomDetails: ' + JSON.stringify(roomDetails, null, 4) );
 
-    if( !UserDetails?.data || !roomDetails?.data ) return false;
+    if( !UserDetails?.data?._id || !roomDetails?.data?._id ) return false;
 
       $('.people').append(`
       <li class="person" data-room="${d.room}" data-user="${d.token}" data-active="false">
         <img src="img/female.webp" alt="" />
-        <span class="name">${UserDetails.data.name}</span>
-        <span class="time">${roomDetails.data.msg?.slice(-1)[0]?.date?.replace(/(\d+)\/(\d+)\/(\d+),/gmi, '') || ''}</span>
+        <span class="name">${UserDetails.data?.name}</span>
+        <span class="time">${roomDetails.data?.msg?.slice(-1)[0]?.date?.replace(/(\d+)\/(\d+)\/(\d+),/gmi, '') || ''}</span>
         <span class="preview"></span>
       </li>`);
 
@@ -55,7 +71,7 @@ console.log( 'getFriends()' );
 
 
 function chatAnimations(){
-console.log('chatAnimations()');
+//console.log('chatAnimations()');
 
   document.querySelector('.chat[data-active="true"]')?.classList?.add('active-chat');
   document.querySelector('.person[data-active="true"]')?.classList?.add('active');
@@ -96,7 +112,9 @@ console.log('chatAnimations()');
 
 
 function bubble(msg, client){
-console.log( 'bubble() - client: ' + client + '\nmsg: ' + JSON.stringify(msg, null, 4) );
+//console.log( 'bubble() - client: ' + client + '\nmsg: ' + JSON.stringify(msg, null, 4) );
+
+  if(client !== 'you' && client !== 'me') return false;
 
   chatAnimations();
 
@@ -125,7 +143,7 @@ console.log('updateTimes()');
   $('.conversation-start span').text(dateFULL);
 
   // get chatpartner
-  let ChatPartner = getChatPartner(ROOM);
+  let ChatPartner = getChatPartner(ROOM, clientDetails.token);
 
   // update time left sidebar
   for( const d of document.querySelectorAll('.people li') ){

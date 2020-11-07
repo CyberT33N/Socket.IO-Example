@@ -98,7 +98,7 @@ console.log( 'connectRoom()' );
 
   //msg --> {"roomdetails": r[0], "userdetails": UserDetails[0]}
   socket.on('connectRoom result', function(msg){
-  console.log( 'connectRoom result - msg: ' + JSON.stringify(msg, null, 4) );
+  //console.log( 'connectRoom result - msg: ' + JSON.stringify(msg, null, 4) );
 
     if( msg?.code ) return errorPage('Can not connect to Room');
 
@@ -131,7 +131,7 @@ console.log( 'connectRoom()' );
         chatAnimations();
 
         for( const d of msg.msg ){
-        console.log( 'd.usertoken: ' + d.usertoken + '\nd.msg: ' + d.msg );
+        //console.log( 'd.usertoken: ' + d.usertoken + '\nd.msg: ' + d.msg );
 
           if( clientDetails.token == d.usertoken ) bubble(d.msg, 'me');
           else bubble(d.msg, 'you')

@@ -47,7 +47,7 @@ describe('Endpoints Services', () => {
 
     it('Send POST request with wrong User Token - Should return { msg: "User Token was not found in Database" }', async() => {
 
-      try{ await axios.post(  host + '/api/getUserDetails', { usertoken: "wrong_token" }, { headers: { authorization: 'sample_auth_token..' }});
+      try{ r = await axios.post(  host + '/api/getUserDetails', { usertoken: "wrong_token" }, { headers: { authorization: 'sample_auth_token..' }});
       } catch (e){ expect( e.toString() ).toBe( 'Error: Request failed with status code 403' ); }
 
     }); // it('Send POST request with wrong User Token - Should return { msg: "User Token was not found in Database" }', async() => {

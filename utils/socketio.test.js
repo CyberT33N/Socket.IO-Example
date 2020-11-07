@@ -3,6 +3,7 @@
   test_client1 = json_config.test.user[0],
   test_client2 = json_config.test.user[1],
      test_room = json_config.test.room,
+     host = json_config.test.host,
 
             io = require('socket.io-client'),
 
@@ -23,13 +24,13 @@ describe('Socket.io Services', () => {
 
 
   // client 1
-  socket = io.connect(`http://localhost:1337/?usertoken=${test_client1.token}`, {
+  socket = io.connect(`${host}/?usertoken=${test_client1.token}`, {
     transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
   });
 
 
   // client 2
-  socket2 = io.connect(`http://localhost:1337/?usertoken=${test_client2.token}`, {
+  socket2 = io.connect(`${host}/?usertoken=${test_client2.token}`, {
     transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
   });
 

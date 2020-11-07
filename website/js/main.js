@@ -21,7 +21,7 @@ $(()=>{(async()=>{
   personClick();
 
   // start event for sending message
-  $(".write-link.send").on("click", function(e) { sendMessage(); });
+  $(".write-link.send").on("click", (e) => { sendMessage(); });
 
   // start event to catch room enter
   connectRoom();
