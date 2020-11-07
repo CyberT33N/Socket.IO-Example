@@ -151,11 +151,19 @@ In order to use Unit Test create aswell two testing user:
 ```javascript
 {
     "token": "mocha",
-    "name": "mocha"
+    "name": "mocha",
+    "friends": [{
+        "token": "mocha2",
+        "room": "mocha"
+    }]
 },
 {
     "token": "mocha2",
-    "name": "mocha2"
+    "name": "mocha2",
+    "friends": [{
+        "token": "mocha",
+        "room": "mocha"
+    }]
 }
 ```
 
