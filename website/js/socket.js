@@ -1,10 +1,7 @@
 'use strict'
 
-function personClick() {
-console.log( 'personClick()' );
-
-  $(document).on('click', '.person', function() {
-  console.log( '.person was clicked..' );
+function personClick() { console.log( 'personClick()' );
+  $(document).on('click', '.person', function() { console.log( '.person was clicked..' );
 
     socket.emit('room connect', $(this).attr('data-room'));
 
@@ -15,7 +12,6 @@ console.log( 'personClick()' );
     $(this).attr('data-active', 'true');
 
   }); //  $(document).on('click', '.person', function() {
-
 }; // function personClick() {
 
 
@@ -26,8 +22,7 @@ console.log( 'personClick()' );
 
 
 
-function sendMessage(){
-console.log('sendMessage()');
+function sendMessage(){ console.log('sendMessage()');
 
   let msg = $('textarea').val();
   console.log( 'sendMessage() - message: ' + msg );
@@ -64,11 +59,8 @@ console.log('sendMessage()');
 
 
 // do something when message of chat partner was recieved
-function socketMSG() {
-console.log( 'socketMSG()' );
-
-  socket.on('msg', function(msg){
-  console.log( 'message incoming.. msg: ' + msg );
+function socketMSG() { console.log( 'socketMSG()' );
+  socket.on('msg', function(msg){ console.log( 'message incoming.. msg: ' + msg );
 
     // catch NPE
     if( msg?.code ) return false;
@@ -83,7 +75,6 @@ console.log( 'socketMSG()' );
     document.querySelector(".chat").scrollTop = document.querySelector(".chat").scrollHeight;
 
   }); // socket.on('msg', function(msg){
-
 }; // function socketMSG() {
 
 
@@ -92,11 +83,8 @@ console.log( 'socketMSG()' );
 
 
 
-
-function connectRoom() {
-console.log( 'connectRoom()' );
-
-  //msg --> {"roomdetails": r[0], "userdetails": UserDetails[0]}
+//msg --> {"roomdetails": r[0], "userdetails": UserDetails[0]}
+function connectRoom() { console.log( 'connectRoom()' );
   socket.on('connectRoom result', function(msg){
   //console.log( 'connectRoom result - msg: ' + JSON.stringify(msg, null, 4) );
 
@@ -144,5 +132,4 @@ console.log( 'connectRoom()' );
       } //  if(msg){
 
   }); //  socket.on('connectRoom result', function(msg){
-
 }; // function connectRoom() {

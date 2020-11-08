@@ -13,6 +13,7 @@
 chalkAnimation = require('chalk-animation'),
       gradient = require('gradient-string'),
          chalk = require('chalk');
+
 var socket;
 
 
@@ -22,12 +23,10 @@ var socket;
 
 describe('Socket.io Services', () => {
 
-
   // client 1
   socket = io.connect(`${host}/?usertoken=${test_client1.token}`, {
     transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
   });
-
 
   // client 2
   socket2 = io.connect(`${host}/?usertoken=${test_client2.token}`, {
@@ -45,9 +44,7 @@ describe('Socket.io Services', () => {
   describe('connectRoom()', () => {
 
 
-
     it('Successfully connect - Should return object with _id', (done) => {
-
       socket.on('connectRoom result', function(roomDetails) {
       //log('connectRoom result - Successfully connect - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
 
@@ -58,13 +55,11 @@ describe('Socket.io Services', () => {
       }); // socket.on('connectRoom result', function(roomDetails) {
 
       socket.emit('room connect', test_room);
-
     }); // it('Successfully connect - Should return object with _id', (done) => {
 
 
 
     it('Simulate wrong Room ID - Should return {code : "Can not find Room ID in Database"}', (done) => {
-
       socket.on('connectRoom result', function(roomDetails) {
       log('connectRoom result - Simulate wrong Room ID - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
 
@@ -75,12 +70,10 @@ describe('Socket.io Services', () => {
       }); // socket.on('connectRoom result', function(roomDetails) {
 
       socket.emit('room connect', "wrong_roomID");
-
     }); // it('Simulate wrong Room ID - Should return "Can not find Room ID in Database"', (done) => {
 
 
     it('Simulate NPE - Should return {code: "NPE"}', (done) => {
-
       socket.on('connectRoom result', function(roomDetails) {
       log('connectRoom result - Simulate NPE - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
 
@@ -91,8 +84,8 @@ describe('Socket.io Services', () => {
       }); // socket.on('connectRoom result', function(roomDetails) {
 
       socket.emit('room connect', null);
-
     }); // it('Simulate NPE - Should return {code: "NPE"}', (done) => {
+
 
   }); // describe('connectRoom()', () => {
 
@@ -107,8 +100,8 @@ describe('Socket.io Services', () => {
 
   describe('messageRoom()', () => {
 
-    it('Should send message to chat partner and return string', (done) => {
 
+    it('Should send message to chat partner and return string', (done) => {
       socket.on('msg', function(msg) {
       log('messageRoom() - sucess message: ' + msg);
 
@@ -120,14 +113,11 @@ describe('Socket.io Services', () => {
 
       // simulate chat partner with socket 2
       socket2.emit('chat message', {msg: "sample message..", room: test_room, usertoken: test_client2.token});
-
-
     }); // it('Successfully connect - Should return object with _id', (done) => {
 
 
 
     it('Simulate null message - Should return {code: "Message was null"}', (done) => {
-
       socket.on('msg', function(msg) {
       log('messageRoom() - error message: ' + JSON.stringify(msg, null, 4));
 
@@ -139,22 +129,10 @@ describe('Socket.io Services', () => {
 
       // simulate chat partner with socket 2
       socket2.emit('chat message', {msg: '', room: test_room, usertoken: test_client2.token});
-
     }); // it('Should return {code: "Message was null"}', (done) => {
 
+
   }); // describe('messageRoom()', () => {
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -5,30 +5,13 @@
          gradient = require('gradient-string'),
             chalk = require('chalk'),
 
-controllermongodb = require('../controller/controller-mongodb');
+controllermongodb = require('../controller/controller-mongodb'),
+         services = {
 
+          getUserDetails: async (req, res) => { return await getUserDetails(req, res); },
+          getRoomDetails: async (req, res) => { return await getRoomDetails(req, res); }
 
-
-
-
-
-const services = {
-
-  getUserDetails: async (req, res) => { return await getUserDetails(req, res); },
-  getRoomDetails: async (req, res) => { return await getRoomDetails(req, res); }
-
-};
-
-module.exports = services;
-
-
-
-
-
-
-
-
-
+        }; module.exports = services;
 
 
 
@@ -39,7 +22,10 @@ module.exports = services;
 
 
 async function getUserDetails(req, res){
-log( 'getUserDetails() - SSL: ' + req?.secure + '\nRequest Body: ' + JSON.stringify(req?.body, null, 4) + '\nRequest Query: ' + JSON.stringify(req?.query, null, 4) + '\nHeader: ' + JSON.stringify(req?.headers, null, 4)  );
+log(`getUserDetails() - SSL: ${req?.secure}
+Request Body: ${JSON.stringify(req?.body, null, 4)}
+Request Query: ${JSON.stringify(req?.query, null, 4)}
+Header: ${JSON.stringify(req?.headers, null, 4)}`);
 
   if(!req?.body?.usertoken && !req?.query?.usertoken) return res.status(404).json( { msg: "User Token can not be null" } );
 
@@ -61,17 +47,11 @@ log( 'getUserDetails() - SSL: ' + req?.secure + '\nRequest Body: ' + JSON.string
 
 
 
-
-
-
-
-
-
-
-
-
 async function getRoomDetails(req, res){
-log( 'getRoomDetails() - SSL: ' + req?.secure + '\nRequest Body: ' + JSON.stringify(req?.body, null, 4) + '\nRequest Query: ' + JSON.stringify(req?.query, null, 4) + '\nHeader: ' + JSON.stringify(req?.headers, null, 4)  );
+log(`getRoomDetails() - SSL: ${req?.secure}
+Request Body: ${JSON.stringify(req?.body, null, 4)}
+Request Query: ${JSON.stringify(req?.query, null, 4)}
+Header: ${JSON.stringify(req?.headers, null, 4)}`);
 
   if(!req?.body?.id && !req?.query?.id) return res.status(404).json( { msg: "Room ID can not be null" } );
 

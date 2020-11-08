@@ -1,32 +1,25 @@
 'use strict'
 
 function getURLParams(){
-
   let token = window.location.search.match( /usertoken=([a-z0-9]+)/gmi );
   if(!token) return false;
   return {"token": token[0].replace('usertoken=', '')};
-
 }; // function getURLParams(){
 
 
 function getChatPartner(roomDetails, userToken){
-
   if(!roomDetails || !userToken ) return false;
 
   for( const d of roomDetails.user ){
     if( userToken !== d.usertoken ) return d;
   } // for( const d of roomDetails.user ){
-
 }; // function getChatPartner(roomdetails){
 
 
 function errorPage(e){
-
   $('.wrapper').remove();
   $('body').append(`<div class="error usertoken">Error: ${e}</div>`);
-
-} // function errorPage(){
-
+}; // function errorPage(){
 
 
 
@@ -37,9 +30,8 @@ function errorPage(e){
 
 
 
-async function getFriends(UserDetails) {
-console.log( 'getFriends()' );
 
+async function getFriends(UserDetails) { console.log( 'getFriends()' );
   if(!UserDetails?.friends) return false;
 
   for( const d of UserDetails.friends ){
@@ -60,9 +52,7 @@ console.log( 'getFriends()' );
         <span class="preview"></span>
       </li>`);
 
-  } // for( const friends of d.friends ){
-  return true;
-
+  } return true;
 } // async function getFriends() {
 
 
@@ -70,9 +60,7 @@ console.log( 'getFriends()' );
 
 
 
-function chatAnimations(){
-//console.log('chatAnimations()');
-
+function chatAnimations(){ //console.log('chatAnimations()');
   document.querySelector('.chat[data-active="true"]')?.classList?.add('active-chat');
   document.querySelector('.person[data-active="true"]')?.classList?.add('active');
 
@@ -104,17 +92,14 @@ function chatAnimations(){
     friends.name = f?.querySelector('.name')?.innerText;
     chat.name.innerHTML = friends.name;
   }
-
 }; // function chatAnimations(){
 
 
 
 
 
-function bubble(msg, client){
-//console.log( 'bubble() - client: ' + client + '\nmsg: ' + JSON.stringify(msg, null, 4) );
-
-  if(client !== 'you' && client !== 'me') return false;
+function bubble(msg, client){ console.log( 'bubble() - client: ' + client + '\nmsg: ' + JSON.stringify(msg, null, 4) );
+  if(client !== 'you' && client !== 'me' || !msg) return false;
 
   chatAnimations();
 
@@ -126,15 +111,14 @@ function bubble(msg, client){
   </div>`);
 
   $('.chat').append(`<div class="bubble ${client}">${msg}</div>`);
-
+  return true;
 }; // function bubble(){
 
 
 
 
 
-function updateTimes(){
-console.log('updateTimes()');
+function updateTimes(){ console.log('updateTimes()');
 
   let AMPM = formatAMPM(new Date);
   let dateFULL = formatDate() + ', ' + AMPM;
@@ -170,20 +154,16 @@ console.log('updateTimes()');
 
 
 
-function formatDate() {
-
+function formatDate() { console.log('formatDate()');
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   var yyyy = today.getFullYear();
-
   return today = mm + '/' + dd + '/' + yyyy;
-
 }; // function formatDate() {
 
 
-function formatAMPM(date) {
-
+function formatAMPM(date) { console.log('formatAMPM()');
   var hours = date.getHours();
   var minutes = date.getMinutes();
   var ampm = hours >= 12 ? 'pm' : 'am';
@@ -192,5 +172,4 @@ function formatAMPM(date) {
   minutes = minutes < 10 ? '0'+minutes : minutes;
   var strTime = hours + ':' + minutes + ' ' + ampm;
   return strTime;
-
 }; // function formatAMPM(date) {

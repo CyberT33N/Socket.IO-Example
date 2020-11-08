@@ -55,6 +55,8 @@ controllerEndpoints = require('./controller/controller-endpoints'),
         json_config = JSON.parse(  fs.readFileSync('./admin/config.json', 'utf8')  ),
 
               limit = json_config.request_limit;
+              log( 'Current working directory: ' + __dirname );
+
 
 /*
  ████████████████████████████████████████████████████████████████████████████████
@@ -72,31 +74,6 @@ controllerEndpoints = require('./controller/controller-endpoints'),
  console.log(ads);
  console.log( '\nCheck my Github Profile: ' + chalk.white.bgGreen.bold(' github.com/CyberT33N ')  + '\n\n');
  console.log( gradient('white', 'black')('\n\n=======================================\n\n') );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- /*
- -----------------------------------------------------------------------------
-
- ███████╗████████╗ █████╗ ██████╗ ████████╗    ███████╗ ██████╗██████╗ ██╗██████╗ ████████╗
- ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝    ██╔════╝██╔════╝██╔══██╗██║██╔══██╗╚══██╔══╝
- ███████╗   ██║   ███████║██████╔╝   ██║       ███████╗██║     ██████╔╝██║██████╔╝   ██║
- ╚════██║   ██║   ██╔══██║██╔══██╗   ██║       ╚════██║██║     ██╔══██╗██║██╔═══╝    ██║
- ███████║   ██║   ██║  ██║██║  ██║   ██║       ███████║╚██████╗██║  ██║██║██║        ██║
- ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝       ╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝
- */
-log( 'Current working directory: ' + __dirname );
 
 
 
@@ -140,28 +117,10 @@ app.use(express.static(__dirname + '/website'));
 
 // log all requests..
 app.use((req, res, next)=>{
-
   if( path.extname(path.basename(req.url)) ) log("The file " + path.basename(req?.url) + " was requested.");
   else log("The endpoint " + path.basename(req?.url) + " was requested.");
-
   next();
-
 }); // app.use((req, res, next)=>{
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -183,18 +142,14 @@ app.use((req, res, next)=>{
 
 
 // POST request where we take User Token and send back Object with User Details to Client
-app.post('/api/getUserDetails', (req, res)=>{(async()=>{  await controllerEndpoints.getUserDetails(req, res);  })().catch((e)=>{  log('ASYNC - POST - Error at /api/getUserDetails - Error: ' + e)  })});
+app.post('/api/getUserDetails', (req, res)=>{(async()=>{
+  await controllerEndpoints.getUserDetails(req, res);
+})().catch((e)=>{  log('ASYNC - POST - Error at /api/getUserDetails - Error: ' + e)  })});
 
 // POST request where we take Room ID and send back Object with Room Details to Client
-app.post('/api/getRoomDetails', (req, res)=>{(async()=>{  await controllerEndpoints.getRoomDetails(req, res);  })().catch((e)=>{  log('ASYNC - POST - Error at /api/getRoomDetails - Error: ' + e)  })});
-
-
-
-
-
-
-
-
+app.post('/api/getRoomDetails', (req, res)=>{(async()=>{
+  await controllerEndpoints.getRoomDetails(req, res);
+})().catch((e)=>{  log('ASYNC - POST - Error at /api/getRoomDetails - Error: ' + e)  })});
 
 
 
@@ -206,14 +161,7 @@ app.post('/api/getRoomDetails', (req, res)=>{(async()=>{  await controllerEndpoi
 
 
 // start server
-http.listen(port, (async()=>{
-log('Server was started.. Listening on port: ' + port);
-
-  // connect to MongoDB Database
+http.listen(port, (async()=>{ log('Server was started.. Listening on port: ' + port);
   if( !await controllermongodb.connectMongoDB() ) return false;
-  log( 'Successfully connected to MongoDB Database' );
-
-  // Start Socket.io
   controller.rootConnect(http);
-
 })().catch((e)=>{  log('ASYNC - Error at main function.. Error: ' + e)  }));
