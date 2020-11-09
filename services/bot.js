@@ -76,10 +76,10 @@ if( osPLATFORM == 'win32' ){
 if( extensionlist.length !== 0 ){
 
   let extensionlistAR = [];
-  for( let d in extensionlist ){
+  for( const d in extensionlist ){
     extensionlistAR.push( chromeExtensionPath + extensionlist[d] );
     args.push( '--load-extension=' + chromeExtensionPath + extensionlist[d] );
-  } // for( let d of extensionlist ){
+  } // for( const d of extensionlist ){
 
   extensionlist = '--disable-extensions-except=' + extensionlistAR.join( ',' );
   args.push(extensionlist);

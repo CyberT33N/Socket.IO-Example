@@ -24,7 +24,7 @@ function personClick() { console.log( 'personClick()' );
 
 function sendMessage(){ console.log('sendMessage()');
 
-  let msg = $('textarea').val();
+  const msg = $('textarea').val();
   console.log( 'sendMessage() - message: ' + msg );
 
   // do something when message is empty..
@@ -44,7 +44,7 @@ function sendMessage(){ console.log('sendMessage()');
   bubble(msg, 'me');
 
   // update times in chat APP
-  updateTimes();
+  updateTimes(ROOM, clientDetails.token, formatAMPM(), formatDate() + ', ' + formatAMPM());
 
   // scroll to bottom of chat window
   document.querySelector(".chat").scrollTop = document.querySelector(".chat").scrollHeight;
@@ -69,7 +69,7 @@ function socketMSG() { console.log( 'socketMSG()' );
     bubble(msg, 'you');
 
     // update times in chat APP
-    updateTimes();
+    updateTimes(ROOM, clientDetails.token, formatAMPM(), formatDate() + ', ' + formatAMPM());
 
     // scroll to bottom of chat window
     document.querySelector(".chat").scrollTop = document.querySelector(".chat").scrollHeight;

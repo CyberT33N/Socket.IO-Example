@@ -23,16 +23,20 @@ var socket;
 
 describe('Socket.io Services', () => {
 
-  // client 1
-  socket = io.connect(`${host}/?usertoken=${test_client1.token}`, {
-    transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
-  });
 
-  // client 2
-  socket2 = io.connect(`${host}/?usertoken=${test_client2.token}`, {
-    transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
-  });
+  before(async () => {
 
+    // client 1
+    socket = io.connect(`${host}/?usertoken=${test_client1.token}`, {
+      transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
+    });
+
+    // client 2
+    socket2 = io.connect(`${host}/?usertoken=${test_client2.token}`, {
+      transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
+    });
+
+  }); //   before( async () => {
 
 
 
@@ -109,11 +113,11 @@ describe('Socket.io Services', () => {
         expect( typeof msg ).toBe( 'string' );
         done();
 
-      }); // socket.on('connectRoom result', function(roomDetails) {
+      }); // socket.on('msg', function(msg) {
 
       // simulate chat partner with socket 2
-      socket2.emit('chat message', {msg: "sample message..", room: test_room, usertoken: test_client2.token});
-    }); // it('Successfully connect - Should return object with _id', (done) => {
+      socket2.emit('chat message', {msg: "sample message..", room: test_room, usertoken: test_client2.token, date: "xx/xx/xxxx, xx:xx xx" });
+    }); // it('Should send message to chat partner and return string', (done) => {
 
 
 

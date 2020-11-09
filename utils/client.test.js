@@ -12,6 +12,8 @@ const {getUserDetails, getRoomDetails, connectMongoDB} = require('../services/mo
              host = json_config.test.host,
              link = host + '/?usertoken=' + test_client1.token,
 
+               io = require('socket.io-client'),
+
     controllerbot = require('../controller/controller-bot'),
 controllermongodb = require('../controller/controller-mongodb'),
 
@@ -20,7 +22,7 @@ controllermongodb = require('../controller/controller-mongodb'),
          gradient = require('gradient-string'),
             chalk = require('chalk');
 
-var pptr;
+var pptr, testRoomDetails, testUserDetails, AMPM, dateFULL, ChatPartner, socket, socket2;
 
 // create function to create loop if something went wrong like timeout to restart
 async function openLink(page, link){
@@ -41,14 +43,47 @@ async function openLink(page, link){
 describe('Client Side Services', () => {
 
 
-  before( async () => {
+  before( (done) => { (async()=>{
+
     // start browser and get page & client
     pptr = await controllerbot.startBROWSER();
     if(!pptr) throw new Error('Something went wrong we cant find pptr');
 
     await openLink(pptr.page, link);
+
     await connectMongoDB();
-  }); // before( async () => {
+
+    // get room details of test room
+    testRoomDetails = await getRoomDetails(test_room);
+    if(!testRoomDetails?._id) throw new Error('before() - Cant get Room Details');
+
+    // get user details of test user
+    testUserDetails = await getUserDetails(test_client1.token);
+    if(!testUserDetails?._id) throw new Error('before() - Cant get User Details');
+
+
+
+    // client 1
+    socket = io.connect(`${host}/?usertoken=${test_client1.token}`, {
+      transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
+    });
+
+    // client 2
+    socket2 = io.connect(`${host}/?usertoken=${test_client2.token}`, {
+      transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
+    });
+
+    socket.on('connectRoom result', function(roomDetails) {
+    //log('connectRoom result - Successfully connect - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
+      socket.off('connectRoom result');
+      done();
+    }); // socket.on('connectRoom result', function(roomDetails) {
+
+    socket.emit('room connect', test_room);
+
+
+  })().catch((e)=>{  log('ASYNC - client.test.js - MAIN - Error: ' + e)  })}); // before( (done) => {
+
 
 
 
@@ -146,55 +181,30 @@ describe('Client Side Services', () => {
 
 
 
+
+
+
+
+
+
+
+
+
+
   describe('web.js', () => {
-
-
-    describe('getURLParams()', () => {
-
-      it('Should return token from URL paramater', async()=>{
-        const r = await pptr.page.evaluate(async()=>{
-          return await getURLParams();
-        });
-        log('getURLParams() - result: ' + JSON.stringify(r, null, 4));
-
-        expect( r ).toEqual(expect.objectContaining({ token: expect.anything() }));
-      }); // it('Should return token from URL paramater', async()=>{
-
-
-      it('Simulate no user token paramater inside of URL found', async()=>{
-        await openLink(pptr.page, host + '/?usertoken=');
-
-        expect( await pptr.page.evaluate(async()=>{
-          return await getURLParams();
-        })).toBe(false);
-      }); // it('Should return token from URL paramater', async()=>{
-
-
-    }); // describe('getURLParams()', () => {
-
-
-
-
 
 
     describe('getChatPartner()', () => {
 
 
-      it('Should return object with key _id', async()=>{
-        const roomDetails = await getRoomDetails(test_room);
+      it('Should return object with key usertoken', async()=>{
 
-        if(roomDetails?._id){
-        //log( 'getChatPartner() - Room Details: ' + JSON.stringify(roomDetails, null, 4) );
+        ChatPartner = await pptr.page.evaluate(async(d)=>{
+          return await getChatPartner(d.roomDetails, d.usertoken);
+        }, {"roomDetails": testRoomDetails, "usertoken": test_client1.token});
 
-          const r = await pptr.page.evaluate(async(d)=>{
-            return await getChatPartner(d.roomDetails, d.usertoken);
-          }, {"roomDetails": roomDetails, "usertoken": test_client1.token});
-          //log('getChatPartner() - Chat Partner usertoken: ' + r?.usertoken);
+        expect(ChatPartner).toEqual(expect.objectContaining({ usertoken: expect.anything() }));
 
-          expect( r ).toEqual(expect.objectContaining({ usertoken: expect.anything() }));
-
-        } // if(roomDetails){
-        else throw new Error('getChatPartner() - Cant get Room Details');
       }); // it('Should return object with key _id', async()=>{
 
 
@@ -215,17 +225,9 @@ describe('Client Side Services', () => {
     describe('getFriends()', () => {
 
       it('Should return object with key _id', async()=>{
-        const userDetails = await getUserDetails(test_client1.token);
-
-        if(userDetails?._id){
-        log( 'getFriends() - User Details: ' + JSON.stringify(userDetails, null, 4) );
-
           expect( await pptr.page.evaluate(async(userDetails)=>{
             return await getFriends(userDetails);
-          }, userDetails)).toBe(true);
-
-        } // if(roomDetails){
-        else throw new Error('getFriends() - Cant get User Details');
+          }, testUserDetails)).toBe(true);
       }); // it('Should return object with key _id', async()=>{
 
 
@@ -310,6 +312,124 @@ describe('Client Side Services', () => {
 
 
     }); // describe('bubble()', () => {
+
+
+
+
+
+
+
+    describe('formatAMPM()', () => {
+      it('Should return xx:xx am/pm', async()=>{
+        AMPM = await pptr.page.evaluate(async()=>{
+          return await formatAMPM();
+        });
+        expect( AMPM ).toMatch(/([0-1]?[0-9]|2[0-3]):[0-5][0-9] (am|pm)/gmi);
+      }); // it('Should return xx:xx am/pm', async()=>{
+    }); // describe('formatAMPM()', () => {
+
+
+
+
+    describe('formatDate()', () => {
+      it('Should return mm/dd/yyyy', async()=>{
+        const formatDate = await pptr.page.evaluate(async()=>{
+          return await formatDate();
+        });
+        dateFULL = formatDate + ', ' + AMPM;
+        expect( formatDate ).toMatch(/\d\d\/\d\d\/\d\d\d\d/gmi);
+      }); // it('Should return mm/dd/yyyy', async()=>{
+    }); // describe('formatDate()', () => {
+
+
+
+
+
+
+
+
+    describe('updateTimes()', () => {
+
+
+
+      it('Simulate successfully update times - Should return true', async()=>{
+        expect(await pptr.page.evaluate(async(d)=>{
+          return await updateTimes(d.roomDetails, d.userDetails, d.AMPM, d.dateFULL);
+        }, {roomDetails: testRoomDetails, userDetails: testUserDetails, AMPM: AMPM, dateFULL: dateFULL})).toBe(true);
+      }); // it('Simulate successfully update times - Should return true', async()=>{
+
+
+      it(`Check for date at CSS Selector .conversation-start span`, async()=>{
+        expect(await pptr.page.evaluate(async()=>{
+          return document.querySelector('.conversation-start span').textContent;
+        })).toBe(dateFULL);
+      }); // it(`Check for date(${dateFULL}) at CSS Selector .conversation-start span`, async()=>{
+
+
+      it(`Check for AMPM(${AMPM}) at CSS Selector .time with Partner Token`, (done)=>{
+
+        socket.on('msg', async function(msg) {
+        log('updateTimes() - success message: ' + msg);
+
+          expect(await pptr.page.evaluate(async(token)=>{
+            return document.querySelector(`.people li[data-user="${token}"]`)?.querySelector('.time')?.textContent;
+          }, ChatPartner.usertoken)).toBe(AMPM);
+
+          done();
+
+        }); // socket.on('msg', function(msg) {
+
+        socket2.emit('chat message', {msg: "sample message22..", room: test_room, usertoken: test_client2.token, date: dateFULL });
+
+      }); // it(`Check for AMPM(${AMPM}) at CSS Selector .time with Partner Token`, (done)=>{
+
+
+      it('Simulate NPE  - Should return false', async()=>{
+          expect(await pptr.page.evaluate(async(d)=>{
+            return await updateTimes(d.roomDetails, d.userDetails);
+          }, {roomDetails: null, userDetails: null})).toBe(false);
+      }); // it('Simulate NPE  - Should return false', async()=>{
+
+
+
+
+    }); // describe('updateTimes()', () => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    describe('getURLParams()', () => {
+
+      it('Should return token from URL paramater', async()=>{
+        const r = await pptr.page.evaluate(async()=>{
+          return await getURLParams();
+        });
+        log('getURLParams() - result: ' + JSON.stringify(r, null, 4));
+
+        expect( r ).toEqual(expect.objectContaining({ token: expect.anything() }));
+      }); // it('Should return token from URL paramater', async()=>{
+
+
+      it('Simulate no user token paramater inside of URL found', async()=>{
+        await openLink(pptr.page, host + '/?usertoken=');
+
+        expect( await pptr.page.evaluate(async()=>{
+          return await getURLParams();
+        })).toBe(false);
+      }); // it('Should return token from URL paramater', async()=>{
+
+
+    }); // describe('getURLParams()', () => {
 
 
 

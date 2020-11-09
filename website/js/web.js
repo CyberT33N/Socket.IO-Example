@@ -1,15 +1,14 @@
 'use strict'
 
 function getURLParams(){
-  let token = window.location.search.match( /usertoken=([a-z0-9]+)/gmi );
+  const token = window.location.search.match( /usertoken=([a-z0-9]+)/gmi );
   if(!token) return false;
   return {"token": token[0].replace('usertoken=', '')};
 }; // function getURLParams(){
 
 
 function getChatPartner(roomDetails, userToken){
-  if(!roomDetails || !userToken ) return false;
-
+if(!roomDetails || !userToken ) return false;
   for( const d of roomDetails.user ){
     if( userToken !== d.usertoken ) return d;
   } // for( const d of roomDetails.user ){
@@ -32,7 +31,7 @@ function errorPage(e){
 
 
 async function getFriends(UserDetails) { console.log( 'getFriends()' );
-  if(!UserDetails?.friends) return false;
+if(!UserDetails?.friends) return false;
 
   for( const d of UserDetails.friends ){
 
@@ -99,14 +98,14 @@ function chatAnimations(){ //console.log('chatAnimations()');
 
 
 function bubble(msg, client){ console.log( 'bubble() - client: ' + client + '\nmsg: ' + JSON.stringify(msg, null, 4) );
-  if(client !== 'you' && client !== 'me' || !msg) return false;
+if(client !== 'you' && client !== 'me' || !msg) return false;
 
   chatAnimations();
 
   if( !$('.conversation-start').html() ) $('.right .top').after(`
   <div class="chat" data-active="true">
     <div class="conversation-start">
-      <span>${formatDate()}, ${formatAMPM(new Date)}</span>
+      <span>${formatDate()}, ${formatAMPM()}</span>
     </div>
   </div>`);
 
@@ -118,23 +117,6 @@ function bubble(msg, client){ console.log( 'bubble() - client: ' + client + '\nm
 
 
 
-function updateTimes(){ console.log('updateTimes()');
-
-  let AMPM = formatAMPM(new Date);
-  let dateFULL = formatDate() + ', ' + AMPM;
-
-  // update time header
-  $('.conversation-start span').text(dateFULL);
-
-  // get chatpartner
-  let ChatPartner = getChatPartner(ROOM, clientDetails.token);
-
-  // update time left sidebar
-  for( const d of document.querySelectorAll('.people li') ){
-    if( $(d).attr('data-user') == ChatPartner.usertoken ) $(d).find('.time').text(AMPM);
-  } // for( const d of document.querySelectorAll('.people li') ){
-
-}; // function updateTimes(){
 
 
 
@@ -159,11 +141,12 @@ function formatDate() { console.log('formatDate()');
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   var yyyy = today.getFullYear();
-  return today = mm + '/' + dd + '/' + yyyy;
+  return mm + '/' + dd + '/' + yyyy;
 }; // function formatDate() {
 
 
-function formatAMPM(date) { console.log('formatAMPM()');
+function formatAMPM(){ console.log('formatAMPM()');
+  var date = new Date;
   var hours = date.getHours();
   var minutes = date.getMinutes();
   var ampm = hours >= 12 ? 'pm' : 'am';
@@ -172,4 +155,22 @@ function formatAMPM(date) { console.log('formatAMPM()');
   minutes = minutes < 10 ? '0'+minutes : minutes;
   var strTime = hours + ':' + minutes + ' ' + ampm;
   return strTime;
-}; // function formatAMPM(date) {
+}; // function formatAMPM() {
+
+
+function updateTimes(roomDetails, userToken, AMPM, dateFULL){ console.log('updateTimes()');
+if( !roomDetails?._id || !userToken || !AMPM || !dateFULL ) return false;
+
+  // update time header
+  $('.conversation-start span').text(dateFULL);
+
+  // get chatpartner
+  const ChatPartner = getChatPartner(roomDetails, userToken);
+  if(!ChatPartner) return false;
+
+  // update time left sidebar
+  for( const d of document.querySelectorAll('.people li') ){
+    if( $(d).attr('data-user') == ChatPartner.usertoken ) $(d).find('.time').text(AMPM);
+  } return true;
+
+}; // function updateTimes(){
