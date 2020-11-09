@@ -1,5 +1,7 @@
 'use strict'
 
+function scrollBottom(css){ document.querySelector(css).scrollTop = document.querySelector(css).scrollHeight; } // function scrollBottom(css){
+
 function getURLParams(){
   const token = window.location.search.match( /usertoken=([a-z0-9]+)/gmi );
   if(!token) return false;
@@ -20,7 +22,14 @@ function errorPage(e){
   $('body').append(`<div class="error usertoken">Error: ${e}</div>`);
 }; // function errorPage(){
 
-
+function addConversationStart(date){
+  $('.right .top').after(`
+  <div class="chat" data-active="true">
+    <div class="conversation-start">
+      <span>${date}</span>
+    </div>
+  </div>`);
+}; // function addConversationStart(date){
 
 
 
@@ -97,20 +106,16 @@ function chatAnimations(){ //console.log('chatAnimations()');
 
 
 
-function bubble(msg, client){ console.log( 'bubble() - client: ' + client + '\nmsg: ' + JSON.stringify(msg, null, 4) );
+function bubble(msg, client){ //console.log( 'bubble() - client: ' + client + '\nmsg: ' + JSON.stringify(msg, null, 4) );
 if(client !== 'you' && client !== 'me' || !msg) return false;
 
   chatAnimations();
 
-  if( !$('.conversation-start').html() ) $('.right .top').after(`
-  <div class="chat" data-active="true">
-    <div class="conversation-start">
-      <span>${formatDate()}, ${formatAMPM()}</span>
-    </div>
-  </div>`);
+  if( !$('.conversation-start').html() ) addConversationStart(`${formatDate()}, ${formatAMPM()}`);
 
   $('.chat').append(`<div class="bubble ${client}">${msg}</div>`);
-  return true;
+
+return true;
 }; // function bubble(){
 
 

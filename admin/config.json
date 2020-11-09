@@ -21,7 +21,7 @@
   },
 
   "bot": {
-    "headless":false,
+    "headless":true,
     "browser_profile":"TDD",
     "windowWidth":1280,
     "windowHeight":720,

@@ -22,33 +22,34 @@ function personClick() { console.log( 'personClick()' );
 
 
 
-function sendMessage(){ console.log('sendMessage()');
+function sendMessage(clientToken, roomDetails, AMPM, dateFull){ console.log('sendMessage()');
+if( !clientToken || !roomDetails || !AMPM || !dateFull ) return false;
 
   const msg = $('textarea').val();
+  $('textarea').val(''); // clear textarea
   console.log( 'sendMessage() - message: ' + msg );
 
   // do something when message is empty..
-  if( !msg ) return false;
+  if( !msg ) return {code: "message can not be empty"};
 
   // send current message to server to store it in db and to transfer it to the chat partner
   socket.emit('chat message', {
-    "date": formatDate() + ', ' + formatAMPM(new Date),
+    "date": dateFull,
     "msg": msg,
-    "room": ROOM.id,
-    "usertoken": clientDetails.token});
-
-  // clear textarea
-  $('textarea').val('');
+    "room": roomDetails.id,
+    "usertoken": clientToken
+  });
 
   // send text to chat
   bubble(msg, 'me');
 
   // update times in chat APP
-  updateTimes(ROOM, clientDetails.token, formatAMPM(), formatDate() + ', ' + formatAMPM());
+  updateTimes(roomDetails, clientToken, AMPM, dateFull);
 
   // scroll to bottom of chat window
-  document.querySelector(".chat").scrollTop = document.querySelector(".chat").scrollHeight;
+  scrollBottom('.chat');
 
+return true;
 }; // function sendMessage(){
 
 
@@ -61,18 +62,17 @@ function sendMessage(){ console.log('sendMessage()');
 // do something when message of chat partner was recieved
 function socketMSG() { console.log( 'socketMSG()' );
   socket.on('msg', function(msg){ console.log( 'message incoming.. msg: ' + msg );
-
-    // catch NPE
-    if( msg?.code ) return false;
+  if( msg?.code ) return false;
 
     // import messages from chat partner to chat
     bubble(msg, 'you');
 
     // update times in chat APP
-    updateTimes(ROOM, clientDetails.token, formatAMPM(), formatDate() + ', ' + formatAMPM());
+    const AMPM = formatAMPM();
+    updateTimes(ROOM, clientDetails.token, AMPM, formatDate() + ', ' + AMPM);
 
     // scroll to bottom of chat window
-    document.querySelector(".chat").scrollTop = document.querySelector(".chat").scrollHeight;
+    scrollBottom('.chat');
 
   }); // socket.on('msg', function(msg){
 }; // function socketMSG() {
@@ -83,12 +83,18 @@ function socketMSG() { console.log( 'socketMSG()' );
 
 
 
+
+
+
+
+
+
+
+
 //msg --> {"roomdetails": r[0], "userdetails": UserDetails[0]}
 function connectRoom() { console.log( 'connectRoom()' );
-  socket.on('connectRoom result', function(msg){
-  //console.log( 'connectRoom result - msg: ' + JSON.stringify(msg, null, 4) );
-
-    if( msg?.code ) return errorPage('Can not connect to Room');
+  socket.on('connectRoom result', function(msg){ //console.log( 'connectRoom result - msg: ' + JSON.stringify(msg, null, 4) );
+  if( msg?.code ) return errorPage('Can not connect to Room');
 
     ROOM = msg;
 
@@ -99,37 +105,22 @@ function connectRoom() { console.log( 'connectRoom()' );
     $('.chat').remove();
 
 
+    if(msg?.msg){ console.log( 'connectRoom result - old messages was found..' );
 
+      if( !$('.conversation-start').html() ) addConversationStart(`${msg?.msg?.slice(-1)[0]?.date}`);
 
-      if(msg?.msg){
-      console.log( 'connectRoom result - old messages was found..' );
+      // load chat animations
+      chatAnimations();
 
-        if( !$('.conversation-start').html() ) {
+      for( const d of msg.msg ){ //console.log( 'd.usertoken: ' + d.usertoken + '\nd.msg: ' + d.msg );
+        if( clientDetails.token == d.usertoken ) bubble(d.msg, 'me');
+        else bubble(d.msg, 'you')
+      } //   for( const d of msg.msg ){
 
-          $('.right .top').after(`
-          <div class="chat" data-active="true">
-            <div class="conversation-start">
-              <span>${msg?.msg?.slice(-1)[0]?.date}</span>
-            </div>
-          </div>`);
+      // scroll to bottom of chat window
+      scrollBottom('.chat');
 
-        } // if( !$('.conversation-start').html() ) {
-
-        // load chat animations
-        chatAnimations();
-
-        for( const d of msg.msg ){
-        //console.log( 'd.usertoken: ' + d.usertoken + '\nd.msg: ' + d.msg );
-
-          if( clientDetails.token == d.usertoken ) bubble(d.msg, 'me');
-          else bubble(d.msg, 'you')
-
-        } //   for( const d of msg.msg ){
-
-        // scroll to bottom of chat window
-        document.querySelector(".chat").scrollTop = document.querySelector(".chat").scrollHeight;
-
-      } //  if(msg){
+    } // if(msg?.msg){
 
   }); //  socket.on('connectRoom result', function(msg){
 }; // function connectRoom() {
