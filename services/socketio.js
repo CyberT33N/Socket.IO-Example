@@ -8,7 +8,7 @@
 controllermongodb = require('../controller/controller-mongodb'),
          services = {
 
-          rootConnect: async (http) => { return await rootConnect(http); }
+          rootConnect: async (http)=>{ return await rootConnect(http); }
 
          }; module.exports = services;
 
@@ -26,7 +26,7 @@ async function rootConnect(http){ log( 'rootConnect();' );
 
   const io = require('socket.io')(http);
 
-  io.on('connection', (socket) => { log('User connected..');
+  io.on('connection', (socket)=>{ log('User connected..');
 
     // catch message from Chat Room
     messageRoom(socket);
@@ -37,7 +37,7 @@ async function rootConnect(http){ log( 'rootConnect();' );
     // Check when user disconnect from website
     disconnectUser(socket);
 
-  }); // io.on('connection', (socket) => {
+  }); // io.on('connection', (socket)=>{
 
 }; // function rootConnect(){
 
@@ -93,7 +93,7 @@ function messageRoom(socket){ // {"msg": msg, "room": details.room, "usertoken":
 
 
 
-function disconnectUser(socket){ socket.on('disconnect', () => afterDisconnect() ); }
+function disconnectUser(socket){ socket.on('disconnect', ()=> afterDisconnect() ); }
 
 async function afterDisconnect(){ log('afterDisconnect()');
   // do something..

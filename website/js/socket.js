@@ -1,7 +1,7 @@
 'use strict'
 
 function personClick() { console.log( 'personClick()' );
-  $(document).on('click', '.person', function() { console.log( '.person was clicked..' );
+  $(document).on('click', '.person', function(){ console.log( '.person was clicked..' );
 
     socket.emit('room connect', $(this).attr('data-room'));
 
@@ -11,7 +11,7 @@ function personClick() { console.log( 'personClick()' );
     $('.person').attr('data-active', 'false');
     $(this).attr('data-active', 'true');
 
-  }); //  $(document).on('click', '.person', function() {
+  }); // $(document).on('click', '.person', function(){
 }; // function personClick() {
 
 
@@ -60,9 +60,9 @@ return true;
 
 
 // do something when message of chat partner was recieved
-function socketMSG() { console.log( 'socketMSG()' );
-  socket.on('msg', function(msg){ console.log( 'message incoming.. msg: ' + msg );
-  if( msg?.code ) return false;
+function socketMSG(){ console.log( 'socketMSG()' );
+  socket.on('msg', (msg)=>{ console.log( 'message incoming.. msg: ' + msg );
+  if( msg?.code || !msg ) return false;
 
     // import messages from chat partner to chat
     bubble(msg, 'you');
@@ -74,7 +74,7 @@ function socketMSG() { console.log( 'socketMSG()' );
     // scroll to bottom of chat window
     scrollBottom('.chat');
 
-  }); // socket.on('msg', function(msg){
+  }); // socket.on('msg', (msg)=>{
 }; // function socketMSG() {
 
 
@@ -91,12 +91,13 @@ function socketMSG() { console.log( 'socketMSG()' );
 
 
 
-//msg --> {"roomdetails": r[0], "userdetails": UserDetails[0]}
+//roomDetails --> {"roomdetails": r[0], "userdetails": UserDetails[0]}
 function connectRoom() { console.log( 'connectRoom()' );
-  socket.on('connectRoom result', function(msg){ //console.log( 'connectRoom result - msg: ' + JSON.stringify(msg, null, 4) );
-  if( msg?.code ) return errorPage('Can not connect to Room');
+  socket.on('connectRoom result', (roomDetails)=>{ //console.log( 'connectRoom result - roomDetails: ' + JSON.stringify(roomDetails, null, 4) );
+  if( roomDetails?.code ) return errorPage('Can not connect to Room - Code: ' + roomDetails?.code);
+  if( !roomDetails || !roomDetails.msg ) return false;
 
-    ROOM = msg;
+    ROOM = roomDetails;
 
     // load chat animations
     chatAnimations();
@@ -105,22 +106,22 @@ function connectRoom() { console.log( 'connectRoom()' );
     $('.chat').remove();
 
 
-    if(msg?.msg){ console.log( 'connectRoom result - old messages was found..' );
+    if(roomDetails?.msg){ console.log( 'connectRoom result - old messages was found..' );
 
-      if( !$('.conversation-start').html() ) addConversationStart(`${msg?.msg?.slice(-1)[0]?.date}`);
+      if( !$('.conversation-start').html() ) addConversationStart(`${roomDetails?.msg?.slice(-1)[0]?.date}`);
 
       // load chat animations
       chatAnimations();
 
-      for( const d of msg.msg ){ //console.log( 'd.usertoken: ' + d.usertoken + '\nd.msg: ' + d.msg );
+      for( const d of roomDetails.msg ){ //console.log( 'd.usertoken: ' + d.usertoken + '\nd.msg: ' + d.msg );
         if( clientDetails.token == d.usertoken ) bubble(d.msg, 'me');
         else bubble(d.msg, 'you')
-      } //   for( const d of msg.msg ){
+      } //   for( const d of roomDetails.msg ){
 
       // scroll to bottom of chat window
       scrollBottom('.chat');
 
-    } // if(msg?.msg){
+    } // if(roomDetails?.msg){
 
-  }); //  socket.on('connectRoom result', function(msg){
+  }); // socket.on('connectRoom result', (roomDetails)=>{
 }; // function connectRoom() {

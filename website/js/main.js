@@ -21,11 +21,11 @@ $(()=>{(async()=>{
   personClick();
 
   // start event for sending message
-  $(".write-link.send").on("click", (e) => {
+  $(".write-link.send").on("click", (e)=>{
     const AMPM = formatAMPM();
     const dateFull = formatDate() + ', ' + AMPM;
     sendMessage(clientDetails.token, ROOM, AMPM, dateFull);
-  }); //   $(".write-link.send").on("click", (e) => {
+  }); //   $(".write-link.send").on("click", (e)=>{
 
   // start event to catch room enter
   connectRoom();
@@ -36,4 +36,4 @@ $(()=>{(async()=>{
   // click first person on chat list to show first chat
   $('.people li:nth-child(1)').click();
 
-})().catch((e) => {  console.log('ASYNC - document ready Error:' +  e )  })});
+})().catch((e)=>{  console.log('ASYNC - document ready Error:' +  e )  })});

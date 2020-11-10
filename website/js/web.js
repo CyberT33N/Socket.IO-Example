@@ -84,8 +84,8 @@ function chatAnimations(){ //console.log('chatAnimations()');
     name: document.querySelector('.container .right .top .name') };
 
 
-  friends.all.forEach(f => {
-    f.addEventListener('mousedown', () => {
+  friends.all.forEach(f=>{
+    f.addEventListener('mousedown', ()=>{
       f?.classList?.contains('active') || setAciveChat(f);
     });
   });

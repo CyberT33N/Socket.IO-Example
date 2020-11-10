@@ -14,12 +14,12 @@
 MongoDB_DB_NAME = json_config.MongoDB_DB_NAME,
        services = {
 
-        connectMongoDB: async () => { return await connectMongoDB(); },
+        connectMongoDB: async ()=>{ return await connectMongoDB(); },
 
-        storeMessages: async (msg) => { return await storeMessages(msg); },
+        storeMessages: async (msg)=>{ return await storeMessages(msg); },
 
-        getUserDetails: async (token) => { return await getUserDetails(token); },
-        getRoomDetails: async (roomID) => { return await getRoomDetails(roomID); }
+        getUserDetails: async (token)=>{ return await getUserDetails(token); },
+        getRoomDetails: async (roomID)=>{ return await getRoomDetails(roomID); }
 
        }; module.exports = services;
 
@@ -54,7 +54,7 @@ async function connectMongoDB(){ log('connectMongoDB() - Database URL: ' + Mongo
 
 
 
-// msg => {"msg": msg, "room": details.room, "usertoken": details.usertoken}
+// msg=>{"msg": msg, "room": details.room, "usertoken": details.usertoken}
 async function storeMessages(msg){ log( 'storeMessages() - msg: ' + JSON.stringify(msg, null, 4) );
 
   const collection = MongoDB.collection('rooms');

@@ -18,24 +18,24 @@ chalkAnimation = require('chalk-animation'),
 
 
 
-describe('MongoDB Services', () => {
+describe('MongoDB Services', ()=>{
 
 
 
 
 
 
-  describe('connectMongoDB()', () => {
+  describe('connectMongoDB()', ()=>{
 
-    it('Connect to MongoDB Database - Should return true', async() => {
+    it('Connect to MongoDB Database - Should return true', async()=>{
       expect( await connectMongoDB() ).toBe(true);
     });
 
-    xit('Error while try to connect to MongoDB Database - Should return false', async() => {
+    xit('Error while try to connect to MongoDB Database - Should return false', async()=>{
       expect( await connectMongoDB() ).toBe(false);
     });
 
-  }); // describe('connectMongoDB()()', () => {
+  }); // describe('connectMongoDB()()', ()=>{
 
 
 
@@ -43,45 +43,45 @@ describe('MongoDB Services', () => {
 
 
 
-  describe('storeMessages()', () => {
+  describe('storeMessages()', ()=>{
 
-    it('Simulate NPE - Should return {"msg": "NPE"}', async() => {
+    it('Simulate NPE - Should return {"msg": "NPE"}', async()=>{
       expect( await storeMessages({"msg": null,"room": "1234", "usertoken": "a"}) ).toStrictEqual( {"msg": "NPE"} );
     });
 
-    it('Simulate not existing Room ID - Should return {"msg": "ROOM ID NOT FOUND"}', async() => {
+    it('Simulate not existing Room ID - Should return {"msg": "ROOM ID NOT FOUND"}', async()=>{
       expect( await storeMessages({"msg": "sample message..", "room": "wrong_room_ID", "usertoken": test_client1.token}) ).toStrictEqual( {"msg": "ROOM ID NOT FOUND"} );
     });
 
-    it('Successfully updating of field - Should return {code : "SUCCESS"}', async() => {
+    it('Successfully updating of field - Should return {code : "SUCCESS"}', async()=>{
       expect( await storeMessages({"msg": "sample message..", "room": test_room, "usertoken": test_client1.token}) ).toStrictEqual( {code : "SUCCESS"} );
     });
 
-    xit('Simulate error while updating of field - Should return {code : "ERROR"}', async() => {
+    xit('Simulate error while updating of field - Should return {code : "ERROR"}', async()=>{
       expect( await storeMessages({"msg": "sample message..", "room": test_room, "usertoken": test_client1.token}) ).toStrictEqual( {code : "ERROR"} );
     });
 
-  }); // describe('storeMessages()', () => {
+  }); // describe('storeMessages()', ()=>{
 
 
 
 
 
-  describe('getUserDetails()', () => {
+  describe('getUserDetails()', ()=>{
 
-    it('Check if User can be found by token - Should return object', async() => {
+    it('Check if User can be found by token - Should return object', async()=>{
       expect( typeof await getUserDetails(test_client1.token) ).toBe('object');
     });
 
-    it('Simulate User not found by token - Should return null', async() => {
+    it('Simulate User not found by token - Should return null', async()=>{
       expect( await getUserDetails('wrong_token') ).toBe(null);
     });
 
-    it('Simulate NPE - Should return false', async() => {
+    it('Simulate NPE - Should return false', async()=>{
       expect( await getUserDetails(null) ).toBe(false);
     });
 
-  }); // describe('getUserDetails()', () => {
+  }); // describe('getUserDetails()', ()=>{
 
 
 
@@ -90,21 +90,21 @@ describe('MongoDB Services', () => {
 
 
 
-  describe('getRoomDetails()', () => {
+  describe('getRoomDetails()', ()=>{
 
-    it('Check if User can be found by token - Should return object', async() => {
+    it('Check if User can be found by token - Should return object', async()=>{
       expect( typeof await getRoomDetails(test_room) ).toBe('object');
     });
 
-    it('Simulate User not found by token - Should return null', async() => {
+    it('Simulate User not found by token - Should return null', async()=>{
       expect( await getRoomDetails('wrong_roomID') ).toBe(null);
     });
 
-    it('Simulate NPE - Should return false', async() => {
+    it('Simulate NPE - Should return false', async()=>{
       expect( await getRoomDetails(null) ).toBe(false);
     });
 
-  }); // describe('getRoomDetails()', () => {
+  }); // describe('getRoomDetails()', ()=>{
 
 
 
@@ -113,4 +113,4 @@ describe('MongoDB Services', () => {
 
 
 
-}); // describe('mongodb service', () => {
+}); // describe('mongodb service', ()=>{

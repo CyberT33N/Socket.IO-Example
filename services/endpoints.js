@@ -22,10 +22,10 @@ controllermongodb = require('../controller/controller-mongodb'),
 
 
 async function getUserDetails(req, res){
-log(`getUserDetails() - SSL: ${req?.secure}
+/*log(`getUserDetails() - SSL: ${req?.secure}
 Request Body: ${JSON.stringify(req?.body, null, 4)}
 Request Query: ${JSON.stringify(req?.query, null, 4)}
-Header: ${JSON.stringify(req?.headers, null, 4)}`);
+Header: ${JSON.stringify(req?.headers, null, 4)}`);*/
 
   if(!req?.body?.usertoken && !req?.query?.usertoken) return res.status(404).json( { msg: "User Token can not be null" } );
 
@@ -48,10 +48,10 @@ Header: ${JSON.stringify(req?.headers, null, 4)}`);
 
 
 async function getRoomDetails(req, res){
-log(`getRoomDetails() - SSL: ${req?.secure}
+/*log(`getRoomDetails() - SSL: ${req?.secure}
 Request Body: ${JSON.stringify(req?.body, null, 4)}
 Request Query: ${JSON.stringify(req?.query, null, 4)}
-Header: ${JSON.stringify(req?.headers, null, 4)}`);
+Header: ${JSON.stringify(req?.headers, null, 4)}`);*/
 
   if(!req?.body?.id && !req?.query?.id) return res.status(404).json( { msg: "Room ID can not be null" } );
 

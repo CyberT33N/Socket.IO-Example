@@ -164,4 +164,4 @@ app.post('/api/getRoomDetails', (req, res)=>{(async()=>{
 http.listen(port, (async()=>{ log('Server was started.. Listening on port: ' + port);
   if( !await controllermongodb.connectMongoDB() ) return false;
   controller.rootConnect(http);
-})().catch((e)=>{  log('ASYNC - Error at main function.. Error: ' + e)  }));
+})().catch((e)=>{  log('ASYNC - Error at main start server.. Error: ' + e)  }));

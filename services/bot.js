@@ -22,10 +22,10 @@ config_browser_profile = json_config.bot.browser_profile,
               gradient = require('gradient-string'),
                  chalk = require('chalk'),
 
-                 services = {
-                   startBROWSER: async ()=>{ return await startBROWSER(); },
-                   openLink: async (page, link)=>{ return await openLink(page, link); }
-                 };module.exports = services;
+              services = {
+                startBROWSER: async ()=>{ return await startBROWSER(); },
+                openLink: async (page, link)=>{ return await openLink(page, link); }
+              }; module.exports = services;
 
 var client;
 
