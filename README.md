@@ -24,7 +24,7 @@ Database: **MongoDB**
 
 # Features
 - Friendlist for multiple Chats (Left Sidebar)
-- Room Chat (Currently only works for 2 People! In future I will add multiple people support)
+- Socket.io Rooms
 - Storage of messages (MongoDB)
 - Realtime Chat
 
