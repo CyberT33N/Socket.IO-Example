@@ -95,7 +95,7 @@ function socketMSG(){ console.log( 'socketMSG()' );
 function connectRoom() { console.log( 'connectRoom()' );
   socket.on('connectRoom result', (roomDetails)=>{ //console.log( 'connectRoom result - roomDetails: ' + JSON.stringify(roomDetails, null, 4) );
   if( roomDetails?.code ) return errorPage('Can not connect to Room - Code: ' + roomDetails?.code);
-  if( !roomDetails || !roomDetails.msg ) return false;
+  if( !roomDetails ) return false;
 
     ROOM = roomDetails;
 
