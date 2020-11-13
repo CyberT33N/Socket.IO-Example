@@ -84,6 +84,14 @@ The **rooms** collection contains the **room ID** and the **user array** which w
 All sended messages from this room will be later also imported to this object.
 ```javascript
 [{
+    "id": "1234",
+    "user": [{
+        "usertoken": "a"
+    }, {
+        "usertoken": "b"
+    }]
+},
+{
     "id": "4321",
     "user": [{
         "usertoken": "c"
@@ -123,6 +131,14 @@ The **user** collection contains the **user token**, **user name** and the **fri
 
 ```javascript
 [{
+    "token": "a",
+    "name": "Lisa Wolscht",
+    "friends": [{
+        "token": "b",
+        "room": 1234
+    }]
+},
+{
     "token": "b",
     "name": "Lena Groß",
     "friends": [{
@@ -130,6 +146,14 @@ The **user** collection contains the **user token**, **user name** and the **fri
         "room": 1234
     }, {
         "token": "c",
+        "room": 4321
+    }]
+},
+{
+    "token": "c",
+    "name": "Julia Lückertz",
+    "friends": [{
+        "token": "b",
         "room": 4321
     }]
 },
