@@ -83,7 +83,7 @@ The **rooms** collection contains the **room ID** and the **user array** which w
 <br><br>
 All sended messages from this room will be later also imported to this object.
 ```javascript
-{
+[{
     "id": "4321",
     "user": [{
         "usertoken": "c"
@@ -98,7 +98,7 @@ All sended messages from this room will be later also imported to this object.
     }, {
         "usertoken": "mocha2"
     }]
-}
+}]
 // In order to use Unit Test we aswell a testing room.
 ```
 
@@ -122,7 +122,7 @@ The **user** collection contains the **user token**, **user name** and the **fri
 <br><br>The friendlist currently must also contain the room ID because of the left sidebar of the Chat APP which will fetch the room ID when we switch the friend chats.
 
 ```javascript
-{
+[{
     "token": "b",
     "name": "Lena Groß",
     "friends": [{
@@ -148,7 +148,7 @@ The **user** collection contains the **user token**, **user name** and the **fri
         "token": "mocha",
         "room": "mocha"
     }]
-}
+}]
 // In order to use Unit Test create aswell two testing user.
 ```
 
