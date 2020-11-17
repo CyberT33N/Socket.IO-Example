@@ -1,6 +1,7 @@
 {
   "name": "Socket.io-Chat-APP-Example",
   "version": "1.0.2",
+  "type": "module",
   "description": "Example Node.js Chat APP based on socket.io",
   "main": "app.js",
   "dependencies": {
@@ -27,7 +28,7 @@
     "socket.io-client": "^2.3.1"
   },
   "scripts": {
-    "test": "mocha **/*.test.js --timeout 0 --exit --reporter mochawesome",
+    "test": "mocha **/*.test.mjs --timeout 0 --exit --reporter mochawesome",
     "test-watch": "nodemon --exec \"npm test\""
   },
   "nodemonConfig": {
