@@ -1,4 +1,4 @@
-import mongodb from '../services/mongodb.mjs';
+import * as mongodb from '../services/mongodb.mjs';
 
 export default {
   connectMongoDB: async ()=>{ return await mongodb.connectMongoDB(); },

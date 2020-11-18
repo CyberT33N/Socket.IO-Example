@@ -18,6 +18,8 @@
 |__|__|_|  /   __/ \____/|__|   |__|   |   __/|____/____/\___  /|__|___|  /____  >
          \/|__|                        |__|             /_____/         \/     \/
 */
+
+/*################ Express ################*/
 import express from 'express';
 import bodyParser from 'body-parser';
 import rateLimit from 'express-rate-limit';
@@ -25,34 +27,50 @@ import timeout from 'connect-timeout';
 import http from 'http';
 //import helmet from 'helmet';
 //import morgan from 'morgan';
+const app = express(),
+     port = process.env.PORT || 1337,
+   server = http.createServer(app);
 
+/*################ Node.js ################*/
 import { fileURLToPath } from 'url';
-import fs from 'fs';
 import path, { dirname } from 'path';
-import os from 'os';
+const __filename = fileURLToPath(import.meta.url),
+       __dirname = dirname(__filename);
 
-/*################ controller ################*/
+/*################ Operating System ################*/
+import os from 'os';
+const osHOME = os.homedir(),
+  osPLATFORM = os.platform();
+
+/*################ Controller ################*/
 import controller from './controller/socketio.mjs';
 import controllermongodb from './controller/mongodb.mjs';
 import controllerEndpoints from './controller/endpoints.mjs';
 
-/*################ logs ################*/
+/*################ Logs ################*/
 import log from 'fancy-log';
 import chalkAnimation from 'chalk-animation';
 import gradient from 'gradient-string';
 import chalk from 'chalk';
 
-  const app = express(),
-       port = process.env.PORT || 1337,
-     server = http.createServer(app),
+/*################ config.json ################*/
+import fs from 'fs';
+const json_config = JSON.parse(  fs.readFileSync('./admin/config.json', 'utf8')  ),
+      limit = json_config.request_limit;
 
-     osHOME = os.homedir(),
- osPLATFORM = os.platform(),
-json_config = JSON.parse(  fs.readFileSync('./admin/config.json', 'utf8')  ),
-      limit = json_config.request_limit,
- __filename = fileURLToPath(import.meta.url),
-  __dirname = dirname(__filename);
 log( 'Current working directory: ' + __dirname );
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*

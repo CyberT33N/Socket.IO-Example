@@ -1,21 +1,21 @@
+/*################ Controller ################*/
+import controllermongodb from '../controller/mongodb.mjs';
+
+/*################ Logs ################*/
 import log from 'fancy-log';
 import chalkAnimation from 'chalk-animation';
 import gradient from 'gradient-string';
 import chalk from 'chalk';
 
-import controllermongodb from '../controller/mongodb.mjs';
-
-export default{
-  getUserDetails: async (req, res) => { return await getUserDetails(req, res); },
-  getRoomDetails: async (req, res) => { return await getRoomDetails(req, res); }
-}
 
 
 
 
 
 
-const getUserDetails = async (req, res)=>{
+
+
+export const getUserDetails = async (req, res)=>{
 /*log(`getUserDetails() - SSL: ${req?.secure}
 Request Body: ${JSON.stringify(req?.body, null, 4)}
 Request Query: ${JSON.stringify(req?.query, null, 4)}
@@ -41,7 +41,7 @@ Header: ${JSON.stringify(req?.headers, null, 4)}`);*/
 
 
 
-const getRoomDetails = async (req, res)=>{
+export const getRoomDetails = async (req, res)=>{
 /*log(`getRoomDetails() - SSL: ${req?.secure}
 Request Body: ${JSON.stringify(req?.body, null, 4)}
 Request Query: ${JSON.stringify(req?.query, null, 4)}

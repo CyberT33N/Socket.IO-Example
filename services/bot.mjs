@@ -1,21 +1,26 @@
+/*################ Node.js ################*/
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import fs from 'fs';
-import os from 'os';
+const __filename = fileURLToPath(import.meta.url),
+       __dirname = dirname(__filename);
 
+
+/*################ Operating System ################*/
+import os from 'os';
+const osHOME = os.homedir(),
+  osPLATFORM = os.platform();
+
+/*################ Bot ################*/
 import puppeteer from 'puppeteer';
 
+/*################ Logs ################*/
 import log from 'fancy-log';
 import chalkAnimation from 'chalk-animation';
 import gradient from 'gradient-string';
 import chalk from 'chalk';
 
-export default {
-  startBROWSER: async ()=>{ return await startBROWSER(); },
-  openLink: async (page, link)=>{ return await openLink(page, link); }
-}
-
-
+/*################ config.json ################*/
+import fs from 'fs';
      const json_config = JSON.parse(  fs.readFileSync('./admin/config.json', 'utf8')  ),
 
 config_browser_profile = json_config.bot.browser_profile,
@@ -24,14 +29,7 @@ config_browser_profile = json_config.bot.browser_profile,
 
            windowWidth = json_config.bot.windowWidth,
           windowHeight = json_config.bot.windowHeight,
-    windowSizeComplete = '--window-size=' + windowWidth + ',' + windowHeight,
-
-                osHOME = os.homedir(),
-            osPLATFORM = os.platform(),
-
-            __filename = fileURLToPath(import.meta.url),
-             __dirname = dirname(__filename);
-
+    windowSizeComplete = '--window-size=' + windowWidth + ',' + windowHeight;
 
 
 var client;
@@ -118,7 +116,7 @@ log( 'browserProfilePath: ' + browserProfilePath + '\nconfig_browser_profile: ' 
 
 
 
-const startBROWSER = async ()=>{ log( 'We will start now your Browser please wait..' );
+export const startBROWSER = async ()=>{ log( 'We will start now your Browser please wait..' );
 
   try { client = await puppeteer.launch({
       //executablePath: '/snap/bin/chromium',
@@ -159,7 +157,7 @@ const startBROWSER = async ()=>{ log( 'We will start now your Browser please wai
 
 
 
-const openLink = async (page, link)=>{
+export const openLink = async (page, link)=>{
 log( 'openLink() - link: ' + link );
 
   try { await page.goto(link, {waitUntil: 'networkidle0', timeout: 35000});

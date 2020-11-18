@@ -1,17 +1,26 @@
-import fs from 'fs';
-import expect from 'expect';
+/*################ API ################*/
 import axios from 'axios';
 
+/*################ TDD ################*/
+import expect from 'expect';
+
+/*################ Logs ################*/
 import log from 'fancy-log';
 import chalkAnimation from 'chalk-animation';
 import gradient from 'gradient-string';
 import chalk from 'chalk';
 
+/*################ config.json ################*/
+import fs from 'fs';
 const json_config = JSON.parse(  fs.readFileSync('./admin/config.json', 'utf8')  ),
              host = json_config.test.host + ':' + json_config.test.port,
      test_client1 = json_config.test.user[0],
      test_client2 = json_config.test.user[1],
         test_room = json_config.test.room;
+
+
+
+
 
 
 

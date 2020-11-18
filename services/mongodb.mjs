@@ -1,26 +1,19 @@
-import fs from 'fs';
+/*################ MongoDB ################*/
+import mongodb from 'mongodb';
+import assert from 'assert';
+const {MongoClient, ObjectId} = mongodb;
 
+/*################ Logs ################*/
 import log from 'fancy-log';
 import chalkAnimation from 'chalk-animation';
 import gradient from 'gradient-string';
 import chalk from 'chalk';
 
-import mongodb from 'mongodb';
-import assert from 'assert';
-
-export default{
-  connectMongoDB: async ()=>{ return await connectMongoDB(); },
-
-  storeMessages: async (msg)=>{ return await storeMessages(msg); },
-
-  getUserDetails: async (token)=>{ return await getUserDetails(token); },
-  getRoomDetails: async (roomID)=>{ return await getRoomDetails(roomID); }
-}
-
-      const json_config = JSON.parse(  fs.readFileSync('./admin/config.json', 'utf8')  ),
-               MongoURL = json_config.MongoDB.url,
-              MongoName = json_config.MongoDB.dbname,
-{MongoClient, ObjectId} = mongodb;
+/*################ config.json ################*/
+import fs from 'fs';
+const json_config = JSON.parse(  fs.readFileSync('./admin/config.json', 'utf8')  ),
+         MongoURL = json_config.MongoDB.url,
+        MongoName = json_config.MongoDB.dbname;
 
 var MongoDB;
 
@@ -30,7 +23,7 @@ var MongoDB;
 
 
 
-const connectMongoDB = async ()=>{ log('connectMongoDB() - Database URL: ' + MongoURL);
+export const connectMongoDB = async ()=>{ log('connectMongoDB() - Database URL: ' + MongoURL);
 
   try { // connect to MongoDB Database and create global MongoDB variable
     const client = await MongoClient.connect(MongoURL, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -49,7 +42,7 @@ const connectMongoDB = async ()=>{ log('connectMongoDB() - Database URL: ' + Mon
 
 
 // msg=>{"msg": msg, "room": details.room, "usertoken": details.usertoken}
-const storeMessages = async (msg)=>{ log( 'storeMessages() - msg: ' + JSON.stringify(msg, null, 4) );
+export const storeMessages = async (msg)=>{ log( 'storeMessages() - msg: ' + JSON.stringify(msg, null, 4) );
 
   const collection = MongoDB.collection('rooms');
 
@@ -88,7 +81,7 @@ const storeMessages = async (msg)=>{ log( 'storeMessages() - msg: ' + JSON.strin
 
 
 
-const getUserDetails = async (token)=>{ log( 'getUserDetails() - token: ' + token );
+export const getUserDetails = async (token)=>{ log( 'getUserDetails() - token: ' + token );
 
   const collection = MongoDB.collection('user');
 
@@ -99,7 +92,9 @@ const getUserDetails = async (token)=>{ log( 'getUserDetails() - token: ' + toke
 }; // async function getUserDetails(token){
 
 
-const getRoomDetails = async (roomID)=>{ log( 'mongodb.js - getRoomDetails() - roomID: ' + roomID );
+
+
+export const getRoomDetails = async (roomID)=>{ log( 'mongodb.js - getRoomDetails() - roomID: ' + roomID );
 
   const collection = MongoDB.collection('rooms');
 

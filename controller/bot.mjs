@@ -1,4 +1,4 @@
-import bot from '../services/bot.mjs';
+import * as bot from "../services/bot.mjs";
 
 export default {
   startBROWSER: async ()=>{ return await bot.startBROWSER(); },

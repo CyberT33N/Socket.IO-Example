@@ -1,15 +1,15 @@
+/*################ Socket.io ################*/
+import socketIO from 'socket.io';
+
+/*################ Controller ################*/
+import controllermongodb from '../controller/mongodb.mjs'
+
+/*################ Logs ################*/
 import log from 'fancy-log';
 import chalkAnimation from 'chalk-animation';
 import gradient from 'gradient-string';
 import chalk from 'chalk';
 
-import socketIO from 'socket.io';
-
-import controllermongodb from '../controller/mongodb.mjs'
-
-export default {
-  rootConnect: async (http)=>{ return await rootConnect(http); }
-}
 
 
 
@@ -19,7 +19,8 @@ export default {
 
 
 
-const rootConnect = async (http)=>{ log( 'rootConnect();' );
+
+export const rootConnect = async (http)=>{ log( 'rootConnect();' );
 
   const io = socketIO(http);
 
@@ -90,8 +91,8 @@ function messageRoom(socket){ // {"msg": msg, "room": details.room, "usertoken":
 
 
 
-function disconnectUser(socket){ socket.on('disconnect', ()=> afterDisconnect() ); }
-
-async function afterDisconnect(){ log('afterDisconnect()');
-  // do something..
-}; // async function afterDisconnect(){
+function disconnectUser(socket){
+  socket.on('disconnect', ()=> {
+    // do something..
+  }); 
+} // function disconnectUser(socket){

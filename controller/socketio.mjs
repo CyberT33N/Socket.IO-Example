@@ -1,4 +1,4 @@
-import socket from '../services/socketio.mjs';
+import * as socket from '../services/socketio.mjs';
 
 export default {
   rootConnect: async (http)=>{ return await socket.rootConnect(http); }
