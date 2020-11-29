@@ -214,4 +214,4 @@ npm run test-watch
 <br><br>
 Results can be found here:
 - ./website/report/client.html
-- ./website/report/mochawesome.html
+- ./website/report/server.html

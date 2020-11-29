@@ -29,7 +29,7 @@
     "socket.io-client": "^2.3.1"
   },
   "scripts": {
-    "test": "mocha **/*.test.mjs --timeout 0 --exit --reporter mochawesome --reporter-options reportDir=website/report",
+    "test": "mocha **/*.test.mjs --timeout 0 --exit --reporter mochawesome --reporter-options reportDir=website/report,reportFilename=server",
     "test-watch": "nodemon --ignore 'website/report' --exec \"npm test\""
   },
   "nodemonConfig": {
