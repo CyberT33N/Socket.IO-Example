@@ -10,21 +10,16 @@ import chalk from 'chalk';
 
 
 
-// POST request where we take User Token and send back Object with User Details to Client
-export const getUserDetailsListener = app=>{ log('---- getUserDetailsListener() ----');
-  app.post('/api/getUserDetails', async (req, res)=>{
-    await getUserDetails(req, res);
-  });
-}; // export const getUserDetailsListener = app=>{
+
+
+
 
 
 export const getUserDetails = async (req, res)=>{
-/*
-log(`getUserDetails() - SSL: ${req?.secure}
+/*log(`getUserDetails() - SSL: ${req?.secure}
 Request Body: ${JSON.stringify(req?.body, null, 4)}
 Request Query: ${JSON.stringify(req?.query, null, 4)}
-Header: ${JSON.stringify(req?.headers, null, 4)}`); //```
-*/
+Header: ${JSON.stringify(req?.headers, null, 4)}`);*/
 
   if(!req?.body?.usertoken && !req?.query?.usertoken) return res.status(404).json( { msg: "User Token can not be null" } );
 
@@ -32,7 +27,6 @@ Header: ${JSON.stringify(req?.headers, null, 4)}`); //```
   if(req?.query?.usertoken) var usertoken = req?.query?.usertoken;
 
   const UserDetails = await controllermongodb.getUserDetails(usertoken);
-  //log('getUserDetails() - UserDetails: ' + JSON.stringify(UserDetails, null, 4));
 
   if( UserDetails ) res.status(200).json( UserDetails );
   else res.status(403).json( { msg: "User Token was not found in Database" } );
@@ -45,13 +39,6 @@ Header: ${JSON.stringify(req?.headers, null, 4)}`); //```
 
 
 
-
-// POST request where we take Room ID and send back Object with Room Details to Client
-export const getRoomDetailsListener = app=>{ log('---- getRoomDetailsListener() ----');
-  app.post('/api/getRoomDetails', async (req, res)=>{
-    await getRoomDetails(req, res);
-  });
-}; // export const getRoomDetailsListener = app=>{
 
 
 export const getRoomDetails = async (req, res)=>{

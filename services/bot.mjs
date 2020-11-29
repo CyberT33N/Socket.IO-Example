@@ -7,7 +7,8 @@ const __filename = fileURLToPath(import.meta.url),
 
 /*################ Operating System ################*/
 import os from 'os';
-const osPlatform = os.platform();
+const osHOME = os.homedir(),
+  osPLATFORM = os.platform();
 
 /*################ Bot ################*/
 import puppeteer from 'puppeteer';
@@ -33,87 +34,69 @@ config_browser_profile = json_config.bot.browser_profile,
 
 var client;
 
+var args = [windowSizeComplete,
+
+  '--disable-flash-3d',
+  '--no-sandbox',
+  // '--disable-setuid-sandbox',
+
+  '--disable-popup-blocking',
+  '--disable-notifications',
+  '--disable-dev-shm-usage',
+  '--force-webrtc-ip-handling-policy=disable-non-proxied-udp',
+  '--disable-flash-stage3d',
+  '--disable-java',
+  '--disable-internal-flash',
+  '--disable-cache',
+  '--disable-webgl', // webgl
+  '--disable-3d-apis', // webgl
+  //'--disable-extensions',
+  '--disable-webgl-image-chromium',
+  //'--disable-reading-from-canvas', // <-- youtube videos not playing with this enabled
+
+  '--lang=en']; if(headlessVALUE) args.push('--disable-gpu');
 
 
 
 
 
-export const checkExtensions = ()=>{ log( '---- checkExtensions() ----' );
-  if( extensionlist?.length > 0 ){
-
-    var extensionlistAR = [];
-    for( const d in extensionlist ){
-      extensionlistAR.push( chromeExtensionPath + extensionlist[d] );
-      args.push( '--load-extension=' + chromeExtensionPath + extensionlist[d] );
-    } // for( const d of extensionlist ){
-
-    extensionlist = '--disable-extensions-except=' + extensionlistAR.join( ',' );
-    args.push(extensionlist);
-
-  } // if( extensionlist?.length > 0 ){
-}; // export const checkExtensions = ()=>{
 
 
+if( osPLATFORM == 'darwin' ){
+  var chromeExtensionPath = './lib/chromeextension/';
+  var browserProfilePath = './lib/browserProfiles/';
+}
 
-export const createPath = ()=>{ log( '---- createPath - osPlatform: ' + osPlatform + '----' );
-  if( osPlatform == 'darwin' ){
-    var chromeExtension = './lib/chromeextension/';
-    var browserProfile = './lib/browserProfiles/';
-  }
-  if( osPlatform == 'linux' ) {
-    var browserProfile = './lib/browserProfiles/';
-    var chromeExtension = './lib/chromeextension/';
-  }
-  if( osPlatform == 'win32' ){
-    var browserProfile = '../../../../../lib/browserProfiles/';
-    var chromeExtension = '../../../../../lib/chromeextension/';
-  }
-  return {browserProfile: browserProfile, chromeExtension: chromeExtension};
-}; // export const createPath = ()=>{
+if( osPLATFORM == 'linux' ) {
+  var browserProfilePath = './lib/browserProfiles/';
+  var chromeExtensionPath = './lib/chromeextension/';
+}
+
+if( osPLATFORM == 'win32' ){
+  var browserProfilePath = '../../../../../lib/browserProfiles/';
+  var chromeExtensionPath = '../../../../../lib/chromeextension/';
+}
 
 
+if( extensionlist.length !== 0 ){
 
-export const createArgs = ()=>{ log( '---- createArgs ----' );
-  var args = [
-    windowSizeComplete,
-    '--no-sandbox',
-    // '--disable-setuid-sandbox',
-    //'--disable-popup-blocking',
-    //'--disable-notifications',
-    //'--disable-dev-shm-usage',
-    '--force-webrtc-ip-handling-policy=disable-non-proxied-udp',
-    '--lang=en'
-  ]; if(headlessVALUE) args.push('--disable-gpu');
-  return args;
-}; // export const createArgs = ()=>{
+  let extensionlistAR = [];
+  for( const d in extensionlist ){
+    extensionlistAR.push( chromeExtensionPath + extensionlist[d] );
+    args.push( '--load-extension=' + chromeExtensionPath + extensionlist[d] );
+  } // for( const d of extensionlist ){
 
+  extensionlist = '--disable-extensions-except=' + extensionlistAR.join( ',' );
+  args.push(extensionlist);
 
-// create arguments array for the puppeteer launch process
-var args = createArgs();
+} //  if( extensionlist.length !== 0 ){
 
-// check system OS and then create path related to OS
-const osPaths = createPath();
-const chromeExtensionPath = osPaths.chromeExtension;
-const browserProfilePath = osPaths.browserProfile;
-
-// check if browser extensions was defined in config.json file. If true we add them to our args array
-checkExtensions();
-
-log(`
-chromeExtension Path: ${chromeExtensionPath}
-
-extensionlist: ${extensionlist}
-
-args: ${args}
-
-windowSizeComplete: ${windowSizeComplete}
-
-Current working directory: ${__dirname}
-
-browserProfilePath: ${browserProfilePath}
-
-config_browser_profile: ${config_browser_profile}
-`);
+log( 'chromeExtension Path: ' + chromeExtensionPath );
+log( 'extensionlist: ' + extensionlist + '\n\nArgs: ' + args);
+log( 'windowSizeComplete: ' + windowSizeComplete );
+log( 'Current working directory: ' + __dirname );
+log( 'osPLATFORM: ' + osPLATFORM );
+log( 'browserProfilePath: ' + browserProfilePath + '\nconfig_browser_profile: ' + config_browser_profile );
 
 
 
@@ -128,7 +111,12 @@ config_browser_profile: ${config_browser_profile}
 
 
 
-export const startBROWSER = async ()=>{log( 'We will start now your Browser please wait..' );
+
+
+
+
+
+export const startBROWSER = async ()=>{ log( 'We will start now your Browser please wait..' );
 
   try { client = await puppeteer.launch({
       //executablePath: '/snap/bin/chromium',
@@ -150,12 +138,12 @@ export const startBROWSER = async ()=>{log( 'We will start now your Browser plea
 
   } catch(e) { log('Error while try to start browser - error :' + e );
 
-    if( e?.length == undefined ) log( 'startBROWSER() - error is undefinied.. we restart now the browser..' );
-    if( e?.name == 'TimeoutError' ) log( 'startBROWSER() - TimeoutError was found.. we restart now the browser..' );
-    if( e == 'Error: connect ECONNREFUSED 0.0.0.0:4444') log( 'startBROWSER() - ECONNREFUSED error found..' );
+        if( e?.length == undefined ) log( 'startBROWSER() - error is undefinied.. we restart now the browser..' );
+        if( e?.name == 'TimeoutError' ) log( 'startBROWSER() - TimeoutError was found.. we restart now the browser..' );
+        if( e == 'Error: connect ECONNREFUSED 0.0.0.0:4444') log( 'startBROWSER() - ECONNREFUSED error found..' );
 
-    await client.close();
-    await startBROWSER();
+        await client.close();
+        await startBROWSER();
 
   } // catch(e) {
 }; // async function startBROWSER(){
@@ -169,7 +157,8 @@ export const startBROWSER = async ()=>{log( 'We will start now your Browser plea
 
 
 
-export const openLink = async (page, link)=>{log( 'openLink() - link: ' + link );
+export const openLink = async (page, link)=>{
+log( 'openLink() - link: ' + link );
 
   try { await page.goto(link, {waitUntil: 'networkidle0', timeout: 35000});
   } catch(e) { log( 'openLink() - Error while open link.. Error: ' + e?.message );
@@ -185,7 +174,6 @@ export const openLink = async (page, link)=>{log( 'openLink() - link: ' + link )
 
     // optional timeout
     await new Promise(resolve => setTimeout(resolve, 30000));
-    await openLink(page, link);
 
   }; return true;
 

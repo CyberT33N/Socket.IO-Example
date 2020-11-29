@@ -1,19 +1,18 @@
 {
-  "server": {
-    "port": 1337
-  },
+  "request_limit": 1000,
 
   "MongoDB": {
-    "dbname": "socketio-example",
     "url": "mongodb://localhost:27017",
-    "host": "",
-    "port": "",
+    "host": "localhost",
+    "port": "27017",
+    "dbname": "socketio-example",
     "username": "",
     "password": ""
   },
 
   "test": {
-    "port": 1338,
+    "port": "1337",
+    "devport": "1338",
     "host": "http://localhost",
     "room":"mocha",
     "user": [{
@@ -28,8 +27,8 @@
   "bot": {
     "headless": true,
     "browser_profile": "TDD",
-    "windowWidth": 1920,
-    "windowHeight": 1080,
+    "windowWidth": 1280,
+    "windowHeight": 720,
     "extensionlist": ""
   }
 

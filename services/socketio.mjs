@@ -1,13 +1,3 @@
-/*################ config.json ################*/
-import fs from 'fs';
-const json_config = JSON.parse( fs.readFileSync('./admin/config.json', 'utf8') ),
-     test_client1 = json_config.test.user[0],
-     test_client2 = json_config.test.user[1],
-        test_room = json_config.test.room,
-
-          devHost = json_config.test.host + ':' + json_config.test.port;
-
-
 /*################ Socket.io ################*/
 import socketIO from 'socket.io';
 
@@ -23,29 +13,49 @@ import chalk from 'chalk';
 
 
 
-export const rootConnect = io=>{return new Promise(resolve => { log( 'rootConnect();' );
-  io.on('connection', socket=>{ log('User connected..');
+
+
+
+
+
+
+
+export const rootConnect = async (http)=>{ log( 'rootConnect();' );
+
+  const io = socketIO(http);
+
+  io.on('connection', (socket)=>{ log('User connected..');
+
     // catch message from Chat Room
     messageRoom(socket);
+
     // start event to catch room enter request
     connectRoom(socket);
+
     // Check when user disconnect from website
     disconnectUser(socket);
 
-    resolve(socket);
-  }); // io.on('connection', socket=>{
-})}; // function rootConnect(){
+  }); // io.on('connection', (socket)=>{
+
+}; // function rootConnect(){
 
 
 
 
-export const connectRoom = socket=>{ log( 'connectRoom();' );
-  socket.on('room connect', roomID=>{(async()=>{ log('connectRoom() - roomID: ' + JSON.stringify(roomID, null, 4));
+
+
+
+
+
+
+
+function connectRoom(socket){ log( 'connectRoom();' );
+  socket.on('room connect', (roomID)=>{(async()=>{ log('connectRoom() - roomID: ' + JSON.stringify(roomID, null, 4));
 
     if( !roomID ) return socket.emit('connectRoom result', {code : "NPE"});
 
     const r = await controllermongodb.getRoomDetails(roomID);
-    if(r){ //log( 'getRoomDetails() success - result: ' + JSON.stringify(r, null, 4) );
+    if(r){ log( 'getRoomDetails() success - result: ' + JSON.stringify(r, null, 4) );
 
       socket.join(roomID);
       socket.emit('connectRoom result', r);
@@ -53,12 +63,13 @@ export const connectRoom = socket=>{ log( 'connectRoom();' );
     } else socket.emit('connectRoom result', {code : "Can not find Room ID in Database"});
 
   })().catch((e)=>{  console.log('ASYNC - connectRoom Error:' +  e )  })});
-}; // export const connectRoom = socket=>{
+} //function connectRoom(socket){
 
 
 
-export const messageRoom = socket=>{ // {"msg": msg, "room": details.room, "usertoken": details.usertoken}
-  socket.on('chat message', msg=>{(async()=>{ log('messageRoom() - chat message - message: ' + JSON.stringify(msg, null, 4));
+
+function messageRoom(socket){ // {"msg": msg, "room": details.room, "usertoken": details.usertoken}
+  socket.on('chat message', (msg)=>{(async()=>{ log('messageRoom() - chat message - message: ' + JSON.stringify(msg, null, 4));
 
     if(msg?.msg){
 
@@ -68,30 +79,20 @@ export const messageRoom = socket=>{ // {"msg": msg, "room": details.room, "user
     } else socket.to(msg.room).emit('msg', {code: "Message was null"});
 
   })().catch((e)=>{  console.log('ASYNC - chat message Error:' +  e )  })});
-}; // export const messageRoom = socket=>{
+}; // function messageRoom(socket){
 
 
 
-export const disconnectUser = socket=>{
+
+
+
+
+
+
+
+
+function disconnectUser(socket){
   socket.on('disconnect', ()=> {
     // do something..
-  });
-}; // const disconnectUser = socket=>{
-
-
-
-
-
-
-
-export const createDevSockets = io_client=>{ log( '---- createDevSockets() ----' );
-  // client
-  const devSocket = io_client.connect(`${devHost}/?usertoken=${test_client1.token}`, {
-    transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
-  });
-  // partner
-  const devSocketPartner = io_client.connect(`${devHost}/?usertoken=${test_client2.token}`, {
-    transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
-  });
-  return {devSocket: devSocket, devSocketPartner: devSocketPartner};
-}; // const createDevSockets = io_client=>{
+  }); 
+} // function disconnectUser(socket){

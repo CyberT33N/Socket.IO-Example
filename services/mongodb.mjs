@@ -24,11 +24,13 @@ var MongoDB;
 
 
 export const connectMongoDB = async ()=>{ log('connectMongoDB() - Database URL: ' + MongoURL);
+
   try { // connect to MongoDB Database and create global MongoDB variable
     const client = await MongoClient.connect(MongoURL, { useNewUrlParser: true, useUnifiedTopology: true });
     MongoDB = client.db(MongoName);
     return true;
   } catch (e) { log( chalk.red.bold('❌ ERROR') + ' Error while try to connect to MongoDB Database - ' + chalk.white.bold('error:\n') + e ); }
+
 }; // async function connectMongoDB(){
 
 
@@ -40,7 +42,7 @@ export const connectMongoDB = async ()=>{ log('connectMongoDB() - Database URL: 
 
 
 // msg=>{"msg": msg, "room": details.room, "usertoken": details.usertoken}
-export const storeMessages = async msg=>{ log( 'storeMessages() - msg: ' + JSON.stringify(msg, null, 4) );
+export const storeMessages = async (msg)=>{ log( 'storeMessages() - msg: ' + JSON.stringify(msg, null, 4) );
 
   const collection = MongoDB.collection('rooms');
 
@@ -79,19 +81,25 @@ export const storeMessages = async msg=>{ log( 'storeMessages() - msg: ' + JSON.
 
 
 
-export const getUserDetails = async token=>{ log( 'getUserDetails() - token: ' + token );
+export const getUserDetails = async (token)=>{ log( 'getUserDetails() - token: ' + token );
+
   const collection = MongoDB.collection('user');
+
   // search for token inside of user collections
   if(!token) return false;
   return await collection.findOne( {"token": token} );
+
 }; // async function getUserDetails(token){
 
 
 
 
-export const getRoomDetails = async roomID=>{ log( 'mongodb.js - getRoomDetails() - roomID: ' + roomID );
+export const getRoomDetails = async (roomID)=>{ log( 'mongodb.js - getRoomDetails() - roomID: ' + roomID );
+
   const collection = MongoDB.collection('rooms');
+
   // search for Room ID inside of rooms collections
   if( !roomID ) return false;
   return await collection.findOne( {"id": roomID?.toString()} );
+
 }; // async function getRoomDetails(token){
