@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="css/lib/mocha.css"/>
+  </head>
+  <body>
+
+  <!-- insert website to test here.. -->
+  <div id="original"></div>
+
+
+  <div id="mocha" style="display:none;">
+    <div class="header-time"><h1 style="font-size:.5em;"></h1></div>
+  </div>
+
+  <!-- lib packages -->
+  <script src="js/lib/jquery.min.js"></script>
+
+  <!-- catch original HTML -->
+  <script>
+    $( "#original" ).load( 'index.html' );
+    $( ".header-time h1" ).text(new Date);
+  </script>
+
+  <!-- mocha files -->
+  <script src="js/lib/chai.js"></script>
+  <script src="js/lib/mocha.js"></script>
+  <script class="mocha-init">mocha.setup('bdd')</script>
+
+  <!-- TDD -->
+  <script src="js/lib/expect.min.js"></script>
+
+
+  <!-- test files -->
+  <script type="module" src="js/utils/test.req.mjs"></script>
+  <script type="module" src="js/utils/test.socket.mjs"></script>
+  <script type="module" src="js/utils/test.web.mjs"></script>
+
+  <!-- mocha INIT -->
+  <script class="mocha-init" type="module">mocha.checkLeaks();</script>
+  <script class="mocha-exec" type="module">mocha.run();</script>
+
+  </body>
+</html>

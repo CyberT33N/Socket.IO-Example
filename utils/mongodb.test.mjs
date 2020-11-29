@@ -14,27 +14,12 @@ import chalk from 'chalk';
 import fs from 'fs';
 const json_config = JSON.parse(  fs.readFileSync('./admin/config.json', 'utf8')  ),
      test_client1 = json_config.test.user[0],
-     test_client2 = json_config.test.user[1],
         test_room = json_config.test.room;
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 describe('MongoDB Services', ()=>{
-
-
-
 
 
 
@@ -49,8 +34,6 @@ describe('MongoDB Services', ()=>{
     });
 
   }); // describe('connectMongoDB()()', ()=>{
-
-
 
 
 
@@ -101,8 +84,6 @@ describe('MongoDB Services', ()=>{
 
 
 
-
-
   describe('getRoomDetails()', ()=>{
 
     it('Check if User can be found by token - Should return object', async()=>{
@@ -118,9 +99,6 @@ describe('MongoDB Services', ()=>{
     });
 
   }); // describe('getRoomDetails()', ()=>{
-
-
-
 
 
 

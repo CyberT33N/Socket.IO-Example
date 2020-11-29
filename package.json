@@ -22,17 +22,20 @@
   },
   "devDependencies": {
     "expect": "^26.6.2",
+    "jsdom": "^16.4.0",
     "mocha": "^8.2.1",
     "mochawesome": "^6.2.1",
     "puppeteer": "^5.4.1",
     "socket.io-client": "^2.3.1"
   },
   "scripts": {
-    "test": "mocha **/*.test.mjs --timeout 0 --exit --reporter mochawesome",
-    "test-watch": "nodemon --exec \"npm test\""
+    "test": "mocha **/*.test.mjs --timeout 0 --exit --reporter mochawesome --reporter-options reportDir=website/report",
+    "test-watch": "nodemon --ignore 'website/report' --exec \"npm test\""
   },
   "nodemonConfig": {
-     "ignore": ["mochawesome-report/*"]
+    "ignore": [
+      "mochawesome-report/*"
+    ]
   },
   "repository": {
     "type": "git",
