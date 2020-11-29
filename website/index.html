@@ -144,22 +144,20 @@
 
     </div> <!-- <div class="wrapper"> -->
 
-  <!-- lib files -->
-  <script src="js/lib/jquery.min.js"></script>
-  <script src="js/lib/socket.io.min.js"></script>
-  <script src="js/lib/axios.min.js"></script>
 
-  <!-- create global variables -->
+
+  <!-- lib packages -->
+  <script src="js/lib/jquery.min.js"></script>
+  <script src="js/lib/axios.min.js"></script>
+  <script src="js/lib/socket.io.min.js"></script>
+
+  <!-- global variables -->
   <script>
-  const socket = io();
-  var ROOM, clientDetails;
+    const socketIO = io();
   </script>
 
   <!-- custom files -->
-  <script src="js/web.js"></script>
-  <script src="js/socket.js"></script>
-  <script src="js/req.js"></script>
-  <script src="js/main.js"></script>
+  <script type="module" src="js/main.mjs"></script>
 
   </body>
 </html>

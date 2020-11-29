@@ -1,5 +1,8 @@
+/*################ Controller ################*/
+import controllerSocketIO from '../controller/socketio.mjs';
+
 /*################ Socket.io ################*/
-import io from 'socket.io-client';
+import io_client from 'socket.io-client';
 
 /*################ TDD ################*/
 import expect from 'expect';
@@ -13,18 +16,10 @@ import chalk from 'chalk';
 /*################ config.json ################*/
 import fs from 'fs';
 const json_config = JSON.parse(  fs.readFileSync('./admin/config.json', 'utf8')  ),
-     test_client1 = json_config.test.user[0],
      test_client2 = json_config.test.user[1],
-        test_room = json_config.test.room,
-             host = json_config.test.host + ':' + json_config.test.port;
+        test_room = json_config.test.room;
 
-var socket, socket2;
-
-
-
-
-
-
+var devSocket, devSocketPartner;
 
 
 
@@ -33,71 +28,58 @@ var socket, socket2;
 
 describe('Socket.io Services', ()=>{
 
+  before(done=>{(async()=>{
+    // get dev sockets
+       const sockets = await controllerSocketIO.createDevSockets(io_client);
+           devSocket = sockets.devSocket;
+    devSocketPartner = sockets.devSocketPartner;
 
-  before(async ()=>{
-
-    // client 1
-    socket = io.connect(`${host}/?usertoken=${test_client1.token}`, {
-      transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
-    });
-
-    // client 2
-    socket2 = io.connect(`${host}/?usertoken=${test_client2.token}`, {
-      transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
-    });
-
-  }); //   before( async ()=>{
-
-
-
-
+    done();
+  })()}); // before( async ()=>{
 
 
 
 
   describe('connectRoom()', ()=>{
 
+    it('Successfully connect - Should return object with _id', done=>{
+      devSocket.on('connectRoom result', roomDetails=>{ //log('connectRoom result - Successfully connect - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
 
-    it('Successfully connect - Should return object with _id', (done)=>{
-      socket.on('connectRoom result', (roomDetails)=>{
-      //log('connectRoom result - Successfully connect - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
-
-        socket.off('connectRoom result');
+        devSocket.off('connectRoom result');
         expect( roomDetails ).toEqual(expect.objectContaining({ _id: expect.anything() }));
-        done();
+        setTimeout(() => { done(); }, 1000); // <-- dont delete timeout
 
-      }); //  socket.on('connectRoom result', (roomDetails)=>{
+      }); //  devSocket.on('connectRoom result', (roomDetails)=>{
 
-      socket.emit('room connect', test_room);
+      devSocket.emit('room connect', test_room);
     }); // it('Successfully connect - Should return object with _id', (done)=>{
 
 
 
-    it('Simulate wrong Room ID - Should return {code : "Can not find Room ID in Database"}', (done)=>{
-      socket.on('connectRoom result', (roomDetails)=>{
-      log('connectRoom result - Simulate wrong Room ID - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
+    it('Simulate wrong Room ID - Should return {code : "Can not find Room ID in Database"}', done=>{
+      devSocket.on('connectRoom result', roomDetails=>{
+      //log('connectRoom result - Simulate wrong Room ID - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
 
-        socket.off('connectRoom result');
+        devSocket.off('connectRoom result');
         expect( roomDetails ).toMatchObject({code : "Can not find Room ID in Database"});
         done();
 
-      }); // socket.on('connectRoom result', (roomDetails)=>{
-
-      socket.emit('room connect', "wrong_roomID");
+      }); // devSocket.on('connectRoom result', (roomDetails)=>{
+      devSocket.emit('room connect', "wrong_roomID");
     }); // it('Simulate wrong Room ID - Should return "Can not find Room ID in Database"', (done)=>{
 
 
-    it('Simulate NPE - Should return {code: "NPE"}', (done)=>{
-      socket.on('connectRoom result', (roomDetails)=>{
+    it('Simulate NPE - Should return {code: "NPE"}', done=>{
+      devSocket.on('connectRoom result', roomDetails=>{
       log('connectRoom result - Simulate NPE - roomDetails: ' + JSON.stringify(roomDetails, null, 4));
 
-        socket.off('connectRoom result');
+        devSocket.off('connectRoom result');
         expect( roomDetails ).toMatchObject({code : "NPE"});
         done();
 
-      }); // socket.on('connectRoom result', (roomDetails)=>{
+      }); // devSocket.on('connectRoom result', (roomDetails)=>{
 
-      socket.emit('room connect', null);
+      devSocket.emit('room connect', null);
     }); // it('Simulate NPE - Should return {code: "NPE"}', (done)=>{
 
 
@@ -114,42 +96,38 @@ describe('Socket.io Services', ()=>{
 
   describe('messageRoom()', ()=>{
 
-
-    it('Should send message to chat partner and return string', (done)=>{
-      socket.on('msg', (msg)=>{
+    it('Should send message to chat partner and return string', done=>{
+      devSocket.on('msg', msg=>{
       log('messageRoom() - sucess message: ' + msg);
 
-        socket.off('msg');
+        devSocket.off('msg');
         expect( typeof msg ).toBe( 'string' );
         done();
 
-      }); // socket.on('msg', (msg)=>{
+      }); // devSocket.on('msg', (msg)=>{
 
       // simulate chat partner with socket 2
-      socket2.emit('chat message', {msg: "sample message..", room: test_room, usertoken: test_client2.token, date: "xx/xx/xxxx, xx:xx xx" });
+      devSocketPartner.emit('chat message', {msg: "sample message..", room: test_room, usertoken: test_client2.token, date: "xx/xx/xxxx, xx:xx xx" });
     }); // it('Should send message to chat partner and return string', (done)=>{
 
 
 
-    it('Simulate null message - Should return {code: "Message was null"}', (done)=>{
-      socket.on('msg', (msg)=>{
+    it('Simulate null message - Should return {code: "Message was null"}', done=>{
+      devSocket.on('msg', msg=>{
       log('messageRoom() - error message: ' + JSON.stringify(msg, null, 4));
 
-        socket.off('msg');
+        devSocket.off('msg');
         expect( msg ).toStrictEqual( {code: "Message was null"} );
         done();
 
-      }); // socket.on('msg', (msg)=>{
+      }); // devSocket.on('msg', (msg)=>{
 
       // simulate chat partner with socket 2
-      socket2.emit('chat message', {msg: '', room: test_room, usertoken: test_client2.token});
+      devSocketPartner.emit('chat message', {msg: '', room: test_room, usertoken: test_client2.token});
     }); // it('Should return {code: "Message was null"}', (done)=>{
 
 
   }); // describe('messageRoom()', ()=>{
-
-
-
 
 
 
