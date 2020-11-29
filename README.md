@@ -54,18 +54,21 @@ In order to use this Chat APP you must create a MongoDB Database and insert the 
 
 In order to use Unit Test the **config.json** file already contains the two testing user and the testing room. Make sure that the room and both user exist aswell in your database as explained in the next section.
 
+Add a different port than your main express server will use because we will create a test server.
+
 ```javascript
 "test": {
-    "host": "http://localhost:1337",
-    "room": "mocha",
-    "user": [{
-      "token": "mocha",
-      "name": "mocha"
-    },{
-      "token": "mocha2",
-      "name": "mocha2"
-    }]
-  }
+  "port": 1338,
+  "host": "http://localhost",
+  "room":"mocha",
+  "user": [{
+    "token": "mocha",
+    "name": "mocha"
+  },{
+    "token": "mocha2",
+    "name": "mocha2"
+  }]
+}
 ```
 
 
