@@ -1,6 +1,6 @@
 {
   "name": "Socket.io-Chat-APP-Example",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "description": "Example Node.js Chat APP based on socket.io",
   "main": "app.js",

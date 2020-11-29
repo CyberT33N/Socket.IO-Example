@@ -28,6 +28,7 @@ Database: **MongoDB**
 - Socket.io Rooms
 - Storage of messages (MongoDB)
 - Realtime Chat
+- Client & Server Side Unit Tests
 
 
 
@@ -174,7 +175,7 @@ The **user** collection contains the **user token**, **user name** and the **fri
         "room": "mocha"
     }]
 }]
-// In order to use Unit Test create aswell two testing user.
+// In order to use Unit Test create as well two testing user.
 ```
 
 
@@ -201,7 +202,6 @@ Currently you can open each user chat window by using the **User Token** inside 
 
 
 ## How to start Unit Test
-First start your express server (**app.js**) and after this run:
 ```bash
 # method #1
 test.bat # <-- Windows
@@ -211,3 +211,7 @@ test.sh # <--MAC/Linux
 npm run test-watch
 ```
 
+<br><br>
+Results can be found here:
+- ./website/report/client.html
+- ./website/report/mochawesome.html
