@@ -2,3 +2,4 @@ node_modules/
 lib/browserProfiles/*/
 lib/chromeextension/*/
 website/report/
+package-lock.json

@@ -30,7 +30,7 @@
   },
   "scripts": {
     "test": "mocha **/*.test.mjs --timeout 0 --exit --reporter mochawesome --reporter-options reportDir=website/report,reportFilename=server",
-    "test-watch": "nodemon --ignore 'website/report' --exec \"npm test\""
+    "test-watch": "nodemon --ignore 'website/report/*' --exec \"npm test\""
   },
   "nodemonConfig": {
     "ignore": [
