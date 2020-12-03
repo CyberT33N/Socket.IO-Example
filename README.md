@@ -112,7 +112,7 @@ All sended messages from this room will be later also imported to this object.
         "usertoken": "mocha2"
     }]
 }]
-// In order to use Unit Test we aswell a testing room.
+// In order to use Unit Test we add as well a testing room.
 ```
 
 
