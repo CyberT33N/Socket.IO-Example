@@ -1,6 +1,7 @@
 /*################ config.json ################*/
 import fs from 'fs';
-const json_config = JSON.parse( fs.readFileSync('./admin/config.json', 'utf8') ),
+import yaml from 'js-yaml';
+const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8')),
      test_client1 = json_config.test.user[0],
      test_client2 = json_config.test.user[1],
         test_room = json_config.test.room,

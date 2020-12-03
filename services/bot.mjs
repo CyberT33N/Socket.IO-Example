@@ -20,9 +20,9 @@ import chalk from 'chalk';
 
 /*################ config.json ################*/
 import fs from 'fs';
-     const json_config = JSON.parse(  fs.readFileSync('./admin/config.json', 'utf8')  ),
-
-config_browser_profile = json_config.bot.browser_profile,
+import yaml from 'js-yaml';
+const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8')),
+    config_browser_profile = json_config.bot.browser_profile,
          headlessVALUE = json_config.bot.headless,
          extensionlist = json_config.bot.extensionlist,
 

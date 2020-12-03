@@ -1,0 +1,29 @@
+---
+server:
+  port: 1337
+
+MongoDB:
+  dbname: socketio-example
+  url: mongodb://localhost:27017
+  host: ~
+  port: ~
+  username: ~
+  password: ~
+
+test:
+  port: 1338
+  host: http://localhost
+  room: mocha
+  user:
+    - token: mocha
+      name: mocha
+    - token: mocha2
+      name: mocha2
+
+bot:
+  headless: false
+  browser_profile: TDD
+  windowWidth: 1920
+  windowHeight: 1080
+  extensionlist: ~
+...

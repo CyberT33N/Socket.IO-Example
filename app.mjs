@@ -2,8 +2,8 @@
 import fs from 'fs';
 //import {default as fsWithCallbacks} from 'fs'
 //const fsAsync = fsWithCallbacks.promises
-
-const json_config = JSON.parse( fs.readFileSync('./admin/config.json', 'utf8') );
+import yaml from 'js-yaml';
+const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8'));
 
 /*################ Socket.io ################*/
 import socketIO from 'socket.io';
