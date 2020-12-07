@@ -21,7 +21,7 @@ test:
       name: mocha2
 
 bot:
-  headless: false
+  headless: true
   browser_profile: TDD
   windowWidth: 1920
   windowHeight: 1080

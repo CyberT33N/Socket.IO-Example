@@ -91,7 +91,7 @@ describe('Client Side Services', ()=>{
 
 
     // start browser and get page & client
-    pptr = await controllerBot.startBROWSER();
+    pptr = await controllerBot.startBrowser();
     if(!pptr) throw new Error('Something went wrong we cant find pptr');
 
 

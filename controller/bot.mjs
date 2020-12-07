@@ -1,6 +1,6 @@
 import * as bot from "../services/bot.mjs";
 
 export default {
-  startBROWSER: async ()=>{ return await bot.startBROWSER(); },
+  startBrowser: async ()=>{ return await new bot.startBrowser().launch(); },
   openLink: async (page, link)=>{ return await bot.openLink(page, link); }
 }

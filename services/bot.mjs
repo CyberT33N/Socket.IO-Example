@@ -1,10 +1,3 @@
-/*################ Node.js ################*/
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-const __filename = fileURLToPath(import.meta.url),
-       __dirname = dirname(__filename);
-
-
 /*################ Operating System ################*/
 import os from 'os';
 const osPlatform = os.platform();
@@ -21,144 +14,132 @@ import chalk from 'chalk';
 /*################ config.json ################*/
 import fs from 'fs';
 import yaml from 'js-yaml';
-const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8')),
-    config_browser_profile = json_config.bot.browser_profile,
-         headlessVALUE = json_config.bot.headless,
-         extensionlist = json_config.bot.extensionlist,
-
-           windowWidth = json_config.bot.windowWidth,
-          windowHeight = json_config.bot.windowHeight,
-    windowSizeComplete = '--window-size=' + windowWidth + ',' + windowHeight;
-
-
-var client;
 
 
 
 
+class getBrowserConfig{
+
+  constructor(){ log('class getBrowserConfig - constructor()');
+    this.getConfig();
+    this.createArgs();
+    this.checkExtensions();
+  }; // constructor(){
+
+  getConfig(){ log('getConfig()');
+    const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8'));
+    this.config_browser_profile = json_config.bot.browser_profile;
+    this.headless = json_config.bot.headless;
+    this.extensionlist = json_config.bot.extensionlist;
+    this.windowWidth = json_config.bot.windowWidth;
+    this.windowHeight = json_config.bot.windowHeight;
+    this.windowSizeComplete = `--window-size=${this.windowWidth},${this.windowHeight}`;
+    log(`
+      windowSizeComplete: ${this.windowSizeComplete}
+      extensionlist: ${this.windowSizeComplete}
+      headless: ${this.headless}
+      config_browser_profile: ${this.config_browser_profile}
+      `);
+  }; // getConfig(){
+
+  createArgs(){ log( 'createArgs()' );
+    this.args = [
+      this.windowSizeComplete,
+      '--no-sandbox',
+      // '--disable-setuid-sandbox',
+      //'--disable-popup-blocking',
+      //'--disable-notifications',
+      //'--disable-dev-shm-usage',
+      '--force-webrtc-ip-handling-policy=disable-non-proxied-udp',
+      '--lang=en'
+    ]; if(this.headless) this.args.push('--disable-gpu');
+  }; // createArgs(){
+
+  // check if browser extensions was defined in config.json file. If true we add them to our args array
+  checkExtensions(){ log( 'checkExtensions()' );
+    if( this.extensionlist !== null ){
+    log('extensionlist before: ' + this.extensionlist);
+
+      var extensionlistAR = [];
+      for( const d in this.extensionlist ){
+        extensionlistAR.push( this.chromeExtensionPath + this.extensionlist[d] );
+        this.args.push( '--load-extension=' + this.chromeExtensionPath + this.extensionlist[d] );
+      } // for( const d of this.extensionlist ){
+
+      this.extensionlist = '--disable-extensions-except=' + extensionlistAR.join( ',' );
+      this.args.push(this.extensionlist);
+      log(`extensionlist after: ${this.extensionlist}`);
+
+    } // if( this.extensionlist !== null ){
+  }; // checkExtensions(){
 
 
-export const checkExtensions = ()=>{ log( '---- checkExtensions() ----' );
-  if( extensionlist?.length > 0 ){
+  // check system OS and then create path related to OS
+  createPath(){ log( 'createPath() - osPlatform: ' + osPlatform );
+    if( osPlatform == 'darwin' ){
+      this.browserProfilePath = './lib/browserProfiles/';
+      this.chromeExtensionPath  = './lib/chromeextension/';
+    }
+    if( osPlatform == 'linux' ) {
+      this.browserProfilePath = './lib/browserProfiles/';
+      this.chromeExtensionPath  = './lib/chromeextension/';
+    }
+    if( osPlatform == 'win32' ){
+      this.browserProfilePath = '../../../../../lib/browserProfiles/';
+      this.chromeExtensionPath  = '../../../../../lib/chromeextension/';
+    }
+    log(`
+      browserProfilePath: ${browserProfilePath}
+      chromeExtension Path: ${chromeExtensionPath}
+    `);
+  }; // createPath(){
 
-    var extensionlistAR = [];
-    for( const d in extensionlist ){
-      extensionlistAR.push( chromeExtensionPath + extensionlist[d] );
-      args.push( '--load-extension=' + chromeExtensionPath + extensionlist[d] );
-    } // for( const d of extensionlist ){
-
-    extensionlist = '--disable-extensions-except=' + extensionlistAR.join( ',' );
-    args.push(extensionlist);
-
-  } // if( extensionlist?.length > 0 ){
-}; // export const checkExtensions = ()=>{
-
-
-
-export const createPath = ()=>{ log( '---- createPath - osPlatform: ' + osPlatform + '----' );
-  if( osPlatform == 'darwin' ){
-    var chromeExtension = './lib/chromeextension/';
-    var browserProfile = './lib/browserProfiles/';
-  }
-  if( osPlatform == 'linux' ) {
-    var browserProfile = './lib/browserProfiles/';
-    var chromeExtension = './lib/chromeextension/';
-  }
-  if( osPlatform == 'win32' ){
-    var browserProfile = '../../../../../lib/browserProfiles/';
-    var chromeExtension = '../../../../../lib/chromeextension/';
-  }
-  return {browserProfile: browserProfile, chromeExtension: chromeExtension};
-}; // export const createPath = ()=>{
-
-
-
-export const createArgs = ()=>{ log( '---- createArgs ----' );
-  var args = [
-    windowSizeComplete,
-    '--no-sandbox',
-    // '--disable-setuid-sandbox',
-    //'--disable-popup-blocking',
-    //'--disable-notifications',
-    //'--disable-dev-shm-usage',
-    '--force-webrtc-ip-handling-policy=disable-non-proxied-udp',
-    '--lang=en'
-  ]; if(headlessVALUE) args.push('--disable-gpu');
-  return args;
-}; // export const createArgs = ()=>{
-
-
-// create arguments array for the puppeteer launch process
-var args = createArgs();
-
-// check system OS and then create path related to OS
-const osPaths = createPath();
-const chromeExtensionPath = osPaths.chromeExtension;
-const browserProfilePath = osPaths.browserProfile;
-
-// check if browser extensions was defined in config.json file. If true we add them to our args array
-checkExtensions();
-
-log(`
-chromeExtension Path: ${chromeExtensionPath}
-
-extensionlist: ${extensionlist}
-
-args: ${args}
-
-windowSizeComplete: ${windowSizeComplete}
-
-Current working directory: ${__dirname}
-
-browserProfilePath: ${browserProfilePath}
-
-config_browser_profile: ${config_browser_profile}
-`);
-
-
+}; // class getBrowserConfig {
 
 
 
 
+export class startBrowser extends getBrowserConfig{
 
+  async newPage(){ log('newPage()');
+    this.page = await this.client.newPage();
+    await this.page.bringToFront();
+  }; // async newPage(){
 
+  async setViewport(){ log('setViewport()');
+    await this.page.setViewport({width: this.windowWidth, height: this.windowHeight});
+  }; // async setViewport(){
 
+  async launch(){ log('launch() - args: ' + this.args);
+    try {
+        this.client = await puppeteer.launch({
+        //executablePath: '/snap/bin/chromium',
+        //executablePath: '/usr/bin/google-chrome',
+        //executablePath: '/home/user/Downloads/Linux_x64_749751_chrome-linux/chrome-linux/chrome',
+        // executablePath: '/home/user/Downloads/firefox-78.0a1.en-US.linux-x86_64/firefox/firefox',
+        devtools: true,
+        headless: this.headless, // true or false
+        userDataDir: this.browserProfilePath + this.config_browser_profile,
+        args: this.args
+      });
 
+      await this.newPage();
+      await this.setViewport();
+      return {"client": this.client, "page": this.page};
 
+    } catch(e) { error(e); }; // catch(e) {
+  } // async function launch(){
 
+  async error(e){ log('class startBrowser - error() - error: ' + e);
+    if( e?.length == undefined ) log( 'startBrowser() - error is undefinied.. we restart now the browser..' );
+    if( e?.name == 'TimeoutError' ) log( 'startBrowser() - TimeoutError was found.. we restart now the browser..' );
+    if( e == 'Error: connect ECONNREFUSED 0.0.0.0:4444') log( 'startBrowser() - ECONNREFUSED error found..' );
 
+    await this.client.close();
+    await this.launch();
+  }; // async error(e){
 
-export const startBROWSER = async ()=>{log( 'We will start now your Browser please wait..' );
-
-  try { client = await puppeteer.launch({
-      //executablePath: '/snap/bin/chromium',
-      //executablePath: '/usr/bin/google-chrome',
-      //executablePath: '/home/user/Downloads/Linux_x64_749751_chrome-linux/chrome-linux/chrome',
-      // executablePath: '/home/user/Downloads/firefox-78.0a1.en-US.linux-x86_64/firefox/firefox',
-      devtools: true,
-      headless: headlessVALUE, // true or false
-      userDataDir: browserProfilePath + config_browser_profile,
-      args: args
-    });
-
-    const page = await client.newPage();
-    await page.waitFor(5000);
-    await page.bringToFront();
-    await page.setViewport({width:windowWidth, height:windowHeight});
-
-    return {"client": client, "page": page};
-
-  } catch(e) { log('Error while try to start browser - error :' + e );
-
-    if( e?.length == undefined ) log( 'startBROWSER() - error is undefinied.. we restart now the browser..' );
-    if( e?.name == 'TimeoutError' ) log( 'startBROWSER() - TimeoutError was found.. we restart now the browser..' );
-    if( e == 'Error: connect ECONNREFUSED 0.0.0.0:4444') log( 'startBROWSER() - ECONNREFUSED error found..' );
-
-    await client.close();
-    await startBROWSER();
-
-  } // catch(e) {
-}; // async function startBROWSER(){
+}; // class _startBrowser {
 
 
 
@@ -169,7 +150,8 @@ export const startBROWSER = async ()=>{log( 'We will start now your Browser plea
 
 
 
-export const openLink = async (page, link)=>{log( 'openLink() - link: ' + link );
+
+export const openLink = async (page, link)=>{ log( 'openLink() - link: ' + link );
 
   try { await page.goto(link, {waitUntil: 'networkidle0', timeout: 35000});
   } catch(e) { log( 'openLink() - Error while open link.. Error: ' + e?.message );
