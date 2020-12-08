@@ -16,6 +16,6 @@ export default {
   listenerRoomConnect: async (pptr, devIO)=>{ return await new expose.Listener(pptr, devIO).listenerRoomConnect(); },
 
   incomeMsg: async (pptr, devIO)=>{ return await expose.incomeMsg(pptr, devIO); },
-  checkTimeCSS: async (pptr, socket, socketPartner)=>{ return await expose.checkTimeCSS(pptr, socket, socketPartner); }
+  checkTimeCSS: async (pptr, socket, socketPartner)=>{ return await new expose.Listener(pptr).checkTimeCSS(socket, socketPartner); }
 
 }

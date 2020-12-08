@@ -123,7 +123,7 @@ class ListenerEvents{
 
       const newTab = await controllerbot.newTab(this.pptr.client);
       const [msg] = await Promise.all([
-        this.createDevSocketListener('chat message', await this.createDevSocket(newTab, this.devIO)),
+        this.createSocketListener('chat message', await this.createDevSocket(newTab, this.devIO)),
         await controllerbot.typeText(newTab, 'textarea', 'sample_message123', 10),
         await controllerbot.click('.write-link.send', newTab, 1000)
       ]); return msg;
@@ -136,12 +136,30 @@ class ListenerEvents{
 
       const newTab = await controllerbot.newTab(this.pptr.client);
       const [roomID] = await Promise.all([
-        this.createDevSocketListener('room connect', await this.createDevSocket(newTab, this.devIO)),
+        this.createSocketListener('room connect', await this.createDevSocket(newTab, this.devIO)),
         controllerbot.click('.person', newTab, 1000)
       ]); return roomID;
 
     }); // await pptr.page.exposeFunction('listenerRoomConnect', link=>{
   }; // async listenerRoomConnect(){
+
+  async checkTimeCSS(socket, socketPartner){ log('checkTimeCSS()');
+    await this.pptr.page.exposeFunction('checkTimeCSS', async ()=>{ log('checkTimeCSS()');
+
+      const msg = {
+        msg: "sample message22..",
+        room: test_room,
+        usertoken: test_client2.token,
+        date: '12/34/5678, 12:34 pm'
+      };
+
+      const [d] = await Promise.all([
+        this.createSocketListener('msg', socket),
+        this.emitMsg(socketPartner, 'chat message', msg, 1000)
+      ]); return d;
+
+    }); // await this.pptr.page.exposeFunction('checkTimeCSS', async ()=>{
+  }; // async checkTimeCSS(socket, socketPartner){
 
 }; // class ListenerEvents{
 
@@ -164,11 +182,16 @@ export class Listener extends ListenerEvents{
     ]); return devSocket;
   }; // async createDevSocket(){
 
-  createDevSocketListener(name, socket){ return new Promise(resolve => { log(`createDevSocketListener() - Listener Name: ${name}`);
-    socket.on(name, data=>{ log(`createDevSocketListener() - socket.on() - data: ${JSON.stringify(data, null, 4)}`);
+  createSocketListener(name, socket){ return new Promise(resolve => { log(`createSocketListener() - Listener Name: ${name}`);
+    socket.on(name, data=>{ log(`createSocketListener() - socket.on() - data: ${JSON.stringify(data, null, 4)}`);
       resolve(data);
      }); // socket.on(name, data=>{
-  })}; // createDevSocketListener(name, socket){
+  })}; // createSocketListener(name, socket){
+
+  async emitMsg(socket, name, msg, delay){ log(`emitMsg() - Listener Name: ${name} - Message: ${JSON.stringify(msg, null, 4)} - Delay: ${delay}`);
+    if(delay) await new Promise(resolve => setTimeout(resolve, delay));
+    socket.emit(name, msg);
+  }; // emitMsg(socket){
 
 }; // class Listener {
 
@@ -218,23 +241,3 @@ export const incomeMsg = async (pptr, devIO)=>{ log('--- incomeMsg() ----');
 
   }); // await pptr.page.exposeFunction('incomeMsg', link=>{
 }; // export const incomeMsg = async pptr=>{
-
-
-
-
-export const checkTimeCSS = async (pptr, socket, socketPartner)=>{ log('--- checkTimeCSS() ----');
-  await pptr.page.exposeFunction('checkTimeCSS', ()=>{return new Promise(resolve => { log('--- EXPOSE - ccheckTimeCSS ---');
-
-    socket.on('msg', msg=>{ log('checkTimeCSS - success message: ' + msg);
-      resolve(msg);
-    }); // socket.on('msg', async (msg)=>{
-
-    socketPartner.emit('chat message', {
-      msg: "sample message22..",
-      room: test_room,
-      usertoken: test_client2.token,
-      date: '12/34/5678, 12:34 pm'
-    });
-
-  })}); // await pptr.page.exposeFunction('checkTimeCSS', link=>{
-}; // export const checkTimeCSS = async (pptr, socket, socketPartner)=>{
