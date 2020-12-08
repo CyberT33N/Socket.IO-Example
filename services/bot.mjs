@@ -28,16 +28,10 @@ class getBrowserConfig{
     this.windowWidth = json_config.bot.windowWidth;
     this.windowHeight = json_config.bot.windowHeight;
     this.windowSizeComplete = `--window-size=${this.windowWidth},${this.windowHeight}`;
-    log(`
-      windowSizeComplete: ${this.windowSizeComplete}
-      extensionlist: ${this.windowSizeComplete}
-      headless: ${this.headless}
-      config_browser_profile: ${this.config_browser_profile}
-      `);
   }; // getConfig(){
 
   createArgs(){ log( 'createArgs()' );
-    this.args = [
+    const args = [
       this.windowSizeComplete,
       '--no-sandbox',
       // '--disable-setuid-sandbox',
@@ -46,30 +40,30 @@ class getBrowserConfig{
       //'--disable-dev-shm-usage',
       '--force-webrtc-ip-handling-policy=disable-non-proxied-udp',
       '--lang=en'
-    ]; if(this.headless) this.args.push('--disable-gpu');
+    ]; if(this.headless) args.push('--disable-gpu'); return args;
   }; // createArgs(){
 
   // check if browser extensions was defined in config.json file. If true we add them to our args array
-  checkExtensions(){ log( 'checkExtensions()' );
-    if( this.extensionlist !== null ){
-    log('extensionlist before: ' + this.extensionlist);
+  checkExtensions(extensionlist, chromeExtensionPath, args){ log( `checkExtensions() - chromeExtensionPath: ${chromeExtensionPath}` );
+    if( extensionlist !== null ){ log('extensionlist before: ' + extensionlist);
 
       var extensionlistAR = [];
-      for( const d in this.extensionlist ){
-        extensionlistAR.push( this.chromeExtensionPath + this.extensionlist[d] );
-        this.args.push( '--load-extension=' + this.chromeExtensionPath + this.extensionlist[d] );
-      } // for( const d of this.extensionlist ){
+      for( const d in extensionlist ){
+        extensionlistAR.push( chromeExtensionPath + extensionlist[d] );
+        args.push( '--load-extension=' + chromeExtensionPath + extensionlist[d] );
+      } // for( const d of extensionlist ){
 
-      this.extensionlist = '--disable-extensions-except=' + extensionlistAR.join( ',' );
-      this.args.push(this.extensionlist);
-      log(`extensionlist after: ${this.extensionlist}`);
+      extensionlist = '--disable-extensions-except=' + extensionlistAR.join( ',' );
+      args.push(extensionlist);
+      log(`extensionlist after: ${extensionlist}`);
+      return args;
 
-    } // if( this.extensionlist !== null ){
+    } // if( extensionlist !== null ){
   }; // checkExtensions(){
 
 
   // check system OS and then create path related to OS
-  createPath(){ log( 'createPath() - osPlatform: ' + osPlatform );
+  getPath(){ log( 'getPath() - osPlatform: ' + osPlatform );
     if( osPlatform == 'darwin' ){
       this.browserProfilePath = './lib/browserProfiles/';
       this.chromeExtensionPath  = './lib/chromeextension/';
@@ -82,13 +76,11 @@ class getBrowserConfig{
       this.browserProfilePath = '../../../../../lib/browserProfiles/';
       this.chromeExtensionPath  = '../../../../../lib/chromeextension/';
     }
-    log(`
-      browserProfilePath: ${browserProfilePath}
-      chromeExtension Path: ${chromeExtensionPath}
-    `);
-  }; // createPath(){
+  }; // getPath(){
 
 }; // class getBrowserConfig {
+
+
 
 
 
@@ -98,18 +90,16 @@ export class startBrowser extends getBrowserConfig{
   constructor(){ log('class getBrowserConfig - constructor()');
     super();
     this.getConfig();
-    this.createArgs();
-    this.checkExtensions();
+    this.getPath();
+    this.args = this.checkExtensions(this.extensionlist, this.chromeExtensionPath, this.createArgs());
+    log(`
+      windowSizeComplete: ${this.windowSizeComplete}
+      headless: ${this.headless}
+      config_browser_profile: ${this.config_browser_profile}
+      args: ${this.args}
+      browserProfilePath: ${this.browserProfilePath}
+    `);
   }; // constructor(){
-
-  async newPage(){ log('class startBrowser - newPage()');
-    this.page = await this.client.newPage();
-    await this.page.bringToFront();
-  }; // async newPage(){
-
-  async setViewport(){ log('setViewport()');
-    await this.page.setViewport({width: this.windowWidth, height: this.windowHeight});
-  }; // async setViewport(){
 
   async launch(){ log('launch() - args: ' + this.args);
     try {
@@ -124,8 +114,9 @@ export class startBrowser extends getBrowserConfig{
         args: this.args
       });
 
-      await this.newPage();
-      await this.setViewport();
+
+      this.page = await newTab(this.client);
+      await setViewport(this.page, this.windowWidth, this.windowHeight);
       return {"client": this.client, "page": this.page};
 
     } catch(e) { error(e); }; // catch(e) {
@@ -150,6 +141,9 @@ export class startBrowser extends getBrowserConfig{
 
 
 
+export const setViewport = async (page, windowWidth, windowHeight)=>{ log(`setViewport() - windowWidth: ${windowWidth} - windowHeight: ${windowHeight}`);
+  await page.setViewport({width: windowWidth, height: windowHeight});
+}; // export const setViewport = async (page, windowWidth, windowHeight)=>{
 
 
 export const openLink = async (page, link)=>{ log( 'openLink() - link: ' + link );
@@ -172,4 +166,12 @@ export const openLink = async (page, link)=>{ log( 'openLink() - link: ' + link 
 
   }; return true;
 
-} // async function openLink(page, link){
+}; // async function openLink(page, link){
+
+
+
+export const newTab = async client=>{ log( 'bot.mjs - newTab()');
+  const newTab = await client.newPage();
+  await newTab.bringToFront();
+  return newTab;
+}; // export const newTab = async (pptr)=>{

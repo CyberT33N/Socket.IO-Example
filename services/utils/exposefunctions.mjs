@@ -118,15 +118,10 @@ export const details = async pptr=>{ log('--- details() ----');
 
 class ListenerLib{
 
-  async newPage(){ log('class ListenerLib - newPage()');
-    this.newTab = await this.pptr.client.newPage();
-    await this.newTab.bringToFront();
-  }; // async newPage(){
-
-  async createDevSocket(){ log('createDevSocket()');
+  async createDevSocket(page){ log('createDevSocket()');
     [this.devSocket] = await Promise.all([
       controller.rootConnect(this.devIO),
-      controllerbot.openLink(this.newTab, devLink)
+      controllerbot.openLink(page, devLink)
     ]); // [this.devSocket] = await Promise.all([
   }; // async createDevSocket(){
 
@@ -150,8 +145,8 @@ export class Listener extends ListenerLib{
   async listenerChatMessage(){ log('listenerChatMessage()');
     await this.pptr.page.exposeFunction('listenerChatMessage', ()=>{return new Promise(async resolve => { log('--- EXPOSE - clistenerChatMessage ----');
 
-      await this.newPage();
-      await this.createDevSocket();
+      const newTab = await controllerbot.newTab(this.pptr.client);
+      await this.createDevSocket(newTab);
 
       this.devSocket.on('chat message', async msg=>{ log('sendMessage() - chat message: ' + JSON.stringify(msg, null, 4));
       // setTimeout(()=>{ devSocket.off('chat message'); }, 2000); // <-- dont delete timeout or we get error..
@@ -159,8 +154,8 @@ export class Listener extends ListenerLib{
          resolve(msg);
       }); // devSocket.on('chat message', (msg)=>{
 
-      await this.newTab.type('textarea', 'sample_message123', { delay: 10 });
-      await this.click('.write-link.send', this.newTab);
+      await newTab.type('textarea', 'sample_message123', { delay: 10 });
+      await this.click('.write-link.send', newTab);
 
     })}); // await pptr.page.exposeFunction('listenerChatMessage', async link =>{
   }; // async listenerChatMessage(pptr, devIO){
@@ -169,15 +164,15 @@ export class Listener extends ListenerLib{
   async listenerRoomConnect(){ log('listenerRoomConnect()');
     await this.pptr.page.exposeFunction('listenerRoomConnect', ()=>{return new Promise(async resolve => { log('--- EXPOSE - clistenerRoomConnect ----');
 
-      await this.newPage();
-      await this.createDevSocket();
+      const newTab = await controllerbot.newTab(this.pptr.client);
+      await this.createDevSocket(newTab);
 
       this.devSocket.on('room connect', async roomID=>{ log('listenerRoomConnect() - room connect - roomID: ' + roomID);
         await this.pptr.page.bringToFront();
         resolve(roomID);
       }); // devSocket.on('room connect', async (roomID)=>{
 
-      await this.click('.person', this.newTab);
+      await this.click('.person', newTab);
 
     })}); // await pptr.page.exposeFunction('listenerRoomConnect', link=>{
   }; // async listenerRoomConnect(pptr, devIO){
