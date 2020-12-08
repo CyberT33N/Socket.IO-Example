@@ -115,9 +115,9 @@ export class startBrowser extends getBrowserConfig{
       });
 
 
-      this.page = await newTab(this.client);
-      await setViewport(this.page, this.windowWidth, this.windowHeight);
-      return {"client": this.client, "page": this.page};
+      const page = await newTab(this.client);
+      await setViewport(page, this.windowWidth, this.windowHeight);
+      return {"client": this.client, "page": page};
 
     } catch(e) { error(e); }; // catch(e) {
   } // async function launch(){
@@ -127,7 +127,7 @@ export class startBrowser extends getBrowserConfig{
     if( e?.name == 'TimeoutError' ) log( 'startBrowser() - TimeoutError was found.. we restart now the browser..' );
     if( e == 'Error: connect ECONNREFUSED 0.0.0.0:4444') log( 'startBrowser() - ECONNREFUSED error found..' );
 
-    await this.client.close();
+    await this.client?.close();
     await this.launch();
   }; // async error(e){
 
@@ -148,7 +148,8 @@ export const setViewport = async (page, windowWidth, windowHeight)=>{ log(`setVi
 
 export const openLink = async (page, link)=>{ log( 'openLink() - link: ' + link );
 
-  try { await page.goto(link, {waitUntil: 'networkidle0', timeout: 35000});
+  try {
+    await page.goto(link, {waitUntil: 'networkidle0', timeout: 35000});
   } catch(e) { log( 'openLink() - Error while open link.. Error: ' + e?.message );
 
     if( e?.message.match('Navigation timeout of') ) log( '#2 - Navigation timeout was found we reload page in 30 seconds..\n\n' );
@@ -174,4 +175,4 @@ export const newTab = async client=>{ log( 'bot.mjs - newTab()');
   const newTab = await client.newPage();
   await newTab.bringToFront();
   return newTab;
-}; // export const newTab = async (pptr)=>{
+}; // export const newTab = async client=>{
