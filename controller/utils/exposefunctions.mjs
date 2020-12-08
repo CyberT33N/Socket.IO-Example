@@ -12,8 +12,9 @@ export default {
   details: async pptr=>{ return await expose.details(pptr); },
 
   // ---- exposeFunctionsSocket() ----
-  listenerChatMessage: async (pptr, devIO)=>{ return await expose.listenerChatMessage(pptr, devIO); },
-  listenerRoomConnect: async (pptr, devIO)=>{ return await expose.listenerRoomConnect(pptr, devIO); },
+  listenerChatMessage: async (pptr, devIO)=>{ return await new expose.Listener(pptr, devIO).listenerChatMessage(); },
+  listenerRoomConnect: async (pptr, devIO)=>{ return await new expose.Listener(pptr, devIO).listenerRoomConnect(); },
+
   incomeMsg: async (pptr, devIO)=>{ return await expose.incomeMsg(pptr, devIO); },
   checkTimeCSS: async (pptr, socket, socketPartner)=>{ return await expose.checkTimeCSS(pptr, socket, socketPartner); }
 

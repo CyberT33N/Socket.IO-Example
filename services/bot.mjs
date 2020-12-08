@@ -20,12 +20,6 @@ import yaml from 'js-yaml';
 
 class getBrowserConfig{
 
-  constructor(){ log('class getBrowserConfig - constructor()');
-    this.getConfig();
-    this.createArgs();
-    this.checkExtensions();
-  }; // constructor(){
-
   getConfig(){ log('getConfig()');
     const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8'));
     this.config_browser_profile = json_config.bot.browser_profile;
@@ -101,7 +95,14 @@ class getBrowserConfig{
 
 export class startBrowser extends getBrowserConfig{
 
-  async newPage(){ log('newPage()');
+  constructor(){ log('class getBrowserConfig - constructor()');
+    super();
+    this.getConfig();
+    this.createArgs();
+    this.checkExtensions();
+  }; // constructor(){
+
+  async newPage(){ log('class startBrowser - newPage()');
     this.page = await this.client.newPage();
     await this.page.bringToFront();
   }; // async newPage(){
