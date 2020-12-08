@@ -5,5 +5,8 @@ export default {
 
   openLink: async (page, link)=>{ return await bot.openLink(page, link); },
 
-  newTab: async client=>{ return await bot.newTab(client); }
+  newTab: async client=>{ return await bot.newTab(client); },
+
+  click: async (css, page, delay)=>{ return await bot.click(css, page, delay); },
+  typeText: async (page, css, msg, delay)=>{ return await bot.typeText(page, css, msg, delay); }
 }

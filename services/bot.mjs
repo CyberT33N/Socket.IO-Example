@@ -139,7 +139,14 @@ export class startBrowser extends getBrowserConfig{
 
 
 
+export const click = async (css, page, delay)=>{ log(`bot.mjs - click() - CSS Selector: ${css} - Delay: ${delay}`);
+  if(delay) await new Promise(resolve => setTimeout(resolve, delay));
+  await page?.click(css);
+}; // export const click = async (css, page, delay)=>{
 
+export const typeText = async (page, css, msg, delay)=>{ log(`bot.mjs - typeText() - CSS Selector: ${css} - Message: ${msg} - Delay: ${delay}`);
+  await page.type(css, msg, { delay: delay });
+}; // export const typeText = async (page, css, msg, delay)=>{
 
 export const setViewport = async (page, windowWidth, windowHeight)=>{ log(`setViewport() - windowWidth: ${windowWidth} - windowHeight: ${windowHeight}`);
   await page.setViewport({width: windowWidth, height: windowHeight});
