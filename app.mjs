@@ -1,9 +1,12 @@
+/*################ Controller ################*/
+import controllerSocketIO from './controller/socketio.mjs';
+import controllerMongoDB from './controller/mongodb.mjs';
+import controllerEndpoints from './controller/endpoints.mjs';
+import controllerServer from './controller/server.mjs';
+import controllerLib from './controller/lib.mjs';
+
 /*################ config.json ################*/
-import fs from 'fs';
-//import {default as fsWithCallbacks} from 'fs'
-//const fsAsync = fsWithCallbacks.promises
-import yaml from 'js-yaml';
-const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8'));
+const config = controllerLib.getConfig();
 
 /*################ Socket.io ################*/
 import socketIO from 'socket.io';
@@ -17,7 +20,7 @@ import http from 'http';
 //import helmet from 'helmet';
 //import morgan from 'morgan';
 const app = express(),
-     port = process.env.PORT || json_config.server.port,
+     port = process.env.PORT || config.server.port,
    server = http.createServer(app),
        io = socketIO(server);
 
@@ -27,12 +30,6 @@ import path, { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url),
        __dirname = dirname(__filename);
 console.log( 'Current working directory: ' + __dirname );
-
-/*################ Controller ################*/
-import controllerSocketIO from './controller/socketio.mjs';
-import controllerMongoDB from './controller/mongodb.mjs';
-import controllerEndpoints from './controller/endpoints.mjs';
-import controllerServer from './controller/server.mjs';
 
 /*################ Logs ################*/
 import log from 'fancy-log';
