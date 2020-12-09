@@ -5,31 +5,18 @@ const osPlatform = os.platform();
 /*################ Bot ################*/
 import puppeteer from 'puppeteer';
 
+/*################ Controller ################*/
+import controllerLib from '../controller/lib.mjs';
+
 /*################ Logs ################*/
 import log from 'fancy-log';
 import chalkAnimation from 'chalk-animation';
 import gradient from 'gradient-string';
 import chalk from 'chalk';
 
-/*################ config.json ################*/
-import fs from 'fs';
-import yaml from 'js-yaml';
-
-
 
 
 class getBrowserConfig{
-
-  getConfig(){ log('getConfig()');
-    const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8'));
-    this.config_browser_profile = json_config.bot.browser_profile;
-    this.headless = json_config.bot.headless;
-    this.extensionlist = json_config.bot.extensionlist;
-    this.windowWidth = json_config.bot.windowWidth;
-    this.windowHeight = json_config.bot.windowHeight;
-    this.windowSizeComplete = `--window-size=${this.windowWidth},${this.windowHeight}`;
-  }; // getConfig(){
-
 
   createArgs(){ log( 'createArgs()' );
     const args = [
@@ -91,9 +78,19 @@ export class startBrowser extends getBrowserConfig{
 
   constructor(){ log('class getBrowserConfig - constructor()');
     super();
-    this.getConfig();
+
+    const config = controllerLib.getConfig();
+    this.config_browser_profile = config.bot.browser_profile;
+    this.headless = config.bot.headless;
+    this.extensionlist = config.bot.extensionlist;
+    this.windowWidth = config.bot.windowWidth;
+    this.windowHeight = config.bot.windowHeight;
+    this.windowSizeComplete = `--window-size=${this.windowWidth},${this.windowHeight}`;
+
     this.getPath();
+
     this.args = this.checkExtensions(this.extensionlist, this.chromeExtensionPath, this.createArgs());
+
     log(`
       windowSizeComplete: ${this.windowSizeComplete}
       headless: ${this.headless}
@@ -101,6 +98,7 @@ export class startBrowser extends getBrowserConfig{
       args: ${this.args}
       browserProfilePath: ${this.browserProfilePath}
     `);
+
   }; // constructor(){
 
 
