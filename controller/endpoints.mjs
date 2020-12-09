@@ -2,8 +2,8 @@ import * as endpoints from '../services/endpoints.mjs';
 
 export default {
   getUserDetails: async (req, res)=>{ return await new endpoints.User().getUserDetails(req, res); },
-  getUserDetailsListener: async app=>{ return await new endpoints.User().detailsListener(app); },
+  getUserDetailsListener: app=>{ return new endpoints.User().getUserDetailsPOST(app); },
 
   getRoomDetails: async (req, res)=>{ return await endpoints.getRoomDetails(req, res); },
-  getRoomDetailsListener: async app=>{ return await endpoints.getRoomDetailsListener(app); }
+  getRoomDetailsListener: app=>{ return new endpoints.Room().getRoomDetailsPOST(app); }
 }

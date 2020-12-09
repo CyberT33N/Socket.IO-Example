@@ -13,11 +13,11 @@ import chalk from 'chalk';
 class UserListener{
 
   // POST request where we take User Token and send back Object with User Details to Client
-  async detailsListener(app){ log('class UserListener - getUserDetailsListener()');
+  getUserDetailsPOST(app){ log('class UserListener - getUserDetailsListener()');
     app.post('/api/getUserDetails', async (req, res)=>{
       await this.getUserDetails(req, res);
     });
-  }; // detailsListener(app){
+  }; // getUserDetailsPOST(app){
 
 }; // class UserListener{
 
@@ -65,32 +65,42 @@ export class User extends UserListener{
 
 
 
+class RoomListener{
 
-// POST request where we take Room ID and send back Object with Room Details to Client
-export const getRoomDetailsListener = app=>{ log('---- getRoomDetailsListener() ----');
-  app.post('/api/getRoomDetails', async (req, res)=>{
-    await getRoomDetails(req, res);
-  });
-}; // export const getRoomDetailsListener = app=>{
+  // POST request where we take Room ID and send back Object with Room Details to Client
+  getRoomDetailsPOST(app){ log('class RoomListener - detailsListener()');
+    app.post('/api/getRoomDetails', async (req, res)=>{
+      await this.getRoomDetails(req, res);
+    });
+  }; // getRoomDetailsPOST(app){
 
+}; // class RoomListener{
 
-export const getRoomDetails = async (req, res)=>{
-/*log(`getRoomDetails() - SSL: ${req?.secure}
-Request Body: ${JSON.stringify(req?.body, null, 4)}
-Request Query: ${JSON.stringify(req?.query, null, 4)}
-Header: ${JSON.stringify(req?.headers, null, 4)}`);*/
+export class Room extends RoomListener{
 
-  const bodyID = req?.body?.id;
-  const queryID = req?.query?.id;
+  constructor(){ log('class RoomListener - constructor()');
+    super();
+  }; // constructor(){
 
-  if(!bodyID && !queryID) return res.status(404).json( { msg: "Room ID can not be null" } );
+  async getRoomDetails(req, res){
+  /*log(`getRoomDetails() - SSL: ${req?.secure}
+  Request Body: ${JSON.stringify(req?.body, null, 4)}
+  Request Query: ${JSON.stringify(req?.query, null, 4)}
+  Header: ${JSON.stringify(req?.headers, null, 4)}`);*/
 
-  if(bodyID) var roomID = bodyID;
-  if(queryID) var roomID = queryID;
+    const bodyID = req?.body?.id;
+    const queryID = req?.query?.id;
 
-  const roomDetails = await controllermongodb.getRoomDetails(roomID);
+    if(!bodyID && !queryID) return res.status(404).json( { msg: "Room ID can not be null" } );
 
-  if( roomDetails ) res.status(200).json( roomDetails );
-  else res.status(403).json( { msg: "Room ID was not found in Database" } );
+    if(bodyID) var roomID = bodyID;
+    if(queryID) var roomID = queryID;
 
-}; // async function getRoomDetails(){
+    const roomDetails = await controllermongodb.getRoomDetails(roomID);
+
+    if( roomDetails ) res.status(200).json( roomDetails );
+    else res.status(403).json( { msg: "Room ID was not found in Database" } );
+
+  }; // async getRoomDetails(req, res){
+
+}; // export class Room extends RoomListener{
