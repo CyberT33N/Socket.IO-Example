@@ -8,6 +8,6 @@ export default {
 
   newTab: async client=>{ return await bot.newTab(client); },
 
-  click: async (css, page, delay)=>{ return await bot.click(css, page, delay); },
-  typeText: async (page, css, msg, delay)=>{ return await bot.typeText(page, css, msg, delay); }
+  click: async (css, page, delay)=>{ return await new bot.Simulate().click(css, page, delay); },
+  typeText: async (page, css, msg, delay)=>{ return await new bot.Simulate().typeText(page, css, msg, delay); }
 }

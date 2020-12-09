@@ -116,7 +116,7 @@ export class startBrowser extends getBrowserConfig{
 
 
       const page = await newTab(this.client);
-      await setViewport(page, this.windowWidth, this.windowHeight);
+      await new Simulate().setViewport(page, this.windowWidth, this.windowHeight);
       return {"client": this.client, "page": page};
 
     } catch(e) { error(e); }; // catch(e) {
@@ -131,7 +131,7 @@ export class startBrowser extends getBrowserConfig{
     await this.launch();
   }; // async error(e){
 
-}; // class _startBrowser {
+}; // export class startBrowser extends getBrowserConfig{
 
 
 
@@ -139,18 +139,37 @@ export class startBrowser extends getBrowserConfig{
 
 
 
-export const click = async (css, page, delay)=>{ log(`bot.mjs - click() - CSS Selector: ${css} - Delay: ${delay}`);
-  if(delay) await new Promise(resolve => setTimeout(resolve, delay));
-  await page?.click(css);
-}; // export const click = async (css, page, delay)=>{
 
-export const typeText = async (page, css, msg, delay)=>{ log(`bot.mjs - typeText() - CSS Selector: ${css} - Message: ${msg} - Delay: ${delay}`);
-  await page.type(css, msg, { delay: delay });
-}; // export const typeText = async (page, css, msg, delay)=>{
 
-export const setViewport = async (page, windowWidth, windowHeight)=>{ log(`setViewport() - windowWidth: ${windowWidth} - windowHeight: ${windowHeight}`);
-  await page.setViewport({width: windowWidth, height: windowHeight});
-}; // export const setViewport = async (page, windowWidth, windowHeight)=>{
+
+
+
+
+
+
+
+export class Simulate{
+
+  async click(css, page, delay){ log(`class Simulate - click() - CSS Selector: ${css} - Delay: ${delay}`);
+    if(delay) await new Promise(resolve => setTimeout(resolve, delay));
+    await page?.click(css);
+  }; // async click(css, page, delay){
+
+  async typeText(page, css, msg, delay){ log(`class Simulate - typeText() - CSS Selector: ${css} - Message: ${msg} - Delay: ${delay}`);
+    await page.type(css, msg, { delay: delay });
+  }; // async typeText(page, css, msg, delay){
+
+  async setViewport(page, windowWidth, windowHeight){ log(`class Simulate - setViewport() - windowWidth: ${windowWidth} - windowHeight: ${windowHeight}`);
+    await page.setViewport({width: windowWidth, height: windowHeight});
+  }; // async setViewport(page, windowWidth, windowHeight){
+
+}; // class Simulate{
+
+
+
+
+
+
 
 
 
