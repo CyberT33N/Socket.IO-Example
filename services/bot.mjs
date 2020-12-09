@@ -30,6 +30,7 @@ class getBrowserConfig{
     this.windowSizeComplete = `--window-size=${this.windowWidth},${this.windowHeight}`;
   }; // getConfig(){
 
+
   createArgs(){ log( 'createArgs()' );
     const args = [
       this.windowSizeComplete,
@@ -42,6 +43,7 @@ class getBrowserConfig{
       '--lang=en'
     ]; if(this.headless) args.push('--disable-gpu'); return args;
   }; // createArgs(){
+
 
   // check if browser extensions was defined in config.json file. If true we add them to our args array
   checkExtensions(extensionlist, chromeExtensionPath, args){ log( `checkExtensions() - chromeExtensionPath: ${chromeExtensionPath}` );
@@ -101,6 +103,7 @@ export class startBrowser extends getBrowserConfig{
     `);
   }; // constructor(){
 
+
   async launch(){ log('launch() - args: ' + this.args);
     try {
         this.client = await puppeteer.launch({
@@ -114,13 +117,13 @@ export class startBrowser extends getBrowserConfig{
         args: this.args
       });
 
-
-      const page = await newTab(this.client);
+      const page = await new Window().newTab(this.client);
       await new Simulate().setViewport(page, this.windowWidth, this.windowHeight);
       return {"client": this.client, "page": page};
 
     } catch(e) { error(e); }; // catch(e) {
   } // async function launch(){
+
 
   async error(e){ log('class startBrowser - error() - error: ' + e);
     if( e?.length == undefined ) log( 'startBrowser() - error is undefinied.. we restart now the browser..' );
@@ -163,7 +166,7 @@ export class Simulate{
     await page.setViewport({width: windowWidth, height: windowHeight});
   }; // async setViewport(page, windowWidth, windowHeight){
 
-}; // class Simulate{
+}; // export class Simulate{
 
 
 
@@ -177,38 +180,45 @@ export class Simulate{
 
 
 
-export const newTab = async client=>{ log( 'bot.mjs - newTab()');
-  const newTab = await client.newPage();
-  await newTab.bringToFront();
-  return newTab;
-}; // export const newTab = async client=>{
 
-export const openLinkNewTab = async (client, link, delay)=>{ log(`openLinkNewTab() - Link: ${link} - Delay: ${delay}`);
-  const page = await newTab(client);
-  await openLink(page, link);
-  if(delay) await new Promise(resolve => setTimeout(resolve, delay));
-  return page;
-};
 
-export const openLink = async (page, link)=>{ log( 'openLink() - link: ' + link );
 
-  try {
-    await page.goto(link, {waitUntil: 'networkidle0', timeout: 35000});
-  } catch(e) { log( 'openLink() - Error while open link.. Error: ' + e?.message );
+export class Window{
 
-    if( e?.message.match('Navigation timeout of') ) log( '#2 - Navigation timeout was found we reload page in 30 seconds..\n\n' );
-    if( e?.message.match( 'net::ERR_EMPTY_RESPONSE' ) ) log( '#2 - net::ERR_EMPTY_RESPONSE was found we reload page in 30 seconds..\n\n' );
-    if( e?.message.match( 'net::ERR_NETWORK_CHANGED' ) ) log( '#2 - net::ERR_NETWORK_CHANGED was found we reload page in 30 seconds..\n\n' );
-    if( e?.message.match( 'net::ERR_NAME_NOT_RESOLVED' ) ) log( '#2 - net::ERR_NAME_NOT_RESOLVED was found we reload page in 30 seconds..\n\n' );
-    if( e?.message.match( 'net::ERR_CONNECTION_CLOSED' ) ) log( '#2 - net::ERR_CONNECTION_CLOSED was found we reload page in 30 seconds..\n\n' );
-    if( e?.message.match( 'net::ERR_PROXY_CONNECTION_FAILED' ) ) log( '#2 - net::ERR_PROXY_CONNECTION_FAILED was found.. Maybe your proxy is offline? Maybe change your proxy.. However we reload page in 30 seconds..\n\n' );
-    if( e?.message.match( 'net::ERR_CONNECTION_REFUSED' ) ) log( '#2 - net::ERR_CONNECTION_REFUSED was found we reload page in 30 seconds..\n\n' );
-    if( e?.message.match( 'net::ERR_CONNECTION_TIMED_OUT' ) ) log( '#2 - net::ERR_CONNECTION_TIMED_OUT was found we reload page in 30 seconds..\n\n' );
+  async openLinkNewTab(client, link, delay){ log(`class Window - openLinkNewTab() - Link: ${link} - Delay: ${delay}`);
+    const page = await this.newTab(client);
+    await this.openLink(page, link);
+    if(delay) await new Promise(resolve => setTimeout(resolve, delay));
+    return page;
+  }; // async openLinkNewTab(client, link, delay){
 
-    // optional timeout
-    await new Promise(resolve => setTimeout(resolve, 30000));
-    await openLink(page, link);
 
-  }; return true;
+  async openLink(page, link){ log( 'class Window - openLink() - link: ' + link );
+    try {
+      await page.goto(link, {waitUntil: 'networkidle0', timeout: 35000});
+    } catch(e) { log( 'openLink() - Error while open link.. Error: ' + e?.message );
 
-}; // async function openLink(page, link){
+      if( e?.message.match('Navigation timeout of') ) log( '#2 - Navigation timeout was found we reload page in 30 seconds..\n\n' );
+      if( e?.message.match( 'net::ERR_EMPTY_RESPONSE' ) ) log( '#2 - net::ERR_EMPTY_RESPONSE was found we reload page in 30 seconds..\n\n' );
+      if( e?.message.match( 'net::ERR_NETWORK_CHANGED' ) ) log( '#2 - net::ERR_NETWORK_CHANGED was found we reload page in 30 seconds..\n\n' );
+      if( e?.message.match( 'net::ERR_NAME_NOT_RESOLVED' ) ) log( '#2 - net::ERR_NAME_NOT_RESOLVED was found we reload page in 30 seconds..\n\n' );
+      if( e?.message.match( 'net::ERR_CONNECTION_CLOSED' ) ) log( '#2 - net::ERR_CONNECTION_CLOSED was found we reload page in 30 seconds..\n\n' );
+      if( e?.message.match( 'net::ERR_PROXY_CONNECTION_FAILED' ) ) log( '#2 - net::ERR_PROXY_CONNECTION_FAILED was found.. Maybe your proxy is offline? Maybe change your proxy.. However we reload page in 30 seconds..\n\n' );
+      if( e?.message.match( 'net::ERR_CONNECTION_REFUSED' ) ) log( '#2 - net::ERR_CONNECTION_REFUSED was found we reload page in 30 seconds..\n\n' );
+      if( e?.message.match( 'net::ERR_CONNECTION_TIMED_OUT' ) ) log( '#2 - net::ERR_CONNECTION_TIMED_OUT was found we reload page in 30 seconds..\n\n' );
+
+      // optional timeout
+      await new Promise(resolve => setTimeout(resolve, 30000));
+      await this.openLink(page, link);
+
+    }; return true;
+  }; // async openLink(page, link){
+
+
+  async newTab(client){ log( 'class Window - newTab()');
+    const newTab = await client.newPage();
+    await newTab.bringToFront();
+    return newTab;
+  }; // async newTab(client){
+
+}; // export class Window{
