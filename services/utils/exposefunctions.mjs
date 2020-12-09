@@ -118,8 +118,8 @@ export const details = async pptr=>{ log('--- details() ----');
 
 class ListenerEvents{
 
-  async listenerChatMessage(){ log('listenerChatMessage()');
-    await this.pptr.page.exposeFunction('listenerChatMessage', async ()=>{ log('--- EXPOSE - clistenerChatMessage ----');
+  async chatMessage(){ log('listenerChatMessage()');
+    await this.pptr.page.exposeFunction('listenerChatMessage', async ()=>{ log('EXPOSE - listenerChatMessage()');
 
       const newTab = await controllerbot.newTab(this.pptr.client);
       const [msg] = await Promise.all([
@@ -131,8 +131,9 @@ class ListenerEvents{
     }); // await this.pptr.page.exposeFunction('listenerChatMessage', async ()=>{
   }; // async listenerChatMessage(){
 
-  async listenerRoomConnect(){ log('listenerRoomConnect()');
-    await this.pptr.page.exposeFunction('listenerRoomConnect', async ()=>{ log('--- EXPOSE - clistenerRoomConnect ----');
+
+  async roomConnect(){ log('listenerRoomConnect()');
+    await this.pptr.page.exposeFunction('listenerRoomConnect', async ()=>{ log('EXPOSE - listenerRoomConnect()');
 
       const newTab = await controllerbot.newTab(this.pptr.client);
       const [roomID] = await Promise.all([
@@ -143,8 +144,9 @@ class ListenerEvents{
     }); // await pptr.page.exposeFunction('listenerRoomConnect', link=>{
   }; // async listenerRoomConnect(){
 
+
   async checkTimeCSS(socket, socketPartner){ log('checkTimeCSS()');
-    await this.pptr.page.exposeFunction('checkTimeCSS', async ()=>{ log('checkTimeCSS()');
+    await this.pptr.page.exposeFunction('checkTimeCSS', async ()=>{ log('EXPOSE - checkTimeCSS');
 
       const msg = {
         msg: "sample message22..",
@@ -160,6 +162,25 @@ class ListenerEvents{
 
     }); // await this.pptr.page.exposeFunction('checkTimeCSS', async ()=>{
   }; // async checkTimeCSS(socket, socketPartner){
+
+
+  async incomeMsg(){ log('incomeMsg()');
+    await this.pptr.page.exposeFunction('incomeMsg', async ()=>{ log('EXPOSE - incomeMsg');
+
+      const newTab = await controllerbot.newTab(this.pptr.client);
+
+      // emit sample message to trigger websocket
+      this.emitMsg(await this.createDevSocket(newTab, this.devIO), 'msg', 'new sample message');
+
+      // check if message was recieved at partner
+      return await newTab.evaluate(()=>{
+        const lastElement = document.querySelector('.chat div:last-child');
+        if(lastElement.textContent == "new sample message" &&
+        lastElement.getAttribute('class') == 'bubble you' ) return true;
+      }); // return await newTab.evaluate(()=>{
+
+    }); // await pptr.page.exposeFunction('incomeMsg', link=>{
+  }; // async incomeMsg(){
 
 }; // class ListenerEvents{
 
@@ -194,50 +215,3 @@ export class Listener extends ListenerEvents{
   }; // emitMsg(socket){
 
 }; // class Listener {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export const incomeMsg = async (pptr, devIO)=>{ log('--- incomeMsg() ----');
-  await pptr.page.exposeFunction('incomeMsg', async ()=>{ log('--- EXPOSE - clistenerRoomConnect ----');
-
-    // open link in new tab
-    const newTab = await pptr.client.newPage();
-
-    const [devSocket] = await Promise.all([
-      controller.rootConnect(devIO),
-      controllerbot.openLink(newTab, devLinkPartner)
-    ]);
-
-    // emit sample message to trigger websocket
-    devSocket.emit('msg', 'new sample message');
-
-    // check if message was recieved at partner
-    const d = await newTab.evaluate(()=>{
-      const lastElement = document.querySelector('.chat div:last-child');
-      if(lastElement.textContent == "new sample message" &&
-      lastElement.getAttribute('class') == 'bubble you' ) return true;
-    }); //   const d = await newTab.evaluate((=>{
-    log('incomeMsg - data: ' + d);
-
-    await pptr.page.bringToFront();
-    return d;
-
-  }); // await pptr.page.exposeFunction('incomeMsg', link=>{
-}; // export const incomeMsg = async pptr=>{
