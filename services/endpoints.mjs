@@ -10,23 +10,7 @@ import chalk from 'chalk';
 
 
 
-class UserListener{
-
-  // POST request where we take User Token and send back Object with User Details to Client
-  getUserDetailsPOST(app){ log('class UserListener - getUserDetailsListener()');
-    app.post('/api/getUserDetails', async (req, res)=>{
-      await this.getUserDetails(req, res);
-    });
-  }; // getUserDetailsPOST(app){
-
-}; // class UserListener{
-
-
-export class User extends UserListener{
-
-  constructor(){ log('class UserListener - constructor()');
-    super();
-  }; // constructor(){
+class UserLib{
 
   async getUserDetails(req, res){
   /*
@@ -52,35 +36,37 @@ export class User extends UserListener{
 
   }; // getUserDetails(req, res){
 
-}; // class User extends UserListener{
+}; // class UserLib{
 
 
+export class User extends UserLib{
 
-
-
-
-
-
-
-
-
-
-class RoomListener{
-
-  // POST request where we take Room ID and send back Object with Room Details to Client
-  getRoomDetailsPOST(app){ log('class RoomListener - detailsListener()');
-    app.post('/api/getRoomDetails', async (req, res)=>{
-      await this.getRoomDetails(req, res);
-    });
-  }; // getRoomDetailsPOST(app){
-
-}; // class RoomListener{
-
-export class Room extends RoomListener{
-
-  constructor(){ log('class RoomListener - constructor()');
+  constructor(){ log('class UserLib - constructor()');
     super();
   }; // constructor(){
+
+
+  // POST request where we take User Token and send back Object with User Details to Client
+  getUserDetailsPOST(app){ log('class UserLib - getUserDetailsListener()');
+    app.post('/api/getUserDetails', async (req, res)=>{
+      await this.getUserDetails(req, res);
+    });
+  }; // getUserDetailsPOST(app){
+
+}; // class User extends UserLib{
+
+
+
+
+
+
+
+
+
+
+
+
+class RoomLib{
 
   async getRoomDetails(req, res){
   /*log(`getRoomDetails() - SSL: ${req?.secure}
@@ -103,4 +89,21 @@ export class Room extends RoomListener{
 
   }; // async getRoomDetails(req, res){
 
-}; // export class Room extends RoomListener{
+}; // class RoomLib{
+
+
+
+export class Room extends RoomLib{
+
+  constructor(){ log('class RoomLib - constructor()');
+    super();
+  }; // constructor(){
+
+  // POST request where we take Room ID and send back Object with Room Details to Client
+  getRoomDetailsPOST(app){ log('class RoomLib - detailsListener()');
+    app.post('/api/getRoomDetails', async (req, res)=>{
+      await this.getRoomDetails(req, res);
+    });
+  }; // getRoomDetailsPOST(app){
+
+}; // export class Room extends RoomLib{
