@@ -1,7 +1,9 @@
+/*################ Controller ################*/
+import controllerLib from '../controller/lib.mjs';
+
 /*################ MongoDB ################*/
 import mongodb from 'mongodb';
 import assert from 'assert';
-const {MongoClient, ObjectId} = mongodb;
 
 /*################ Logs ################*/
 import log from 'fancy-log';
@@ -9,28 +11,34 @@ import chalkAnimation from 'chalk-animation';
 import gradient from 'gradient-string';
 import chalk from 'chalk';
 
-/*################ config.json ################*/
-import fs from 'fs';
-import yaml from 'js-yaml';
-const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8')),
-         MongoURL = json_config.MongoDB.url,
-        MongoName = json_config.MongoDB.dbname;
 
 var MongoDB;
 
 
 
 
+export class Init{
+
+  constructor(){
+    const config = controllerLib.getConfig();
+    this.MongoURL = config.MongoDB.url;
+    this.MongoName = config.MongoDB.dbname;
+    ({MongoClient: this.MongoClient, ObjectId: this.ObjectId} = mongodb);
+  }; // constructor(){
+
+
+  async connect(){ log('connectMongoDB() - Database URL: ' + this.MongoURL);
+    try { // connect to MongoDB Database and create global MongoDB variable
+      const client = await this.MongoClient.connect(this.MongoURL, { useNewUrlParser: true, useUnifiedTopology: true });
+      MongoDB = client.db(this.MongoName);
+      return true;
+    } catch (e) { log( `${chalk.red.bold('❌ ERROR')} while try to connect to MongoDB Database - ${chalk.white.bold('error:\n')} ${e}` ); }
+  }; // async connect(){
+
+}; // class Init{
 
 
 
-export const connectMongoDB = async ()=>{ log('connectMongoDB() - Database URL: ' + MongoURL);
-  try { // connect to MongoDB Database and create global MongoDB variable
-    const client = await MongoClient.connect(MongoURL, { useNewUrlParser: true, useUnifiedTopology: true });
-    MongoDB = client.db(MongoName);
-    return true;
-  } catch (e) { log( chalk.red.bold('❌ ERROR') + ' Error while try to connect to MongoDB Database - ' + chalk.white.bold('error:\n') + e ); }
-}; // async function connectMongoDB(){
 
 
 

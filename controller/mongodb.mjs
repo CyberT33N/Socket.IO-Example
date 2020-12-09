@@ -1,7 +1,7 @@
 import * as mongodb from '../services/mongodb.mjs';
 
 export default {
-  connectMongoDB: async ()=>{ return await mongodb.connectMongoDB(); },
+  connectMongoDB: async ()=>{ return await new mongodb.Init().connect(); },
 
   storeMessages: async msg=>{ return await mongodb.storeMessages(msg); },
 
