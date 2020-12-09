@@ -39,59 +39,6 @@ export const config = async pptr=>{ log('--- config() ----');
 
 
 
-export const checkPartnerMessage = async pptr=>{ log('--- checkPartnerMessage() ----');
-  await pptr.page.exposeFunction('checkPartnerMessage', async link =>{ log('--- EXPOSE - checkPartnerMessage ----');
-
-    // open link in new tab
-    const newTab = await pptr.client.newPage();
-    await controllerbot.openLink(newTab, devLinkPartner);
-
-    // do not delete timeout - We will wait here until animation is ready
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    // check if message was recieved at partner
-    const d = await newTab.evaluate(msg=>{
-      const lastElement = document.querySelector('.chat div:last-child');
-      if(lastElement.textContent == msg &&
-      lastElement.getAttribute('class') == 'bubble you' ) return true;
-    }, 'sample_message123');
-
-    // bring main page back to front
-    await pptr.page.bringToFront();
-
-    // return result of check
-    return d;
-
-  }); // await pptr.page.exposeFunction('checkPartnerMessage', async link =>{
-}; // export const checkPartnerMessage = async pptr=>{
-
-
-
-
-
-export const checkURLParameter = async pptr=>{ log('--- checkURLParameter() ----');
-  await pptr.page.exposeFunction('checkURLParameter', async script =>{ log('--- EXPOSE - checkURLParameter - script: ' + script + '---');
-
-    // open link in new tab
-    const newTab = await pptr.client.newPage();
-    await controllerbot.openLink(newTab, devHost + '/?usertoken=');
-
-    const d = await newTab.evaluate(async script=>{
-      var f = new Function('return ' + script)();
-      return f();
-    }, script); // const d = await newTab.evaluate(async script=>{
-    log('checkURLParameter - data: ' + d);
-
-    await pptr.page.bringToFront();
-    return d;
-
-  }); // await pptr.page.exposeFunction('checkURLParameter', ()=>{
-}; // export const checkURLParameter = async pptr=>{
-
-
-
-
-
 export const details = async pptr=>{ log('--- details() ----');
   await pptr.page.exposeFunction('details', async()=>{ log('--- EXPOSE - details ----');
       return {
@@ -100,6 +47,83 @@ export const details = async pptr=>{ log('--- details() ----');
       };
   }); // await pptr.page.exposeFunction('details', async()=>{
 }; // export const details = async pptr=>{
+
+
+
+
+
+
+
+
+
+class CheckDOMLib{
+
+  async openLink(client, link){ log('class CheckDOMLib - openLink()');
+    const newTab = await controllerbot.newTab(client);
+    await controllerbot.openLink(newTab, link);
+    return newTab;
+  }; // async openLink(){
+
+  async evaluate(){
+
+  }; // async evaluate(){
+
+}; // class CheckDOMLib{
+
+
+export class CheckDOM extends CheckDOMLib{
+
+  constructor(){ log('class CheckDOM - constructor()');
+    super();
+  }; // constructor(pptr, devIO)
+
+
+  async urlParameter(pptr){ log('checkURLParameter()');
+    await pptr.page.exposeFunction('checkURLParameter', async script =>{ log('--- EXPOSE - checkURLParameter - script: ' + script + '---');
+
+      const newTab = await this.openLink(pptr.client, devHost + '/?usertoken=');
+
+      // execute script inside of DOM by creating new function and run it
+      return await newTab.evaluate(async script=>{
+        var f = new Function('return ' + script)();
+        return f();
+      }, script); // const d = await newTab.evaluate(async script=>{
+
+    }); // await pptr.page.exposeFunction('checkURLParameter', ()=>{
+  }; // async checkURLParameter(pptr){
+
+
+
+  async partnerMessage(pptr){ log('checkPartnerMessage()');
+    await pptr.page.exposeFunction('checkPartnerMessage', async link =>{ log('--- EXPOSE - checkPartnerMessage ----');
+
+      const newTab = await controllerbot.newTab(pptr.client);
+      await controllerbot.openLink(newTab, devLinkPartner);
+
+      // do not delete timeout - We will wait here until animation is ready
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // check if message was recieved at partner
+      return await newTab.evaluate(msg=>{
+        const lastElement = document.querySelector('.chat div:last-child');
+        if(lastElement.textContent == msg &&
+        lastElement.getAttribute('class') == 'bubble you' ) return true;
+      }, 'sample_message123');
+
+    }); // await pptr.page.exposeFunction('checkPartnerMessage', async link =>{
+  }; // async checkPartnerMessage(pptr){
+
+
+}; // class CheckDOM extends CheckDOMLib{
+
+
+
+
+
+
+
+
+
 
 
 
