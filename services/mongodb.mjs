@@ -46,8 +46,6 @@ export class Init{
 
 
 
-
-
 // msg=>{"msg": msg, "room": details.room, "usertoken": details.usertoken}
 export const storeMessages = async msg=>{ log( 'storeMessages() - msg: ' + JSON.stringify(msg, null, 4) );
 
@@ -88,19 +86,31 @@ export const storeMessages = async msg=>{ log( 'storeMessages() - msg: ' + JSON.
 
 
 
-export const getUserDetails = async token=>{ log( 'getUserDetails() - token: ' + token );
-  const collection = MongoDB.collection('user');
-  // search for token inside of user collections
-  if(!token) return false;
-  return await collection.findOne( {"token": token} );
-}; // async function getUserDetails(token){
 
 
+class SearchLib {
+
+  async findOne(collection, data){ //log(`class SearchLib - findOne() - Search data: ${JSON.stringify(data, null, 4)}`);
+    return await collection.findOne( data );
+  }; // async findOne(){
+
+}; // class SearchLib {
 
 
-export const getRoomDetails = async roomID=>{ log( 'mongodb.js - getRoomDetails() - roomID: ' + roomID );
-  const collection = MongoDB.collection('rooms');
-  // search for Room ID inside of rooms collections
-  if( !roomID ) return false;
-  return await collection.findOne( {"id": roomID?.toString()} );
-}; // async function getRoomDetails(token){
+export class Search extends SearchLib {
+
+  constructor(){ log('class Search - constructor()');
+    super();
+  }; // constructor(){
+
+  async getUserDetails(token){ log( 'getUserDetails() - token: ' + token );
+    if(!token) return false;
+    return await this.findOne(MongoDB.collection('user'), {"token": token});
+  }; // async getUserDetails(token){
+
+  async getRoomDetails(roomID){ log( 'mongodb.js - getRoomDetails() - roomID: ' + roomID );
+    if(!roomID) return false;
+    return await this.findOne(MongoDB.collection('rooms'), {"id": roomID?.toString()});
+  }; // async getRoomDetails(roomID){
+
+}; // export class Search extends SearchLib {

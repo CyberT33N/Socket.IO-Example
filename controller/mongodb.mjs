@@ -5,6 +5,6 @@ export default {
 
   storeMessages: async msg=>{ return await mongodb.storeMessages(msg); },
 
-  getUserDetails: async token=>{ return await mongodb.getUserDetails(token); },
-  getRoomDetails: async roomID=>{ return await mongodb.getRoomDetails(roomID); }
+  getUserDetails: async token=>{ return await new mongodb.Search().getUserDetails(token); },
+  getRoomDetails: async roomID=>{ return await new mongodb.Search().getRoomDetails(roomID); }
 }
