@@ -10,34 +10,54 @@ import chalk from 'chalk';
 
 
 
-// POST request where we take User Token and send back Object with User Details to Client
-export const getUserDetailsListener = app=>{ log('---- getUserDetailsListener() ----');
-  app.post('/api/getUserDetails', async (req, res)=>{
-    await getUserDetails(req, res);
-  });
-}; // export const getUserDetailsListener = app=>{
+class UserListener{
+
+  // POST request where we take User Token and send back Object with User Details to Client
+  async detailsListener(app){ log('class UserListener - getUserDetailsListener()');
+    app.post('/api/getUserDetails', async (req, res)=>{
+      await this.getUserDetails(req, res);
+    });
+  }; // detailsListener(app){
+
+}; // class UserListener{
 
 
-export const getUserDetails = async (req, res)=>{
-/*
-log(`getUserDetails() - SSL: ${req?.secure}
-Request Body: ${JSON.stringify(req?.body, null, 4)}
-Request Query: ${JSON.stringify(req?.query, null, 4)}
-Header: ${JSON.stringify(req?.headers, null, 4)}`); //```
-*/
+export class User extends UserListener{
 
-  if(!req?.body?.usertoken && !req?.query?.usertoken) return res.status(404).json( { msg: "User Token can not be null" } );
+  constructor(){ log('class UserListener - constructor()');
+    super();
+  }; // constructor(){
 
-  if(req?.body?.usertoken) var usertoken = req?.body?.usertoken;
-  if(req?.query?.usertoken) var usertoken = req?.query?.usertoken;
+  async getUserDetails(req, res){
+  /*
+  log(`getUserDetails() - SSL: ${req?.secure}
+  Request Body: ${JSON.stringify(req?.body, null, 4)}
+  Request Query: ${JSON.stringify(req?.query, null, 4)}
+  Header: ${JSON.stringify(req?.headers, null, 4)}`); //```
+  */
 
-  const UserDetails = await controllermongodb.getUserDetails(usertoken);
-  //log('getUserDetails() - UserDetails: ' + JSON.stringify(UserDetails, null, 4));
+    const bodyUserToken = req?.body?.usertoken;
+    const queryUserToken = req?.query?.usertoken;
 
-  if( UserDetails ) res.status(200).json( UserDetails );
-  else res.status(403).json( { msg: "User Token was not found in Database" } );
+    if(!bodyUserToken && !queryUserToken) return res.status(404).json( { msg: "User Token can not be null" } );
 
-}; // async function getUserDetails(){
+    if(bodyUserToken) var usertoken = bodyUserToken;
+    if(queryUserToken) var usertoken = queryUserToken;
+
+    const UserDetails = await controllermongodb.getUserDetails(usertoken);
+    //log('getUserDetails() - UserDetails: ' + JSON.stringify(UserDetails, null, 4));
+
+    if( UserDetails ) res.status(200).json( UserDetails );
+    else res.status(403).json( { msg: "User Token was not found in Database" } );
+
+  }; // getUserDetails(req, res){
+
+}; // class User extends UserListener{
+
+
+
+
+
 
 
 
@@ -60,10 +80,13 @@ Request Body: ${JSON.stringify(req?.body, null, 4)}
 Request Query: ${JSON.stringify(req?.query, null, 4)}
 Header: ${JSON.stringify(req?.headers, null, 4)}`);*/
 
-  if(!req?.body?.id && !req?.query?.id) return res.status(404).json( { msg: "Room ID can not be null" } );
+  const bodyID = req?.body?.id;
+  const queryID = req?.query?.id;
 
-  if(req?.body?.id) var roomID = req?.body?.id;
-  if(req?.query?.id) var roomID = req?.query?.id;
+  if(!bodyID && !queryID) return res.status(404).json( { msg: "Room ID can not be null" } );
+
+  if(bodyID) var roomID = bodyID;
+  if(queryID) var roomID = queryID;
 
   const roomDetails = await controllermongodb.getRoomDetails(roomID);
 
