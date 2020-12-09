@@ -80,8 +80,7 @@ import chalk from 'chalk';
 
 
   // start endpoint listener
-  await controllerEndpoints.getUserDetailsListener(app);
-  await controllerEndpoints.getRoomDetailsListener(app);
+  await controllerEndpoints.startListener(app);
 
 
   // start main project

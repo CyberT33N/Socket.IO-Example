@@ -10,6 +10,22 @@ import chalk from 'chalk';
 
 
 
+export const startListener = app=>{ log('startListener()');
+  new User().getUserDetailsPOST(app);
+  new Room().getRoomDetailsPOST(app);
+}; // const startListener = ()=>{
+
+
+
+
+
+
+
+
+
+
+
+
 class UserLib{
 
   async getUserDetails(req, res){

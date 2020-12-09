@@ -82,8 +82,7 @@ describe('Client Side Services', ()=>{
     await controllerServer.startServer(devServer, devPort);
 
     // start endpoint listener
-    await controllerEndpoints.getUserDetailsListener(devAPP);
-    await controllerEndpoints.getRoomDetailsListener(devAPP);
+    await controllerEndpoints.startListener(devAPP);
 
 
     // start main project
