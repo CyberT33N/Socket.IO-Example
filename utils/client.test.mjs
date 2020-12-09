@@ -165,7 +165,7 @@ const getMochaHTML = async()=>{ log( '---- getMochaHTML() ----' );
 const exposeFunctions = async(devSocket, devSocketPartner, devIO)=>{ log( '\n\n---- exposeFunctions() ----' );
 
   // get config.json file
-  await controllerExpose.config(pptr);
+  await controllerExpose.config(pptr.page);
 
 
   /* ---- exposeFunctionsWeb() ---- */
@@ -176,7 +176,7 @@ const exposeFunctions = async(devSocket, devSocketPartner, devIO)=>{ log( '\n\n-
 
 
   /* ---- exposeFunctionsReq ---- */
-  await controllerExpose.details(pptr);
+  await controllerExpose.details(pptr.page);
 
 
   /* ---- exposeFunctionsSocket ---- */

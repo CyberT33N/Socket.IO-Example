@@ -2,14 +2,14 @@ import * as expose from '../../services/utils/exposefunctions.mjs';
 
 export default {
 
-  config: async pptr=>{ return await new expose.Config().export(pptr); },
+  config: async page=>{ return await new expose.GetData().config(page); },
 
   // ---- exposeFunctionsWeb() ----
   checkURLParameter: async pptr=>{ return await new expose.CheckDOM().urlParameter(pptr); },
   checkPartnerMessage: async pptr=>{ return await new expose.CheckDOM().partnerMessage(pptr); },
 
   // ---- exposeFunctionsReq() ----
-  details: async pptr=>{ return await expose.details(pptr); },
+  details: async page=>{ return await new expose.GetData().details(page); },
 
   // ---- exposeFunctionsSocket() ----
   listenerChatMessage: async (pptr, devIO)=>{ return await new expose.Listener(pptr, devIO).chatMessage(); },

@@ -13,6 +13,9 @@ MongoDB:
 test:
   port: 1338
   host: http://localhost
+  hostFull: http://localhost:1338
+  linkClient: http://localhost:1338/?usertoken=mocha
+  linkPartner: http://localhost:1338/?usertoken=mocha2
   room: mocha
   user:
     - token: mocha

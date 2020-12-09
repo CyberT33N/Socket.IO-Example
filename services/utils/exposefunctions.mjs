@@ -1,10 +1,7 @@
-/*################ config.json ################*/
-import fs from 'fs';
-import yaml from 'js-yaml';
-
 /*################ Controller ################*/
 import controller from '../../controller/socketio.mjs';
-import controllerbot from '../../controller/bot.mjs';
+import controllerBot from '../../controller/bot.mjs';
+import controllerLib from '../../controller/lib.mjs';
 import controllerMongoDB from '../../controller/mongodb.mjs';
 
 /*################ Logs ################*/
@@ -16,50 +13,27 @@ import chalk from 'chalk';
 
 
 
+export class GetData{
 
-export const details = async pptr=>{ log('--- details() ----');
-  await pptr.page.exposeFunction('details', async()=>{ log('--- EXPOSE - details ----');
-    const config = new Config();
-    return {
-      testRoomDetails: await controllerMongoDB.getRoomDetails(config.test_room),
-      testUserDetails: await controllerMongoDB.getUserDetails(config.test_client1.token)
-    };
-  }); // await pptr.page.exposeFunction('details', async()=>{
-}; // export const details = async pptr=>{
-
-
-
+  async details(page){ log('class GetData - details()');
+    await page.exposeFunction('details', async()=>{ log('--- EXPOSE - details ----');
+      const config = controllerLib.getConfig();
+      return {
+        testRoomDetails: await controllerMongoDB.getRoomDetails(config.test.room),
+        testUserDetails: await controllerMongoDB.getUserDetails(config.test.user[0].token)
+      };
+    }); // await pptr.page.exposeFunction('details', async()=>{
+  }; // async details(page){
 
 
-
-
-export class Config{
-
-  constructor(){
-    this.get();
-  }; // constructor(){
-
-
-  get(){ log('class Config - get()');
-      const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8'));
-      this.test_client1 = json_config.test.user[0];
-      this.test_client2 = json_config.test.user[1];
-         this.test_room = json_config.test.room;
-
-           this.devHost = json_config.test.host + ':' + json_config.test.port;
-
-           this.devLink = this.devHost + '/?usertoken=' + this.test_client1.token;
-    this.devLinkPartner = this.devHost + '/?usertoken=' + this.test_client2.token;
-  }; // async get(){
-
-
-  async export(pptr){ log('class Config - expose()');
-    await pptr.page.exposeFunction('config', ()=>{ log('--- EXPOSE - config() ----');
-        return yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8'));
+  async config(page){ log('class GetData - config()');
+    await page.exposeFunction('config', ()=>{ log('--- EXPOSE - config() ----');
+        return controllerLib.getConfig();
     }); // await pptr.page.exposeFunction('config', ()=>{
-  }; // async export(pptr){
+  }; // async config(page){
 
-}; // export class Config{
+}; // export class getData(){
+
 
 
 
@@ -74,13 +48,15 @@ export class Config{
 export class CheckDOM{
 
   constructor(){
-    this.config = new Config();
+    const config = controllerLib.getConfig();
+    this.hostFull = config.test.hostFull;
+    this.linkPartner = config.test.linkPartner;
   }; // constructor(){
 
   async urlParameter(pptr){ log('checkURLParameter()');
     await pptr.page.exposeFunction('checkURLParameter', async script =>{ log('--- EXPOSE - checkURLParameter - script: ' + script + '---');
 
-      const newTab = await controllerbot.openLinkNewTab(pptr.client, this.config.devHost + '/?usertoken=');
+      const newTab = await controllerBot.openLinkNewTab(pptr.client, this.hostFull + '/?usertoken=');
 
       // execute script inside of DOM by creating new function and run it
       return await newTab.evaluate(async script=>{
@@ -96,7 +72,7 @@ export class CheckDOM{
     await pptr.page.exposeFunction('checkPartnerMessage', async link =>{ log('--- EXPOSE - checkPartnerMessage ----');
 
       // do not delete timeout - We will wait here until animation is ready
-      const newTab = await controllerbot.openLinkNewTab(pptr.client, this.config.devLinkPartner, 2000);
+      const newTab = await controllerBot.openLinkNewTab(pptr.client, this.linkPartner, 2000);
 
       // check if message was recieved at partner
       return await newTab.evaluate(msg=>{
@@ -129,11 +105,11 @@ class ListenerEvents{
   async chatMessage(){ log('listenerChatMessage()');
     await this.pptr.page.exposeFunction('listenerChatMessage', async ()=>{ log('EXPOSE - listenerChatMessage()');
 
-      const newTab = await controllerbot.newTab(this.pptr.client);
+      const newTab = await controllerBot.newTab(this.pptr.client);
       const [msg] = await Promise.all([
         this.createSocketListener('chat message', await this.createDevSocket(newTab, this.devIO)),
-        await controllerbot.typeText(newTab, 'textarea', 'sample_message123', 10),
-        await controllerbot.click('.write-link.send', newTab, 1000)
+        await controllerBot.typeText(newTab, 'textarea', 'sample_message123', 10),
+        await controllerBot.click('.write-link.send', newTab, 1000)
       ]); return msg;
 
     }); // await this.pptr.page.exposeFunction('listenerChatMessage', async ()=>{
@@ -143,10 +119,10 @@ class ListenerEvents{
   async roomConnect(){ log('listenerRoomConnect()');
     await this.pptr.page.exposeFunction('listenerRoomConnect', async ()=>{ log('EXPOSE - listenerRoomConnect()');
 
-      const newTab = await controllerbot.newTab(this.pptr.client);
+      const newTab = await controllerBot.newTab(this.pptr.client);
       const [roomID] = await Promise.all([
         this.createSocketListener('room connect', await this.createDevSocket(newTab, this.devIO)),
-        controllerbot.click('.person', newTab, 1000)
+        controllerBot.click('.person', newTab, 1000)
       ]); return roomID;
 
     }); // await pptr.page.exposeFunction('listenerRoomConnect', link=>{
@@ -158,8 +134,8 @@ class ListenerEvents{
 
       const msg = {
         msg: "sample message22..",
-        room: this.config.test_room,
-        usertoken: this.config.test_client2.token,
+        room: this.room,
+        usertoken: this.partnerToken,
         date: '12/34/5678, 12:34 pm'
       };
 
@@ -175,7 +151,7 @@ class ListenerEvents{
   async incomeMsg(){ log('incomeMsg()');
     await this.pptr.page.exposeFunction('incomeMsg', async ()=>{ log('EXPOSE - incomeMsg');
 
-      const newTab = await controllerbot.newTab(this.pptr.client);
+      const newTab = await controllerBot.newTab(this.pptr.client);
 
       // emit sample message to trigger websocket
       this.emitMsg(await this.createDevSocket(newTab, this.devIO), 'msg', 'new sample message');
@@ -203,13 +179,16 @@ export class Listener extends ListenerEvents{
     this.pptr = pptr;
     this.devIO = devIO;
 
-    this.config = new Config();
+    const config = controllerLib.getConfig();
+    this.linkClient = config.test.linkClient;
+    this.room = config.test.room;
+    this.partnerToken = config.test.user[1].token;
   }; // constructor(pptr, devIO){
 
   async createDevSocket(page, devIO){ log('createDevSocket()');
     const [devSocket] = await Promise.all([
       controller.rootConnect(devIO),
-      controllerbot.openLink(page, this.config.devLink)
+      controllerBot.openLink(page, this.linkClient)
     ]); return devSocket;
   }; // async createDevSocket(){
 
