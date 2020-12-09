@@ -153,6 +153,24 @@ export const setViewport = async (page, windowWidth, windowHeight)=>{ log(`setVi
 }; // export const setViewport = async (page, windowWidth, windowHeight)=>{
 
 
+
+
+
+
+
+export const newTab = async client=>{ log( 'bot.mjs - newTab()');
+  const newTab = await client.newPage();
+  await newTab.bringToFront();
+  return newTab;
+}; // export const newTab = async client=>{
+
+export const openLinkNewTab = async (client, link, delay)=>{ log(`openLinkNewTab() - Link: ${link} - Delay: ${delay}`);
+  const page = await newTab(client);
+  await openLink(page, link);
+  if(delay) await new Promise(resolve => setTimeout(resolve, delay));
+  return page;
+};
+
 export const openLink = async (page, link)=>{ log( 'openLink() - link: ' + link );
 
   try {
@@ -175,11 +193,3 @@ export const openLink = async (page, link)=>{ log( 'openLink() - link: ' + link 
   }; return true;
 
 }; // async function openLink(page, link){
-
-
-
-export const newTab = async client=>{ log( 'bot.mjs - newTab()');
-  const newTab = await client.newPage();
-  await newTab.bringToFront();
-  return newTab;
-}; // export const newTab = async client=>{

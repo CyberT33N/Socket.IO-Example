@@ -56,32 +56,13 @@ export const details = async pptr=>{ log('--- details() ----');
 
 
 
-class CheckDOMLib{
 
-  async openLink(client, link){ log('class CheckDOMLib - openLink()');
-    const newTab = await controllerbot.newTab(client);
-    await controllerbot.openLink(newTab, link);
-    return newTab;
-  }; // async openLink(){
-
-  async evaluate(){
-
-  }; // async evaluate(){
-
-}; // class CheckDOMLib{
-
-
-export class CheckDOM extends CheckDOMLib{
-
-  constructor(){ log('class CheckDOM - constructor()');
-    super();
-  }; // constructor(pptr, devIO)
-
+export class CheckDOM{
 
   async urlParameter(pptr){ log('checkURLParameter()');
     await pptr.page.exposeFunction('checkURLParameter', async script =>{ log('--- EXPOSE - checkURLParameter - script: ' + script + '---');
 
-      const newTab = await this.openLink(pptr.client, devHost + '/?usertoken=');
+      const newTab = await controllerbot.openLinkNewTab(pptr.client, devHost + '/?usertoken=');
 
       // execute script inside of DOM by creating new function and run it
       return await newTab.evaluate(async script=>{
@@ -93,15 +74,11 @@ export class CheckDOM extends CheckDOMLib{
   }; // async checkURLParameter(pptr){
 
 
-
   async partnerMessage(pptr){ log('checkPartnerMessage()');
     await pptr.page.exposeFunction('checkPartnerMessage', async link =>{ log('--- EXPOSE - checkPartnerMessage ----');
 
-      const newTab = await controllerbot.newTab(pptr.client);
-      await controllerbot.openLink(newTab, devLinkPartner);
-
       // do not delete timeout - We will wait here until animation is ready
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const newTab = await controllerbot.openLinkNewTab(pptr.client, devLinkPartner, 2000);
 
       // check if message was recieved at partner
       return await newTab.evaluate(msg=>{
@@ -112,7 +89,6 @@ export class CheckDOM extends CheckDOMLib{
 
     }); // await pptr.page.exposeFunction('checkPartnerMessage', async link =>{
   }; // async checkPartnerMessage(pptr){
-
 
 }; // class CheckDOM extends CheckDOMLib{
 

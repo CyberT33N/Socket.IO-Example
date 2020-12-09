@@ -4,6 +4,7 @@ export default {
   startBrowser: async ()=>{ return await new bot.startBrowser().launch(); },
 
   openLink: async (page, link)=>{ return await bot.openLink(page, link); },
+  openLinkNewTab: async (client, link, delay)=>{ return await bot.openLinkNewTab(client, link, delay); },
 
   newTab: async client=>{ return await bot.newTab(client); },
 
