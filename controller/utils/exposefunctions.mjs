@@ -2,7 +2,7 @@ import * as expose from '../../services/utils/exposefunctions.mjs';
 
 export default {
 
-  config: async pptr=>{ return await expose.config(pptr); },
+  config: async pptr=>{ return await new expose.Config().export(pptr); },
 
   // ---- exposeFunctionsWeb() ----
   checkURLParameter: async pptr=>{ return await new expose.CheckDOM().urlParameter(pptr); },
