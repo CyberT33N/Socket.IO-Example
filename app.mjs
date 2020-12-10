@@ -15,29 +15,12 @@ import bodyParser from 'body-parser';
 
 /* ################ Logs ################ */
 import log from 'fancy-log';
-import gradient from 'gradient-string';
-import chalk from 'chalk';
-
-const ads = gradient('red', 'white').multiline([
-  '',
-  'Presented by',
-  '████████╗██████╗ ██████╗ ███╗   ██╗',
-  '╚══██╔══╝╚════██╗╚════██╗████╗  ██║',
-  '   ██║    █████╔╝ █████╔╝██╔██╗ ██║',
-  '   ██║    ╚═══██╗ ╚═══██╗██║╚██╗██║',
-  '   ██║   ██████╔╝██████╔╝██║ ╚████║',
-  '   ╚═╝   ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝ Software',
-].join('\n'));
-console.log(`
-${ads}
-Check my Github Profile:
-${chalk.white.bgGreen.bold(' github.com/CyberT33N ')}
-${gradient('white', 'black')('\n\n=======================================\n\n')}
-`);
 
 
 class Init {
   constructor() {
+    controllerLib.ads(); // advertisement console.log of author
+
     const config = controllerLib.getConfig();
     this.app = express();
     this.port = process.env.PORT || config.server.port;
