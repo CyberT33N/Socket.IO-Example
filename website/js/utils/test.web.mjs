@@ -138,20 +138,22 @@ describe('web.js', ()=>{
       ).toBe(true);
     }); // it('Simulate successfully update times - Should return true', async()=>{
 
+
     it(`Check for date at CSS Selector .conversation-start span`, async()=>{
       expect( document.querySelector('.conversation-start span').textContent).toBe(dateFull);
     }); // it(`Check for date(${dateFull}) at CSS Selector .conversation-start span`, async()=>{
 
+
     it(`Check for AMPM at CSS Selector .time with Partner Token`, async()=>{
 
       await checkTimeCSS();
-      console.log('checkTimeCSS done..');
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       expect(
         document.querySelector(`.people li[data-user="${ChatPartner.usertoken}"]`)?.querySelector('.time')?.textContent
       ).toBe(AMPM);
 
-    }); // it(`Check for AMPM(${AMPM}) at CSS Selector .time with Partner Token`, ()=>{
+    }).timeout(10000); // it(`Check for AMPM(${AMPM}) at CSS Selector .time with Partner Token`, ()=>{
 
     it('Simulate NPE  - Should return false', async()=>{
         expect(await web.updateTimes(null, null)).toBe(false);
