@@ -1,46 +1,65 @@
-/*################ Node.js ################*/
-import { fileURLToPath } from 'url';
-import path, { dirname } from 'path';
-const __filename = fileURLToPath(import.meta.url),
-       __dirname = dirname(__filename);
-console.log('server.mjs - __dirname: ' + __dirname);
+/* ################ Controller ################ */
+import ctrlSocketIO from '../controller/socketio.mjs';
+import ctrlEndpoints from '../controller/endpoints.mjs';
+import ctrlServer from '../controller/server.mjs';
+import ctrlLib from '../controller/lib.mjs';
 
-/*################ Logs ################*/
+/* ################ Socket.io ################ */
+import socketIO from 'socket.io';
+
+/* ################ Express ################ */
+import express from 'express';
+import http from 'http';
+import bodyParser from 'body-parser';
+
+/* ################ Node.js ################ */
+import path from 'path';
+
+/* ################ Logs ################ */
 import log from 'fancy-log';
-import chalkAnimation from 'chalk-animation';
-import gradient from 'gradient-string';
-import chalk from 'chalk';
 
 
-export const middleWare = (app, bodyParser, express)=>{ log('---- middleWare() ----');
-
-  // parse application/json
-  app.use( bodyParser.json() );
-
-  // adding Helmet to enhance your API's security
-  //app.use( helmet() );
-
-  // enabling CORS for all requests
-  //app.use( cors() );
-
-  // adding morgan to log HTTP requests
-  //app.use( morgan('combined') );
-
+export const middleWare = (app, bodyParser, express)=>{
+  app.use( bodyParser.json() ); // parse application/json
 }; // export const middleWare = (app, bodyParser, express)=>{
 
 
-
-export const startServer = (server, port)=>{ return new Promise(resolve => { log('---- startServer() - Port: ' + port + ' ----');
-  server.listen(port, async()=>{ log('Server was started.. Listening on port: ' + port);
+export const startServer = (server, port)=>{return new Promise(resolve => {
+  server.listen(port, async ()=>{
+    log('Server was started.. Listening on port: ' + port);
     resolve(true);
-  }); // server.listen(port, async()=>{
-})}; // export const startServer = (server, port)=>{
+  }); // server.listen(port, async ()=>{
+});}; // export const startServer = (server, port)=>{
 
 
-export const checkRequests = app => { log('---- checkRequests() ----');
+export const checkRequests = app => {log('---- checkRequests() ----');
   app.use((req, res, next)=>{
-    if( path.extname(path.basename(req?.url)) ) log("The file " + path.basename(req?.url) + " was requested.");
-    else log("The endpoint " + path.basename(req?.url) + " was requested.");
+    const basename = path.basename(req?.url);
+    const extname = path.extname(basename);
+    if (extname) log(`The file ${basename} was requested`);// ```
+    else log(`The endpoint ${basename} was requested.`);// ```
     next();
   }); // app.use((req, res, next)=>{
 }; // export const checkRequests = app => {
+
+
+export class Init {
+  constructor() {log(`class Init - constructor()`);
+    ctrlLib.ads(); // advertisement console.log of author
+
+    this.app = express();
+    this.server = http.createServer(this.app);
+
+    this.app.use(express.static('./website')); // setup website
+
+    const io = socketIO(this.server);
+    ctrlSocketIO.rootConnect(io); // setup sockets
+  }; // constructor(){
+
+  async startServer(port) {log(`class Init - startServer() - port: ${port}`);
+    await ctrlServer.middleWare(this.app, bodyParser, express);
+    await ctrlServer.startServer(this.server, port);
+    await ctrlServer.checkRequests(this.app); // monitor all requests
+    await ctrlEndpoints.startListener(this.app);
+  }; // async startServer(server, this.port) {
+}; // class Init{
