@@ -21,6 +21,8 @@
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
+    "eslint": "^7.15.0",
+    "eslint-config-google": "^0.14.0",
     "expect": "^26.6.2",
     "jsdom": "^16.4.0",
     "mocha": "^8.2.1",

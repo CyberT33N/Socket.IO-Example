@@ -69,7 +69,7 @@ describe('Client Side Services', ()=>{
     if( !await controllerMongoDB.connectMongoDB() ) throw new Error('Can not connect to MongoDB');
 
     // setup middleware
-    await controllerServer.middleWare(devAPP, bodyParser, express);
+    await controllerServer.middleWare(devAPP, express);
 
     // set up website..
     devAPP.use(express.static('./website'));
