@@ -1,6 +1,6 @@
-import * as expose from '../../services/utils/exposefunctions.mjs';
 import {GetData} from '../../services/utils/exposefunctions/GetData.mjs';
 import {DOM} from '../../services/utils/exposefunctions/DOM.mjs';
+import {Listener} from '../../services/utils/exposefunctions/Listener.mjs';
 
 export default {
 
@@ -23,17 +23,17 @@ export default {
 
   // ---- exposeFunctionsSocket() ----
   listenerChatMessage: async (pptr, devIO)=>{
-    return await new expose.Listener(pptr, devIO).chatMessage();
+    return await new Listener(pptr, devIO).chatMessage();
   },
   listenerRoomConnect: async (pptr, devIO)=>{
-    return await new expose.Listener(pptr, devIO).roomConnect();
+    return await new Listener(pptr, devIO).roomConnect();
   },
 
   checkTimeCSS: async (pptr, socket, socketPartner)=>{
-    return await new expose.Listener(pptr).checkTimeCSS(socket, socketPartner);
+    return await new Listener(pptr).checkTimeCSS(socket, socketPartner);
   },
   incomeMsg: async (pptr, devIO)=>{
-    return await new expose.Listener(pptr, devIO).incomeMsg();
+    return await new Listener(pptr, devIO).incomeMsg();
   },
 
 };
