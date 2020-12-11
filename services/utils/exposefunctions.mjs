@@ -2,77 +2,9 @@
 import controller from '../../controller/socketio.mjs';
 import controllerBot from '../../controller/bot.mjs';
 import controllerLib from '../../controller/lib.mjs';
-import controllerMongoDB from '../../controller/mongodb.mjs';
 
 /* ################ Logs ################ */
 import log from 'fancy-log';
-
-
-export class GetData {
-  async details(page) {
-    await page.exposeFunction('details', async ()=>{
-      const config = controllerLib.getConfig();
-      const room = config.test.room;
-      const token = config.test.user[0].token;
-      return {
-        testRoomDetails: await controllerMongoDB.getRoomDetails(room),
-        testUserDetails: await controllerMongoDB.getUserDetails(token),
-      };
-    }); // await pptr.page.exposeFunction('details', async()=>{
-  }; // async details(page){
-
-
-  async config(page) {
-    await page.exposeFunction('config', ()=>{
-      return controllerLib.getConfig();
-    }); // await page.exposeFunction('config', ()=>{
-  }; // async config(page) {
-}; // export class getData(){
-
-
-export class CheckDOM {
-  constructor() {
-    const config = controllerLib.getConfig();
-    this.hostFull = config.test.hostFull;
-    this.linkPartner = config.test.linkPartner;
-  }; // constructor(){
-
-  async urlParameter(pptr) {
-    await pptr.page.exposeFunction('checkURLParameter', async script=>{
-      const newTab = await controllerBot.openLinkNewTab(
-          pptr.client,
-          this.hostFull + '/?usertoken=',
-      );
-
-      // execute script inside of DOM by creating new function and run it
-      return await newTab.evaluate(async script=>{
-        const f = new Function('return ' + script)();
-        return f();
-      }, script); // await newTab.evaluate(async script=>{
-    }); // await pptr.page.exposeFunction('checkURLParameter', async script=>{
-  }; // async urlParameter(pptr) {
-
-
-  async partnerMessage(pptr) {
-    await pptr.page.exposeFunction('checkPartnerMessage', async link=>{
-      const newTab = await controllerBot.openLinkNewTab(
-          pptr.client,
-          this.linkPartner,
-          2000,
-      );
-
-      // check if message was recieved at partner
-      return await newTab.evaluate(msg=>{
-        const lastElement = document.querySelector('.chat div:last-child');
-        if (
-          lastElement.textContent == msg &&
-          lastElement.getAttribute('class') == 'bubble you'
-        ) return true;
-      }, 'sample_message123');
-    }); // await newTab.evaluate(msg=>{
-  }; // async partnerMessage(pptr) {
-}; // class CheckDOM extends CheckDOMLib{
-
 
 class ListenerEvents {
   async chatMessage() {

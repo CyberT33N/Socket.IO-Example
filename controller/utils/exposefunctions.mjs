@@ -1,20 +1,24 @@
 import * as expose from '../../services/utils/exposefunctions.mjs';
+import {GetData} from '../../services/utils/exposefunctions/GetData.mjs';
+import {DOM} from '../../services/utils/exposefunctions/DOM.mjs';
 
 export default {
 
-  config: async page=>{return await new expose.GetData().config(page);},
+  config: async page=>{
+    return await new GetData(page).config();
+  },
+  // ---- exposeFunctionsReq() ----
+  details: async page=>{
+    return await new GetData(page).details();
+  },
+
 
   // ---- exposeFunctionsWeb() ----
   checkURLParameter: async pptr=>{
-    return await new expose.CheckDOM().urlParameter(pptr);
+    return await new DOM(pptr).urlParameter();
   },
   checkPartnerMessage: async pptr=>{
-    return await new expose.CheckDOM().partnerMessage(pptr);
-  },
-
-  // ---- exposeFunctionsReq() ----
-  details: async page=>{
-    return await new expose.GetData().details(page);
+    return await new DOM(pptr).partnerMessage();
   },
 
   // ---- exposeFunctionsSocket() ----
