@@ -66,7 +66,7 @@ describe('Client Side Services', ()=>{
   before(done=>{(async()=>{ log('\n\n---- client.test.mjs - BEFORE ----');
 
     // connect to MongoDB
-    if( !await controllerMongoDB.connectMongoDB() ) throw new Error('Can not connect to MongoDB');
+    if( !await controllerMongoDB.connect() ) throw new Error('Can not connect to MongoDB');
 
     // setup middleware
     await controllerServer.middleWare(devAPP, express);

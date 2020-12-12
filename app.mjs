@@ -6,11 +6,11 @@ import ctrlServer from './controller/server.mjs';
 /* ################ Logs ################ */
 import log from 'fancy-log';
 
+/* ################ Config ################ */
+const config = ctrlLib.getConfig();
+const port = process.env.PORT || config.server.port;
+
 
 (async ()=>{
-  const config = ctrlLib.getConfig();
-  const port = process.env.PORT || config.server.port;
-
-  const r = await ctrlMongoDB.connectMongoDB();
-  if (r) await ctrlServer.init(port);
-})().catch(e=>{log('ASYNC - app.mjs - MAIN - Error: ' + e);});
+  if (await ctrlMongoDB.connect()) await ctrlServer.init(port);
+})().catch(e=>{log('app.mjs - Catch error: ' + e);});

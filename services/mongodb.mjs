@@ -26,7 +26,7 @@ export class Init{
     ({MongoClient: this.MongoClient, ObjectId: this.ObjectId} = mongodb);
   }; // constructor(){
 
-  async connect(){ log('connectMongoDB() - Database URL: ' + this.MongoURL);
+  async connect(){ log('connect() - Database URL: ' + this.MongoURL);
     try { // connect to MongoDB Database and create global MongoDB variable
       const client = await this.MongoClient.connect(this.MongoURL, { useNewUrlParser: true, useUnifiedTopology: true });
       MongoDB = client.db(this.MongoName);

@@ -3,13 +3,17 @@ import fs from 'fs';
 import yaml from 'js-yaml';
 
 /* ################ Logs ################ */
-import log from 'fancy-log';
 import gradient from 'gradient-string';
 import chalk from 'chalk';
 
-export const getConfig = ()=>{log( 'lib.mjs - getConfig()' );
+export const getConfig = ()=>{
   return yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8'));
 }; // export const getConfig = ()=>{
+
+
+export const timeoutAsync = async amount=>{
+  await new Promise(resolve=>setTimeout(resolve, amount));
+}; // export const timeoutAsync = async amount=>{
 
 
 export const ads = ()=>{

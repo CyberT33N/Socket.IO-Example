@@ -1,45 +1,49 @@
 /* ################ Controller ################ */
-import controller from '../../../controller/socketio.mjs';
-import controllerBot from '../../../controller/bot.mjs';
-import controllerLib from '../../../controller/lib.mjs';
+import ctrlSocketIO from '../../../controller/socketio.mjs';
+import ctrlBot from '../../../controller/bot.mjs';
+import ctrlLib from '../../../controller/lib.mjs';
 
-/* ################ Logs ################ */
-import log from 'fancy-log';
 
-/** Create Listener for Socket.io */
+/** Create Socket Listener */
 class ListenerEvents {
   /** Create Listener 'chat message' */
   async chatMessage() {
-    await this.pptr.page.exposeFunction('listenerChatMessage', async ()=>{
-      const newTab = await controllerBot.newTab(this.pptr.client);
+    await this.page.exposeFunction('listenerChatMessage', async ()=>{
+      const newTab = await ctrlBot.newTab(this.client);
+
       const [msg] = await Promise.all([
         this.createSocketListener(
             'chat message',
             await this.createDevSocket(newTab),
         ),
-        await controllerBot.typeText(
+        await ctrlBot.typeText(
             newTab,
             'textarea',
             'sample_message123',
             10,
         ),
-        await controllerBot.click('.write-link.send', newTab, 1000),
-      ]); return msg;
-    }); // this.pptr.page.exposeFunction('listenerChatMessage', async ()=>{
-  }; // async listenerChatMessage(){
+        await ctrlBot.click('.write-link.send', newTab, 1000),
+      ]);
+
+      return msg;
+    }); // this.page.exposeFunction('listenerChatMessage', async ()=>{
+  }; // async chatMessage()
 
   /** Create Listener 'room connect' */
   async roomConnect() {
-    await this.pptr.page.exposeFunction('listenerRoomConnect', async ()=>{
-      const newTab = await controllerBot.newTab(this.pptr.client);
+    await this.page.exposeFunction('listenerRoomConnect', async ()=>{
+      const newTab = await ctrlBot.newTab(this.client);
+
       const [roomID] = await Promise.all([
         this.createSocketListener(
             'room connect',
             await this.createDevSocket(newTab),
         ),
-        controllerBot.click('.person', newTab, 1000),
-      ]); return roomID;
-    }); // this.pptr.page.exposeFunction('listenerRoomConnect', async ()=>{
+        ctrlBot.click('.person', newTab, 1000),
+      ]);
+
+      return roomID;
+    }); // this.page.exposeFunction('listenerRoomConnect', async ()=>{
   }; // async roomConnect() {
 
   /**
@@ -48,7 +52,7 @@ class ListenerEvents {
    * @param {object} socketPartner - Socket Partner
   */
   async checkTimeCSS(socket, socketPartner) {
-    await this.pptr.page.exposeFunction('checkTimeCSS', async ()=>{
+    await this.page.exposeFunction('checkTimeCSS', async ()=>{
       const msg = {
         msg: 'sample message22..',
         room: this.room,
@@ -59,14 +63,16 @@ class ListenerEvents {
       const [d] = await Promise.all([
         this.createSocketListener('msg', socket),
         this.emitMsg(socketPartner, 'chat message', msg, 1000),
-      ]); return d;
-    }); // await this.pptr.page.exposeFunction('checkTimeCSS', async ()=>{
+      ]);
+
+      return d;
+    }); // await this.page.exposeFunction('checkTimeCSS', async ()=>{
   }; // async checkTimeCSS(socket, socketPartner) {
 
   /** Emit Message to listener 'msg' */
   async incomeMsg() {
-    await this.pptr.page.exposeFunction('incomeMsg', async ()=>{
-      const newTab = await controllerBot.newTab(this.pptr.client);
+    await this.page.exposeFunction('incomeMsg', async ()=>{
+      const newTab = await ctrlBot.newTab(this.client);
 
       // emit sample message to trigger websocket
       this.emitMsg(
@@ -83,12 +89,12 @@ class ListenerEvents {
           lastElement.getAttribute('class') == 'bubble you'
         ) return true;
       }); // return await newTab.evaluate(()=>{
-    }); // await this.pptr.page.exposeFunction('incomeMsg', async ()=>{
+    }); // await this.page.exposeFunction('incomeMsg', async ()=>{
   }; // async incomeMsg(){
 }; // class ListenerEvents{
 
 
-/** create Listener for TDD */
+/** create Listener for Unit Testing */
 export class Listener extends ListenerEvents {
   /**
    * Create Listener 'room connect'
@@ -98,10 +104,11 @@ export class Listener extends ListenerEvents {
   constructor(pptr, devIO) {
     super();
 
-    this.pptr = pptr;
+    this.client = pptr.client;
+    this.page = pptr.page;
     this.devIO = devIO;
 
-    const config = controllerLib.getConfig();
+    const config = ctrlLib.getConfig();
     this.linkClient = config.test.linkClient;
     this.room = config.test.room;
     this.partnerToken = config.test.user[1].token;
@@ -114,22 +121,23 @@ export class Listener extends ListenerEvents {
   */
   async createDevSocket(page) {
     const [devSocket] = await Promise.all([
-      controller.rootConnect(this.devIO),
-      controllerBot.openLink(page, this.linkClient),
+      ctrlSocketIO.rootConnect(this.devIO),
+      ctrlBot.openLink(page, this.linkClient),
     ]); return devSocket;
   }; // sync createDevSocket(page) {
 
 
   /**
    * Create Listener
+   * @return {Promise}
    * @param {string} name - Listener name
    * @param {object} socket - Socket where we create Listener at
   */
-  createSocketListener(name, socket) {return new Promise(resolve=>{
-    socket.on(name, data=>{
-      resolve(data);
-    }); // socket.on(name, data=>{
-  });}; // createSocketListener(name, socket){
+  createSocketListener(name, socket) {
+    return new Promise(resolve=>{
+      socket.on(name, data=>{resolve(data);}); // socket.on(name, data=>{
+    }); // return new Promise(resolve=>{
+  }; // createSocketListener(name, socket){
 
 
   /**
@@ -140,12 +148,7 @@ export class Listener extends ListenerEvents {
    * @param {number} delay - Delay before we do action
   */
   async emitMsg(socket, name, msg, delay) {
-    log(`
-      emitMsg() - Listener Name: ${name} - Delay: ${delay}
-      Message: ${JSON.stringify(msg, null, 4)}
-    `);
-
-    if (delay) await new Promise(resolve=>setTimeout(resolve, delay));
+    if (delay) await ctrlLib.timeoutAsync(delay);
     socket.emit(name, msg);
   }; // async emitMsg(socket, name, msg, delay) {
 }; // class Listener {

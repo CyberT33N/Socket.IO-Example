@@ -1,6 +1,6 @@
 /* ################ Controller ################ */
-import controllerBot from '../../../controller/bot.mjs';
-import controllerLib from '../../../controller/lib.mjs';
+import ctrlBot from '../../../controller/bot.mjs';
+import ctrlLib from '../../../controller/lib.mjs';
 
 /** Lib functions for class DOM */
 class Lib {
@@ -11,8 +11,7 @@ class Lib {
   */
   async evalScript(script, page) {
     return await page.evaluate(async script=>{
-      const f = new Function('return ' + script)();
-      return f();
+      return new Function('return ' + script)()();
     }, script); // return await page.evaluate(async script=>{
   }; // async evalScript(script) {
 }; // class Lib {
@@ -22,34 +21,37 @@ class Lib {
 export class DOM extends Lib {
   /**
    * get config.yml and set global variables
-   * @param {string} pptr - PPTR client & Page
+   * @param {object} pptr - PPTR client & Page
   */
   constructor(pptr) {
     super();
-    this.pptr = pptr;
-    const config = controllerLib.getConfig();
+
+    this.client = pptr.client;
+    this.page = pptr.page;
+
+    const config = ctrlLib.getConfig();
     this.hostFull = config.test.hostFull;
     this.linkPartner = config.test.linkPartner;
   };
 
-  /** create link in new tab and then check for empty url usertoken */
+  /** create new tab and then check for empty url usertoken */
   async urlParameter() {
-    await this.pptr.page.exposeFunction('checkURLParameter', async script=>{
+    await this.page.exposeFunction('checkURLParameter', async script=>{
       return this.evalScript(
           script,
-          await controllerBot.openLinkNewTab(
-              this.pptr.client,
+          await ctrlBot.openLinkNewTab(
+              this.client,
               this.hostFull + '/?usertoken=',
-          ), // await controllerBot.openLinkNewTab(
+          ), // await ctrlBot.openLinkNewTab(
       ); // this.evalScript(
     }); // await pptr.page.exposeFunction('checkURLParameter', async script=>{
   }; // async urlParameter(pptr) {
 
   /** Check if message was recieved at partner */
   async partnerMessage() {
-    await this.pptr.page.exposeFunction('checkPartnerMessage', async link=>{
-      const newTab = await controllerBot.openLinkNewTab(
-          this.pptr.client,
+    await this.page.exposeFunction('checkPartnerMessage', async link=>{
+      const newTab = await ctrlBot.openLinkNewTab(
+          this.client,
           this.linkPartner,
           2000,
       );

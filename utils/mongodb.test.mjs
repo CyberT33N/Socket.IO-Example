@@ -24,17 +24,17 @@ describe('MongoDB Services', ()=>{
 
 
 
-  describe('connectMongoDB()', ()=>{
+  describe('connect()', ()=>{
 
     it('Connect to MongoDB Database - Should return true', async()=>{
-      expect( await controllermongodb.connectMongoDB() ).toBe(true);
+      expect( await controllermongodb.connect() ).toBe(true);
     });
 
     xit('Error while try to connect to MongoDB Database - Should return false', async()=>{
-      expect( await controllermongodb.connectMongoDB() ).toBe(false);
+      expect( await controllermongodb.connect() ).toBe(false);
     });
 
-  }); // describe('connectMongoDB()()', ()=>{
+  }); // describe('connect()()', ()=>{
 
 
 
