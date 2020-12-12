@@ -85,14 +85,14 @@ export const disconnectUser = socket=>{
 
 
 
-export const createDevSockets = io_client=>{ log( '---- createDevSockets() ----' );
+export const createDevSockets = io=>{ log( '---- createDevSockets() ----' );
   // client
-  const devSocket = io_client.connect(`${devHost}/?usertoken=${test_client1.token}`, {
+  const devSocket = io.connect(`${devHost}/?usertoken=${test_client1.token}`, {
     transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
   });
   // partner
-  const devSocketPartner = io_client.connect(`${devHost}/?usertoken=${test_client2.token}`, {
+  const devSocketPartner = io.connect(`${devHost}/?usertoken=${test_client2.token}`, {
     transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
   });
   return {devSocket: devSocket, devSocketPartner: devSocketPartner};
-}; // const createDevSockets = io_client=>{
+}; // const createDevSockets = io=>{

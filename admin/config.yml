@@ -28,5 +28,5 @@ bot:
   browser_profile: TDD
   windowWidth: 1920
   windowHeight: 1080
-  extensionlist: ~
+  exts: ~
 ...

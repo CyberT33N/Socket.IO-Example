@@ -2,7 +2,7 @@
 import controllerSocketIO from '../controller/socketio.mjs';
 
 /*################ Socket.io ################*/
-import io_client from 'socket.io-client';
+import io from 'socket.io-client';
 
 /*################ TDD ################*/
 import expect from 'expect';
@@ -31,7 +31,7 @@ describe('Socket.io Services', ()=>{
 
   before(done=>{(async()=>{
     // get dev sockets
-       const sockets = await controllerSocketIO.createDevSockets(io_client);
+       const sockets = await controllerSocketIO.createDevSockets(io);
            devSocket = sockets.devSocket;
     devSocketPartner = sockets.devSocketPartner;
 

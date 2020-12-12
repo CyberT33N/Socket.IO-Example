@@ -3,20 +3,13 @@ import {DOM} from '../../services/utils/exposefunctions/DOM.mjs';
 import {Listener} from '../../services/utils/exposefunctions/Listener.mjs';
 
 export default {
-
-  config: async page=>{
-    return await new GetData(page).config();
-  },
+  config: async page=>{return await new GetData(page).config();},
   // ---- exposeFunctionsReq() ----
-  details: async page=>{
-    return await new GetData(page).details();
-  },
+  details: async page=>{return await new GetData(page).details();},
 
 
   // ---- exposeFunctionsWeb() ----
-  checkURLParameter: async pptr=>{
-    return await new DOM(pptr).urlParameter();
-  },
+  checkURLParameter: async pptr=>{return await new DOM(pptr).urlParameter();},
   checkPartnerMessage: async pptr=>{
     return await new DOM(pptr).partnerMessage();
   },
@@ -35,5 +28,4 @@ export default {
   incomeMsg: async (pptr, devIO)=>{
     return await new Listener(pptr, devIO).incomeMsg();
   },
-
 };

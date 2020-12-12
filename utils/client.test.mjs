@@ -30,7 +30,7 @@ devServer = http.createServer(devAPP);
 /*################ TDD ################*/
 import expect from 'expect';
 import socketIO from 'socket.io';
-import io_client from 'socket.io-client';
+import io from 'socket.io-client';
 const devIO = socketIO(devServer);
 
 /*################ Controller ################*/
@@ -90,12 +90,12 @@ describe('Client Side Services', ()=>{
 
 
     // start browser and get page & client
-    pptr = await controllerBot.startBrowser();
+    pptr = await controllerBot.StartBrowser();
     if(!pptr) throw new Error('Something went wrong we cant find pptr');
 
 
     // get dev sockets
-    const sockets = await controllerSocketIO.createDevSockets(io_client);
+    const sockets = await controllerSocketIO.createDevSockets(io);
     const devSocket = sockets.devSocket;
     const devSocketPartner = sockets.devSocketPartner;
 

@@ -1,98 +1,89 @@
-/*################ Operating System ################*/
+/* ################ Operating System ################ */
 import os from 'os';
-const osPlatform = os.platform();
 
-/*################ Bot ################*/
+/* ################ Bot ################ */
 import puppeteer from 'puppeteer';
 
-/*################ Controller ################*/
+/* ################ Controller ################ */
 import controllerLib from '../controller/lib.mjs';
 
-/*################ Logs ################*/
+/* ################ Logs ################ */
 import log from 'fancy-log';
-import chalkAnimation from 'chalk-animation';
-import gradient from 'gradient-string';
-import chalk from 'chalk';
 
 
-
-class getBrowserConfig{
-
-  createArgs(){ log( 'createArgs()' );
-    const args = [
-      this.windowSizeComplete,
+/** Get launch data like args and exts */
+class Config {
+  /** Create puppeteer launch arguments */
+  createArgs() {
+    this.args = [
+      `--window-size=${this.windowWidth},${this.windowHeight}`,
       '--no-sandbox',
-      // '--disable-setuid-sandbox',
-      //'--disable-popup-blocking',
-      //'--disable-notifications',
-      //'--disable-dev-shm-usage',
       '--force-webrtc-ip-handling-policy=disable-non-proxied-udp',
-      '--lang=en'
-    ]; if(this.headless) args.push('--disable-gpu'); return args;
+      '--lang=en',
+    ];
+
+    if (this.headless) this.args.push('--disable-gpu');
   }; // createArgs(){
 
 
-  // check if browser extensions was defined in config.json file. If true we add them to our args array
-  checkExtensions(extensionlist, chromeExtensionPath, args){ log( `checkExtensions() - chromeExtensionPath: ${chromeExtensionPath}` );
-    if( extensionlist !== null ){ log('extensionlist before: ' + extensionlist);
+  /**
+   * check if browser exts was defined in config.yml file.
+     If true we add them to our args array
+   * @param {object} exts - Browser Extensions
+  */
+  createExtensions(exts) {
+    if (exts !== null) {
+      const extsAR = [];
+      for (const d in exts) {
+        if (exts[d]) {
+          extsAR.push( this.extsPath + exts[d] );
+          this.args.push('--load-extension=' + this.extsPath + exts[d] );
+        } // if(exts[d]){
+      }; // for (const d in exts) {
 
-      var extensionlistAR = [];
-      for( const d in extensionlist ){
-        extensionlistAR.push( chromeExtensionPath + extensionlist[d] );
-        args.push( '--load-extension=' + chromeExtensionPath + extensionlist[d] );
-      } // for( const d of extensionlist ){
-
-      extensionlist = '--disable-extensions-except=' + extensionlistAR.join( ',' );
-      args.push(extensionlist);
-      log(`extensionlist after: ${extensionlist}`);
-      return args;
-
-    } // if( extensionlist !== null ){
-  }; // checkExtensions(){
+      this.args.push(`--disable-extension-except=${extsAR.join( ',' )}`);
+    }; // if (exts !== null) {
+  }; // createExtensions(){
 
 
-  // check system OS and then create path related to OS
-  getPath(){ log( 'getPath() - osPlatform: ' + osPlatform );
-    if( osPlatform == 'darwin' ){
-      this.browserProfilePath = './lib/browserProfiles/';
-      this.chromeExtensionPath  = './lib/chromeextension/';
+  /**
+   * check system OS and then create path related to OS
+   * @param {string} platform - Name of Operating System
+  */
+  getPath(platform) {
+    if (platform == 'darwin') {
+      this.profilePath = './lib/browserProfiles/';
+      this.extsPath = './lib/exts/';
     }
-    if( osPlatform == 'linux' ) {
-      this.browserProfilePath = './lib/browserProfiles/';
-      this.chromeExtensionPath  = './lib/chromeextension/';
+    if (platform == 'linux') {
+      this.profilePath = './lib/browserProfiles/';
+      this.extsPath = './lib/exts/';
     }
-    if( osPlatform == 'win32' ){
-      this.browserProfilePath = '../../../../../lib/browserProfiles/';
-      this.chromeExtensionPath  = '../../../../../lib/chromeextension/';
+    if (platform == 'win32') {
+      this.profilePath = '../../../../../lib/browserProfiles/';
+      this.extsPath = '../../../../../lib/exts';
     }
   }; // getPath(){
-
-}; // class getBrowserConfig {
-
+}; // class Config {
 
 
+export class StartBrowser extends Config{
 
-
-
-export class startBrowser extends getBrowserConfig{
-
-  constructor(){ log('class getBrowserConfig - constructor()');
+  constructor(){ log('class Config - constructor()');
     super();
 
     const config = controllerLib.getConfig();
     this.config_browser_profile = config.bot.browser_profile;
     this.headless = config.bot.headless;
-    this.extensionlist = config.bot.extensionlist;
     this.windowWidth = config.bot.windowWidth;
     this.windowHeight = config.bot.windowHeight;
-    this.windowSizeComplete = `--window-size=${this.windowWidth},${this.windowHeight}`;
 
-    this.getPath();
+    this.getPath(os.platform());
 
-    this.args = this.checkExtensions(this.extensionlist, this.chromeExtensionPath, this.createArgs());
+    this.createArgs();
+    this.createExtensions(config.bot.exts);
 
     log(`
-      windowSizeComplete: ${this.windowSizeComplete}
       headless: ${this.headless}
       config_browser_profile: ${this.config_browser_profile}
       args: ${this.args}
@@ -111,7 +102,7 @@ export class startBrowser extends getBrowserConfig{
         // executablePath: '/home/user/Downloads/firefox-78.0a1.en-US.linux-x86_64/firefox/firefox',
         devtools: true,
         headless: this.headless, // true or false
-        userDataDir: this.browserProfilePath + this.config_browser_profile,
+        userDataDir: this.profilePath + this.config_browser_profile,
         args: this.args
       });
 
@@ -123,16 +114,16 @@ export class startBrowser extends getBrowserConfig{
   } // async function launch(){
 
 
-  async error(e){ log('class startBrowser - error() - error: ' + e);
-    if( e?.length == undefined ) log( 'startBrowser() - error is undefinied.. we restart now the browser..' );
-    if( e?.name == 'TimeoutError' ) log( 'startBrowser() - TimeoutError was found.. we restart now the browser..' );
-    if( e == 'Error: connect ECONNREFUSED 0.0.0.0:4444') log( 'startBrowser() - ECONNREFUSED error found..' );
+  async error(e){ log('class StartBrowser - error() - error: ' + e);
+    if( e?.length == undefined ) log( 'StartBrowser() - error is undefinied.. we restart now the browser..' );
+    if( e?.name == 'TimeoutError' ) log( 'StartBrowser() - TimeoutError was found.. we restart now the browser..' );
+    if( e == 'Error: connect ECONNREFUSED 0.0.0.0:4444') log( 'StartBrowser() - ECONNREFUSED error found..' );
 
     await this.client?.close();
     await this.launch();
   }; // async error(e){
 
-}; // export class startBrowser extends getBrowserConfig{
+}; // export class StartBrowser extends Config{
 
 
 
