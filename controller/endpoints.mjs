@@ -1,12 +1,22 @@
-import * as endpoints from '../services/endpoints.mjs';
+import {User} from '../services/endpoints/User.mjs';
+import {Room} from '../services/endpoints/Room.mjs';
+
 
 export default {
-  startListener: app=>{return endpoints.startListener(app);},
-
-  getUserDetails: async (req, res)=>{
-    return await new endpoints.User().getUserDetails(req, res);
+  startListener: app=>{
+    new User(app).getUserDetailsPOST();
+    new Room(app).getRoomDetailsPOST();
   },
+
+
+  // ---- Service User ----
+  getUserDetails: async (req, res)=>{
+    return await new User().getUserDetails(req, res);
+  },
+
+
+  // ---- Service Room ----
   getRoomDetails: async (req, res)=>{
-    return await endpoints.getRoomDetails(req, res);
+    return await new Room().getRoomDetails(req, res);
   },
 };

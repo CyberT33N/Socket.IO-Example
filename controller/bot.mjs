@@ -3,10 +3,11 @@ import {Window} from '../services/bot/Window.mjs';
 import {Simulate} from '../services/bot/Simulate.mjs';
 
 export default {
-  // ---- Class StartBrowser ----
+  // ---- Service StartBrowser ----
   StartBrowser: async ()=>{return await new StartBrowser().launch();},
 
-  // ---- Class Window ----
+
+  // ---- Service Window ----
   openLink: async (page, link)=>{
     return await new Window().openLink(page, link);
   },
@@ -15,7 +16,8 @@ export default {
   },
   newTab: async client=>{return await new Window().newTab(client);},
 
-  // ---- Class Simulate ----
+
+  // ---- Service Simulate ----
   click: async (css, page, delay)=>{
     return await new Simulate().click(css, page, delay);
   },
