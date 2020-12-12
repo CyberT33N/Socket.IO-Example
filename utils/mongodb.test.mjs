@@ -27,7 +27,10 @@ describe('MongoDB Services', ()=>{
   describe('connect()', ()=>{
 
     it('Connect to MongoDB Database - Should return true', async()=>{
-      expect( await controllermongodb.connect() ).toBe(true);
+      expect( await controllermongodb.connect() ).toEqual(expect.objectContaining({
+        db: expect.any(Object),
+        client: expect.any(Object),
+      }));
     });
 
     xit('Error while try to connect to MongoDB Database - Should return false', async()=>{

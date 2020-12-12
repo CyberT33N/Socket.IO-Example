@@ -4,6 +4,9 @@ server:
 
 MongoDB:
   dbname: socketio-example
+  collection:
+    rooms: rooms
+    user: user
   url: mongodb://localhost:27017
   host: ~
   port: ~

@@ -13,7 +13,7 @@ const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8'))
 import socketIO from 'socket.io';
 
 /*################ Controller ################*/
-import controllermongodb from '../controller/mongodb.mjs'
+import ctrlMongoDB from '../controller/mongodb.mjs'
 
 /*################ Logs ################*/
 import log from 'fancy-log';
@@ -45,7 +45,7 @@ export const connectRoom = socket=>{ log( 'connectRoom();' );
 
     if( !roomID ) return socket.emit('connectRoom result', {code : "NPE"});
 
-    const r = await controllermongodb.getRoomDetails(roomID);
+    const r = await ctrlMongoDB.getRoomDetails(roomID);
     if(r){ //log( 'getRoomDetails() success - result: ' + JSON.stringify(r, null, 4) );
 
       socket.join(roomID);
@@ -63,7 +63,7 @@ export const messageRoom = socket=>{ // {"msg": msg, "room": details.room, "user
 
     if(msg?.msg){
 
-      const r = await controllermongodb.storeMessages(msg);
+      const r = await ctrlMongoDB.storeMessages(msg);
       if( r?.code == "SUCCESS" ) socket.to(msg.room).emit('msg', msg.msg);
 
     } else socket.to(msg.room).emit('msg', {code: "Message was null"});
