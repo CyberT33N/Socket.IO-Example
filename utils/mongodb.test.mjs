@@ -46,11 +46,11 @@ describe('MongoDB Services', ()=>{
   describe('storeMessages()', ()=>{
 
     it('Simulate NPE - Should return {"msg": "NPE"}', async()=>{
-      expect( await controllermongodb.storeMessages({"msg": null,"room": "1234", "usertoken": "a"}) ).toStrictEqual( {"msg": "NPE"} );
+      expect( await controllermongodb.storeMessages({"msg": null,"room": "1234", "usertoken": "a"}) ).toStrictEqual( {code: "NPE"} );
     });
 
     it('Simulate not existing Room ID - Should return {"msg": "ROOM ID NOT FOUND"}', async()=>{
-      expect( await controllermongodb.storeMessages({"msg": "sample message..", "room": "wrong_room_ID", "usertoken": test_client1.token}) ).toStrictEqual( {"msg": "ROOM ID NOT FOUND"} );
+      expect( await controllermongodb.storeMessages({"msg": "sample message..", "room": "wrong_room_ID", "usertoken": test_client1.token}) ).toStrictEqual( {code: "ROOM ID NOT FOUND"} );
     });
 
     it('Successfully updating of field - Should return {code : "SUCCESS"}', async()=>{

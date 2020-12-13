@@ -12,7 +12,10 @@ export class Store {
   constructor() {
     const config = ctrlLib.getConfig();
     this.roomCollection = config.MongoDB.collection.rooms;
+
+    this.connection = new Init().getConnection();
   }; // constructor(){
+
 
   /**
    * Store room chat message
@@ -20,15 +23,13 @@ export class Store {
    * @param {object} msg - Chat Message which structure is above.
   */
   async roomMsg(msg) {
-    const connection = new Init().getConnection();
-    const collection = connection.db.collection(this.roomCollection);
+    const collection = this.connection.db.collection(this.roomCollection);
 
-    // check if msg object has NPE
-    if (!msg?.msg || !msg?.room || !msg?.usertoken) return {msg: 'NPE'};
+    if (!msg?.msg || !msg?.room || !msg?.usertoken) return {code: 'NPE'};
 
     // check if room can be found in collection
     const match = await collection.findOne({'id': msg.room});
-    if (!match) return {msg: 'ROOM ID NOT FOUND'};
+    if (!match) return {code: 'ROOM ID NOT FOUND'};
 
     /* Push our current msg object to the already existing one
     from our room field. If chat was empty we will create new array */
@@ -40,10 +41,10 @@ export class Store {
     });
 
     // update our room field with the new message
-    return await new Update(
+    return await new Update().updateOne(
         collection,
         {id: msg.room},
         {$set: {msg: match.msg}},
-    ).updateOne(); // return await new Update.updateOne(
+    ); // return await new Update.updateOne(
   }; // async roomMsg(msg){
 }; // export class Store{

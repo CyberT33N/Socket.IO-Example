@@ -33,7 +33,7 @@ export class Search extends Lib {
 
 
   /**
-   * Get user details by searching token
+   * Get user details by searching token and return result.
    * @param {string} token - Auth Token
   */
   async getUserDetails(token) {
@@ -43,7 +43,7 @@ export class Search extends Lib {
 
 
   /**
-   * Get room details by searching room ID
+   * Get room details by searching room ID and return result.
     * @param {string} roomID
   */
   async getRoomDetails(roomID) {
