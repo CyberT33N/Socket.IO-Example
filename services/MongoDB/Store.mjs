@@ -1,6 +1,6 @@
 /* ################ Services ################ */
 import {Update} from './Update.mjs';
-import {getConnection} from './Init.mjs';
+import {Init} from './Init.mjs';
 
 /* ################ Controller ################ */
 import ctrlLib from '../../controller/lib.mjs';
@@ -20,7 +20,7 @@ export class Store {
    * @param {object} msg - Chat Message which structure is above.
   */
   async roomMsg(msg) {
-    const connection = getConnection();
+    const connection = Init.getConnection();
     const collection = connection.db.collection(this.roomCollection);
 
     // check if msg object has NPE

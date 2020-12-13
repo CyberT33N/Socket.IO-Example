@@ -1,5 +1,5 @@
 /* ################ Services ################ */
-import {getConnection} from './Init.mjs';
+import {Init} from './Init.mjs';
 
 
 /* ################ Controller ################ */
@@ -13,7 +13,7 @@ class Lib {
    * @param {object} query - Search query
   */
   async findOne(collection, query) {
-    const connection = getConnection();
+    const connection = Init.getConnection();
     return await connection.db.collection(collection).findOne(query);
   }; // async findOne() {
 }; // class Lib {

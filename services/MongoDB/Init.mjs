@@ -36,6 +36,11 @@ export class Init {
       ${chalk.white.bold('Error:\n')} ${e}` );
     } // catch (e) {
   }; // async connect() {
-}; // export class Init {
 
-export const getConnection = () => {return connection;};
+
+  /**
+   * Return connection for cross file usage
+   * @return {object}
+  */
+  static getConnection() {return connection;};
+}; // export class Init {
