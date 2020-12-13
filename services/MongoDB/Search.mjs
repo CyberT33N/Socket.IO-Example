@@ -1,9 +1,9 @@
 /* ################ Services ################ */
 import {Init} from './Init.mjs';
 
-
 /* ################ Controller ################ */
 import ctrlLib from '../../controller/lib.mjs';
+
 
 /** Subclass of Search which contains lib functions */
 class Lib {
@@ -13,8 +13,7 @@ class Lib {
    * @param {object} query - Search query
   */
   async findOne(collection, query) {
-    const connection = new Init().getConnection();
-    return await connection.db.collection(collection).findOne(query);
+    return await this.connection.db.collection(collection).findOne(query);
   }; // async findOne() {
 }; // class Lib {
 
@@ -28,6 +27,8 @@ export class Search extends Lib {
     const config = ctrlLib.getConfig();
     this.userCollection = config.MongoDB.collection.user;
     this.roomCollection = config.MongoDB.collection.rooms;
+
+    this.connection = new Init().getConnection();
   }; // constructor(){
 
 
@@ -36,7 +37,7 @@ export class Search extends Lib {
    * @param {string} token - Auth Token
   */
   async getUserDetails(token) {
-    if (!token) return false;
+    if (!token) return {code: 'User Token can not be undefined'};
     return await this.findOne(this.userCollection, {'token': token});
   }; // async getUserDetails(token) {
 
@@ -46,7 +47,7 @@ export class Search extends Lib {
     * @param {string} roomID
   */
   async getRoomDetails(roomID) {
-    if (!roomID) return false;
-    return await this.findOne(this.roomCollection, {'id': roomID?.toString()});
+    if (!roomID) return {code: 'Room ID can not be undefined'};
+    return await this.findOne(this.roomCollection, {'id': roomID.toString()});
   }; // async getRoomDetails(roomID) {
 }; // export class Search {

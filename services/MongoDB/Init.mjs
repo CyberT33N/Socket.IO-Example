@@ -11,7 +11,12 @@ import chalk from 'chalk';
 
 /** Init MongoDB connection */
 export class Init {
-  /** Get MongoDB details from config.yml and set as global */
+  /**
+   * Check if its first time usage of this class.
+   If true set class instance to this that we always get same instance.
+   * Then get MongoDB details from config.yml and set as global.
+   * In the last step we return the class instance.
+  */
   constructor() {
     if (Init.instance == null) Init.instance = this;
 

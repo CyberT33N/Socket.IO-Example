@@ -78,7 +78,7 @@ describe('MongoDB Services', ()=>{
     });
 
     it('Simulate NPE - Should return false', async()=>{
-      expect( await controllermongodb.getUserDetails(null) ).toBe(false);
+      expect( await controllermongodb.getUserDetails(null) ).toStrictEqual( {code : "User Token can not be undefined"} );
     });
 
   }); // describe('getUserDetails()', ()=>{
@@ -99,7 +99,7 @@ describe('MongoDB Services', ()=>{
     });
 
     it('Simulate NPE - Should return false', async()=>{
-      expect( await controllermongodb.getRoomDetails(null) ).toBe(false);
+      expect( await controllermongodb.getRoomDetails(null) ).toStrictEqual( {code : "Room ID can not be undefined"} );
     });
 
   }); // describe('getRoomDetails()', ()=>{
