@@ -1,6 +1,8 @@
 ---
 server:
   port: 1337
+  website:
+    path: ./website
 
 MongoDB:
   dbname: socketio-example

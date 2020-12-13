@@ -43,23 +43,39 @@ export const checkRequests = app => {log('---- checkRequests() ----');
 }; // export const checkRequests = app => {
 
 
+/** Init processes which are server related */
 export class Init {
-  constructor() {log(`class Init - constructor()`);
+  /**
+    * Get website path from config.yml (getConfig).
+      Create express server and import website.
+      Connect Socket.io and init sockets.
+  */
+  constructor() {
     ctrlLib.ads(); // advertisement console.log of author
+
+    const config = ctrlLib.getConfig();
+    const websitePath = config.server.website.path;
 
     this.app = express();
     this.server = http.createServer(this.app);
-
-    this.app.use(express.static('./website')); // setup website
+    this.app.use(express.static(websitePath));
 
     const io = socketIO(this.server);
-    ctrlSocketIO.rootConnect(io); // setup sockets
+    ctrlSocketIO.rootConnect(io); // init sockets
   }; // constructor(){
 
-  async startServer(port) {log(`class Init - startServer() - port: ${port}`);
+
+  /**
+    * Install Middleware to our express app (middleWare)
+      Start server (startServer)
+      create Listener to monitor all requests (checkRequests)
+      Start endpoints (startListener)
+    * @param {number} port - Port where we run our express server on.
+  */
+  async startServer(port) {
     await ctrlServer.middleWare(this.app, bodyParser, express);
     await ctrlServer.startServer(this.server, port);
-    await ctrlServer.checkRequests(this.app); // monitor all requests
+    await ctrlServer.checkRequests(this.app);
     await ctrlEndpoints.startListener(this.app);
-  }; // async startServer(server, this.port) {
+  }; // async startServer(port) {
 }; // class Init{

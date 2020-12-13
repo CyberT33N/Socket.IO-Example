@@ -9,6 +9,8 @@ const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8'))
      test_client2 = json_config.test.user[1],
         test_room = json_config.test.room,
 
+          websitePath = json_config.server.website.path,
+
           devPort = json_config.test.port,
 
           devHost = json_config.test.host + ':' + devPort,
@@ -72,7 +74,7 @@ describe('Client Side Services', ()=>{
     await controllerServer.middleWare(devAPP, express);
 
     // set up website..
-    devAPP.use(express.static('./website'));
+    devAPP.use(express.static(websitePath));
 
 
     // log all requests from server
