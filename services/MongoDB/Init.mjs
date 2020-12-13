@@ -9,15 +9,18 @@ import log from 'fancy-log';
 import chalk from 'chalk';
 
 
-let connection;
 /** Init MongoDB connection */
 export class Init {
   /** Get MongoDB details from config.yml and set as global */
   constructor() {
+    if (Init.instance == null) Init.instance = this;
+
     const config = ctrlLib.getConfig();
     this.MongoURL = config.MongoDB.url;
     this.MongoName = config.MongoDB.dbname;
     ({MongoClient: this.MongoClient} = mongodb);
+
+    return Init.instance;
   }; // constructor(){
 
 
@@ -28,8 +31,8 @@ export class Init {
           this.MongoURL, {useNewUrlParser: true, useUnifiedTopology: true},
       );
 
-      connection = {'db': client.db(this.MongoName), 'client': client};
-      return connection;
+      this.connection = {'db': client.db(this.MongoName), 'client': client};
+      return this.connection;
     } // try {
     catch (e) {
       log( `${chalk.red.bold('❌ ERROR')} while try to connect to MongoDB DB
@@ -42,5 +45,5 @@ export class Init {
    * Return connection for cross file usage
    * @return {object}
   */
-  static getConnection() {return connection;};
+  getConnection() {return this.connection;};
 }; // export class Init {

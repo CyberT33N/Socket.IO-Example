@@ -20,7 +20,7 @@ export class Store {
    * @param {object} msg - Chat Message which structure is above.
   */
   async roomMsg(msg) {
-    const connection = Init.getConnection();
+    const connection = new Init().getConnection();
     const collection = connection.db.collection(this.roomCollection);
 
     // check if msg object has NPE

@@ -13,7 +13,7 @@ class Lib {
    * @param {object} query - Search query
   */
   async findOne(collection, query) {
-    const connection = Init.getConnection();
+    const connection = new Init().getConnection();
     return await connection.db.collection(collection).findOne(query);
   }; // async findOne() {
 }; // class Lib {
