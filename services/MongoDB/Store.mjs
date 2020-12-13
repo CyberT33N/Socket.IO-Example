@@ -1,6 +1,6 @@
 /* ################ Services ################ */
 import {Update} from './Update.mjs';
-import {Init} from './Init.mjs';
+import {getConnection} from './Init.mjs';
 
 /* ################ Controller ################ */
 import ctrlLib from '../../controller/lib.mjs';
@@ -11,7 +11,7 @@ export class Store {
   /** Get MongoDB collection name */
   constructor() {
     const config = ctrlLib.getConfig();
-    this.collection = config.MongoDB.collection;
+    this.roomCollection = config.MongoDB.collection.rooms;
   }; // constructor(){
 
   /**
@@ -20,8 +20,8 @@ export class Store {
    * @param {object} msg - Chat Message which structure is above.
   */
   async roomMsg(msg) {
-    const MongoDB = await new Init().connect();
-    const collection = MongoDB.db.collection(this.collection.rooms);
+    const connection = getConnection();
+    const collection = connection.db.collection(this.roomCollection);
 
     // check if msg object has NPE
     if (!msg?.msg || !msg?.room || !msg?.usertoken) return {msg: 'NPE'};

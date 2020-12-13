@@ -9,6 +9,7 @@ import log from 'fancy-log';
 import chalk from 'chalk';
 
 
+let connection;
 /** Init MongoDB connection */
 export class Init {
   /** Get MongoDB details from config.yml and set as global */
@@ -26,7 +27,9 @@ export class Init {
       const client = await this.MongoClient.connect(
           this.MongoURL, {useNewUrlParser: true, useUnifiedTopology: true},
       );
-      return {"db": client.db(this.MongoName), "client": client};
+
+      connection = {'db': client.db(this.MongoName), 'client': client};
+      return connection;
     } // try {
     catch (e) {
       log( `${chalk.red.bold('❌ ERROR')} while try to connect to MongoDB DB
@@ -34,3 +37,5 @@ export class Init {
     } // catch (e) {
   }; // async connect() {
 }; // export class Init {
+
+export const getConnection = () => {return connection;};

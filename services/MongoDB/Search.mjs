@@ -1,16 +1,33 @@
 /* ################ Services ################ */
-import {Init} from './Init.mjs';
+import {getConnection} from './Init.mjs';
+
 
 /* ################ Controller ################ */
 import ctrlLib from '../../controller/lib.mjs';
 
+/** Subclass of Search which contains lib functions */
+class Lib {
+  /**
+   * Find data by using search query and return result.
+   * @param {string} collection - Name of collection
+   * @param {object} query - Search query
+  */
+  async findOne(collection, query) {
+    const connection = getConnection();
+    return await connection.db.collection(collection).findOne(query);
+  }; // async findOne() {
+}; // class Lib {
+
 
 /** Search data */
-export class Search {
-  /** Get MongoDB connection */
+export class Search extends Lib {
+  /** Get MongoDB connection details */
   constructor() {
+    super();
+
     const config = ctrlLib.getConfig();
-    this.collection = config.MongoDB.collection;
+    this.userCollection = config.MongoDB.collection.user;
+    this.roomCollection = config.MongoDB.collection.rooms;
   }; // constructor(){
 
 
@@ -20,14 +37,7 @@ export class Search {
   */
   async getUserDetails(token) {
     if (!token) return false;
-
-    const MongoDB = await new Init().connect();
-    const r = await MongoDB.db.collection(this.collection.user).findOne(
-        {'token': token},
-    );
-
-    MongoDB.client.close();
-    return r;
+    return await this.findOne(this.userCollection, {'token': token});
   }; // async getUserDetails(token) {
 
 
@@ -37,13 +47,6 @@ export class Search {
   */
   async getRoomDetails(roomID) {
     if (!roomID) return false;
-
-    const MongoDB = await new Init().connect();
-    const r = await MongoDB.db.collection(this.collection.rooms).findOne(
-        {'id': roomID?.toString()},
-    );
-
-    MongoDB.client.close();
-    return r;
+    return await this.findOne(this.roomCollection, {'id': roomID?.toString()});
   }; // async getRoomDetails(roomID) {
 }; // export class Search {
