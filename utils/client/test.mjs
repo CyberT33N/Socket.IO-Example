@@ -5,12 +5,13 @@ import log from 'fancy-log';
 import expect from 'expect';
 
 /* ################ Services ################ */
-import {Init, pptr} from './Init.mjs';
+import {Init} from './Init.mjs';
 
 
 describe('Client Side Services', ()=> {
   before(done=>{(async ()=>{
     await new Init().create(done);
+    global.pptr = new Init().getPPTR();
   })().catch(e=>{log('client.test.mjs - BEFORE() - Error: ' + e);});});
 
 

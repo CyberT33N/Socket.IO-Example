@@ -13,8 +13,6 @@ import ctrlServer from '../../controller/server.mjs';
 import ctrlLib from '../../controller/lib.mjs';
 
 
-export let pptr;
-
 /** Lib functions which will be related to setup Client Side Unit Tests. */
 class Lib {
   /** Create Dev Sockets for client and partner and set them gobal */
@@ -23,6 +21,12 @@ class Lib {
     this.socketClient = sockets.client;
     this.socketPartner = sockets.partner;
   }; // async createDevSockets(){
+
+  /**
+   * Return Puppeteer page & client for cross file usage.
+   * @return {object} - Puppeteer page & client
+  */
+  getPPTR() {return this.pptr;};
 }; // class Lib {
 
 
@@ -31,15 +35,16 @@ export class Init extends Lib {
   /** Create globals. */
   constructor() {
     super();
+    if (Init.instance == null) Init.instance = this;
 
     const config = ctrlLib.getConfig();
     const clientToken = config.test.user[0].token;
-    this.test_room = config.test.room;
-
+    this.devRoom = config.test.room;
     this.devPort = config.test.port;
     const devHost = config.test.host + ':' + this.devPort;
+    this.clientSideURL = `${devHost}/test.html?usertoken=${clientToken}`;
 
-    this.clientSide_link = `${devHost}/test.html?usertoken=${clientToken}`;
+    return Init.instance;
   }; // constructor(){
 
 
@@ -52,8 +57,8 @@ export class Init extends Lib {
 
 
     // Start Puppeteer and get page & client
-    pptr = await ctrlBot.startBrowser();
-    if (!pptr) throw new Error('Something went wrong we cant find pptr');
+    this.pptr = await ctrlBot.startBrowser();
+    if (!this.pptr) throw new Error('Something went wrong we cant find pptr');
 
 
     await this.createDevSockets(io);
@@ -61,7 +66,7 @@ export class Init extends Lib {
 
     // Create all puppeteer expose function
     await ctrlExpose.init(
-        pptr,
+        this.pptr,
         this.socketClient,
         this.socketPartner,
         await ctrlServer.startServer(this.devPort), // Create Dev Server
@@ -72,17 +77,17 @@ export class Init extends Lib {
     this.socketClient.on('connectRoom result', async roomDetails=>{
       this.socketClient.off('connectRoom result');
       // open mocha.js client side testing
-      await ctrlBot.openLink(pptr.page, this.clientSide_link);
+      await ctrlBot.openLink(this.pptr.page, this.clientSideURL);
       done();
     }); // devSocket.on('connectRoom result', roomDetails=>{
 
-    this.socketClient.emit('room connect', this.test_room);
+    this.socketClient.emit('room connect', this.devRoom);
   }; // async create(){
 
 
   /** Get HTML of the Client Side Mocha Unit Tests and write to client.html */
   async getMochaHTML() {
-    const HTML = await pptr.page.evaluate(() => {
+    const HTML = await this.pptr.page.evaluate(() => {
       return document.querySelector('#mocha').innerHTML;
     });
 
