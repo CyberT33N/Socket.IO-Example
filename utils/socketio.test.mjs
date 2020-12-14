@@ -32,8 +32,8 @@ describe('Socket.io Services', ()=>{
   before(done=>{(async()=>{
     // get dev sockets
        const sockets = await controllerSocketIO.createDevSockets(io);
-           devSocket = sockets.devSocket;
-    devSocketPartner = sockets.devSocketPartner;
+           devSocket = sockets.client;
+    devSocketPartner = sockets.partner;
 
     done();
   })()}); // before( async ()=>{

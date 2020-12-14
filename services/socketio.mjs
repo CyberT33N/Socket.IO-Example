@@ -86,13 +86,12 @@ export const disconnectUser = socket=>{
 
 
 export const createDevSockets = io=>{ log( '---- createDevSockets() ----' );
-  // client
-  const devSocket = io.connect(`${devHost}/?usertoken=${test_client1.token}`, {
+  const client = io.connect(`${devHost}/?usertoken=${test_client1.token}`, {
     transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
   });
-  // partner
-  const devSocketPartner = io.connect(`${devHost}/?usertoken=${test_client2.token}`, {
+
+  const partner = io.connect(`${devHost}/?usertoken=${test_client2.token}`, {
     transports: ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true
   });
-  return {devSocket: devSocket, devSocketPartner: devSocketPartner};
+  return {client: client, partner: partner};
 }; // const createDevSockets = io=>{
