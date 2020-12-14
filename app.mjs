@@ -12,5 +12,5 @@ const port = process.env.PORT || config.server.port;
 
 
 (async ()=>{
-  if (await ctrlMongoDB.connect()) await ctrlServer.init(port);
+  if (await ctrlMongoDB.connect()) await ctrlServer.startServer(port);
 })().catch(e=>{log('app.mjs - Catch error: ' + e);});

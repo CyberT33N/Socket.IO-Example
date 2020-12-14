@@ -22,26 +22,24 @@ const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8'))
 
 /*################ Express ################*/
 import express from 'express';
-import bodyParser from 'body-parser';
 import rateLimit from 'express-rate-limit';
 import timeout from 'connect-timeout';
 import http from 'http';
-const devAPP = express(),
-devServer = http.createServer(devAPP);
+
 
 /*################ TDD ################*/
 import expect from 'expect';
 import socketIO from 'socket.io';
 import io from 'socket.io-client';
-const devIO = socketIO(devServer);
+
 
 /*################ Controller ################*/
 import controllerSocketIO from '../controller/socketio.mjs';
 import controllerBot from '../controller/bot.mjs';
-import controllerMongoDB from '../controller/mongodb.mjs';
-import controllerEndpoints from '../controller/endpoints.mjs';
+import ctrlMongoDB from '../controller/mongodb.mjs';
+import ctrlEndpoints from '../controller/endpoints.mjs';
 import controllerExpose from '../controller/utils/exposefunctions.mjs';
-import controllerServer from '../controller/server.mjs';
+import ctrlServer from '../controller/server.mjs';
 
 /*################ Logs ################*/
 import log from 'fancy-log';
@@ -68,27 +66,11 @@ describe('Client Side Services', ()=>{
   before(done=>{(async()=>{ log('\n\n---- client.test.mjs - BEFORE ----');
 
     // connect to MongoDB
-    if( !await controllerMongoDB.connect() ) throw new Error('Can not connect to MongoDB');
+    if( !await ctrlMongoDB.connect() ) throw new Error('Can not connect to MongoDB');
 
-    // setup middleware
-    await controllerServer.middleWare(devAPP, express);
-
-    // set up website..
-    devAPP.use(express.static(websitePath));
-
-
-    // log all requests from server
-    //await controllerServer.checkRequests(devAPP);
 
     // start dev server on new port
-    await controllerServer.startServer(devServer, devPort);
-
-    // start endpoint listener
-    await controllerEndpoints.startListener(devAPP);
-
-
-    // start main project
-    controllerSocketIO.rootConnect(devIO);
+    const devIO = await ctrlServer.startServer(devPort);
 
 
     // start browser and get page & client

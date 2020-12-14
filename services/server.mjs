@@ -1,7 +1,6 @@
 /* ################ Controller ################ */
 import ctrlSocketIO from '../controller/socketio.mjs';
 import ctrlEndpoints from '../controller/endpoints.mjs';
-import ctrlServer from '../controller/server.mjs';
 import ctrlLib from '../controller/lib.mjs';
 
 /* ################ Socket.io ################ */
@@ -19,38 +18,50 @@ import path from 'path';
 import log from 'fancy-log';
 
 
-export const middleWare = (app, bodyParser, express)=>{
-  app.use( bodyParser.json() ); // parse application/json
-}; // export const middleWare = (app, bodyParser, express)=>{
+/** lib functions which are related to the init process of the express server */
+class Lib {
+  /** Monitor all server requests */
+  checkRequests() {
+    this.app.use((req, res, next)=>{
+      const basename = path.basename(req?.url);
+      const extname = path.extname(basename);
+      if (extname) log(`The file ${basename} was requested`);// ```
+      else log(`The endpoint ${basename} was requested.`);// ```
+      next();
+    }); // this.app.use((req, res, next)=>{
+  }; // checkRequests(app){
 
 
-export const startServer = (server, port)=>{return new Promise(resolve => {
-  server.listen(port, async ()=>{
-    log('Server was started.. Listening on port: ' + port);
-    resolve(true);
-  }); // server.listen(port, async ()=>{
-});}; // export const startServer = (server, port)=>{
+  /**
+   * Create express server and resolve after finished
+   * @param {number} port - Port where we run our express server on.
+   * @return {Promise<boolean>}
+  */
+  createServer(port) {return new Promise(resolve => {
+    this.server.listen(port, ()=>{resolve();});
+  });}; // createServer() {
 
 
-export const checkRequests = app => {log('---- checkRequests() ----');
-  app.use((req, res, next)=>{
-    const basename = path.basename(req?.url);
-    const extname = path.extname(basename);
-    if (extname) log(`The file ${basename} was requested`);// ```
-    else log(`The endpoint ${basename} was requested.`);// ```
-    next();
-  }); // app.use((req, res, next)=>{
-}; // export const checkRequests = app => {
+  /**
+   * setup middleware for express app
+   * @param {object} app - Express app
+  */
+  static createMiddleware(app) {
+    app.use( bodyParser.json() );
+  }; // createMiddleware(app){
+}; // class Lib {
 
 
 /** Init processes which are server related */
-export class Init {
+export class Init extends Lib {
   /**
     * Get website path from config.yml (getConfig).
       Create express server and import website.
       Connect Socket.io and init sockets.
+      Create Listener to monitor all requests (checkRequests).
   */
   constructor() {
+    super();
     ctrlLib.ads(); // advertisement console.log of author
 
     const config = ctrlLib.getConfig();
@@ -60,22 +71,28 @@ export class Init {
     this.server = http.createServer(this.app);
     this.app.use(express.static(websitePath));
 
-    const io = socketIO(this.server);
-    ctrlSocketIO.rootConnect(io); // init sockets
+    this.io = socketIO(this.server);
+    ctrlSocketIO.rootConnect(this.io);
+
+    this.checkRequests();
   }; // constructor(){
 
 
   /**
-    * Install Middleware to our express app (middleWare)
-      Start server (startServer)
-      create Listener to monitor all requests (checkRequests)
-      Start endpoints (startListener)
+    * Install Middleware to our express app (middleWare).
+      Start server (startServer).
+      create Listener to monitor all requests (checkRequests).
+      Start endpoints (startListener).
+      Return Socket.io connection (this.io).
     * @param {number} port - Port where we run our express server on.
+    * @param {object} server - HTTP Server
   */
   async startServer(port) {
-    await ctrlServer.middleWare(this.app, bodyParser, express);
-    await ctrlServer.startServer(this.server, port);
-    await ctrlServer.checkRequests(this.app);
+    Init.createMiddleware(this.app);
+    await this.createServer(port);
+
     await ctrlEndpoints.startListener(this.app);
+
+    return this.io;
   }; // async startServer(port) {
 }; // class Init{
