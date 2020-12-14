@@ -1,12 +1,12 @@
 import {GetData} from '../../services/utils/exposefunctions/GetData.mjs';
 import {DOM} from '../../services/utils/exposefunctions/DOM.mjs';
 import {Listener} from '../../services/utils/exposefunctions/Listener.mjs';
-import * as lib from '../../services/utils/exposefunctions/lib.mjs';
+import {Init} from '../../services/utils/exposefunctions/Lib.mjs';
 
 export default {
-  // ---- Service lib ----
-  init: async (pptr, devSocket, devSocketPartner, devIO)=>{
-    return await lib.init(pptr, devSocket, devSocketPartner, devIO);
+  // ---- Service lib - Create all expose functions ----
+  init: async (pptr, socket, socketPartner, io)=>{
+    return await new Init(pptr, socket, socketPartner, io).create();
   },
 
 

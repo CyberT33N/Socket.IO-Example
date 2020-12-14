@@ -59,7 +59,7 @@ describe('Client Side Services', ()=> {
     const devSocketPartner = sockets.devSocketPartner;
 
     // load expose functions
-    ctrlExpose.init(pptr, devSocket, devSocketPartner, devIO);
+    await ctrlExpose.init(pptr, devSocket, devSocketPartner, devIO);
 
 
     // dont delete its for unit test: Check for AMPM at CSS Selector .time with Partner Toke
