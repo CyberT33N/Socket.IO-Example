@@ -6,12 +6,12 @@ import expect from 'expect';
 import io from 'socket.io-client';
 
 /* ################ Controller ################ */
-import ctrlSocketIO from '../controller/socketio.mjs';
-import ctrlBot from '../controller/bot.mjs';
-import ctrlMongoDB from '../controller/mongodb.mjs';
-import ctrlExpose from '../controller/utils/exposefunctions.mjs';
-import ctrlServer from '../controller/server.mjs';
-import ctrlLib from '../controller/lib.mjs';
+import ctrlSocketIO from '../../controller/socketio.mjs';
+import ctrlBot from '../../controller/bot.mjs';
+import ctrlMongoDB from '../../controller/mongodb.mjs';
+import ctrlExpose from '../../controller/utils/exposefunctions.mjs';
+import ctrlServer from '../../controller/server.mjs';
+import ctrlLib from '../../controller/lib.mjs';
 
 /* ################ Logs ################ */
 import log from 'fancy-log';
