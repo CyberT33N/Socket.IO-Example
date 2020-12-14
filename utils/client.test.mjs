@@ -1,7 +1,7 @@
-/*################ config.json ################*/
+/* ################ config.json ################ */
 import fs from 'fs';
-import {default as fsWithCallbacks} from 'fs'
-const fsAsync = fsWithCallbacks.promises
+import {default as fsWithCallbacks} from 'fs';
+const fsAsync = fsWithCallbacks.promises;
 
 import yaml from 'js-yaml';
 const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8')),
@@ -20,53 +20,28 @@ const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8'))
   clientSide_link = devHost + '/test.html?usertoken=' + test_client1.token;
 
 
-/*################ Express ################*/
-import express from 'express';
-import rateLimit from 'express-rate-limit';
-import timeout from 'connect-timeout';
-import http from 'http';
-
-
-/*################ TDD ################*/
+/* ################ TDD ################ */
 import expect from 'expect';
-import socketIO from 'socket.io';
 import io from 'socket.io-client';
 
 
-/*################ Controller ################*/
-import controllerSocketIO from '../controller/socketio.mjs';
+/* ################ Controller ################ */
+import ctrlSocketIO from '../controller/socketio.mjs';
 import controllerBot from '../controller/bot.mjs';
 import ctrlMongoDB from '../controller/mongodb.mjs';
-import ctrlEndpoints from '../controller/endpoints.mjs';
-import controllerExpose from '../controller/utils/exposefunctions.mjs';
+import ctrlExpose from '../controller/utils/exposefunctions.mjs';
 import ctrlServer from '../controller/server.mjs';
 
-/*################ Logs ################*/
+/* ################ Logs ################ */
 import log from 'fancy-log';
-import chalkAnimation from 'chalk-animation';
-import gradient from 'gradient-string';
-import chalk from 'chalk';
-
-var pptr;
 
 
+let pptr;
 
 
-
-
-
-
-
-
-
-
-
-describe('Client Side Services', ()=>{
-
-  before(done=>{(async()=>{ log('\n\n---- client.test.mjs - BEFORE ----');
-
-    // connect to MongoDB
-    if( !await ctrlMongoDB.connect() ) throw new Error('Can not connect to MongoDB');
+describe('Client Side Services', ()=> {
+  before(done=>{(async ()=>{
+    if ( !await ctrlMongoDB.connect() ) throw new Error('Error connect to DB');
 
 
     // start dev server on new port
@@ -79,12 +54,12 @@ describe('Client Side Services', ()=>{
 
 
     // get dev sockets
-    const sockets = await controllerSocketIO.createDevSockets(io);
+    const sockets = await ctrlSocketIO.createDevSockets(io);
     const devSocket = sockets.devSocket;
     const devSocketPartner = sockets.devSocketPartner;
 
     // load expose functions
-    await exposeFunctions(devSocket, devSocketPartner, devIO);
+    ctrlExpose.init(pptr, devSocket, devSocketPartner, devIO);
 
 
     // dont delete its for unit test: Check for AMPM at CSS Selector .time with Partner Toke
@@ -142,34 +117,3 @@ const getMochaHTML = async()=>{ log( '---- getMochaHTML() ----' );
     })}</div></body>
   </html>`);
 }; // const getMochaHTML = async()=>{
-
-
-
-const exposeFunctions = async(devSocket, devSocketPartner, devIO)=>{ log( '\n\n---- exposeFunctions() ----' );
-
-  // get config.json file
-  await controllerExpose.config(pptr.page);
-
-
-  /* ---- exposeFunctionsWeb() ---- */
-  // Verify that partner recieve message
-  await controllerExpose.checkPartnerMessage(pptr);
-  // Simulate no user token paramater inside of URL found
-  await controllerExpose.checkURLParameter(pptr);
-
-
-  /* ---- exposeFunctionsReq ---- */
-  await controllerExpose.details(pptr.page);
-
-
-  /* ---- exposeFunctionsSocket ---- */
-  // Check listener "chat message" for recieve object
-  await controllerExpose.listenerChatMessage(pptr, devIO);
-  // Check listener "room connect" for getting the Room ID
-  await controllerExpose.listenerRoomConnect(pptr, devIO);
-  // Simulate incoming message from Chat Partner
-  await controllerExpose.incomeMsg(pptr, devIO);
-  // Check for AMPM at CSS Selector .time with Partner Token
-  await controllerExpose.checkTimeCSS(pptr, devSocket, devSocketPartner);
-
-}; // const exposeFunctions = async()=>{

@@ -1,8 +1,15 @@
 import {GetData} from '../../services/utils/exposefunctions/GetData.mjs';
 import {DOM} from '../../services/utils/exposefunctions/DOM.mjs';
 import {Listener} from '../../services/utils/exposefunctions/Listener.mjs';
+import * as lib from '../../services/utils/exposefunctions/lib.mjs';
 
 export default {
+  // ---- Service lib ----
+  init: async (pptr, devSocket, devSocketPartner, devIO)=>{
+    return await lib.init(pptr, devSocket, devSocketPartner, devIO);
+  },
+
+
   // ---- Service GetData ----
   config: async page=>{return await new GetData(page).config();},
   details: async page=>{return await new GetData(page).details();},
