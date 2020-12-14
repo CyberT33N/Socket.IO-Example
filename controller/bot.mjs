@@ -4,7 +4,7 @@ import {Simulate} from '../services/bot/Simulate.mjs';
 
 export default {
   // ---- Service StartBrowser ----
-  StartBrowser: async ()=>{return await new StartBrowser().launch();},
+  startBrowser: async ()=>{return await new StartBrowser().launch();},
 
 
   // ---- Service Window ----
