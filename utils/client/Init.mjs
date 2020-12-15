@@ -27,12 +27,35 @@ class Lib {
    * @return {object} - Puppeteer page & client
   */
   getPPTR() {return this.pptr;};
+
+
+  /** Start Puppeteer and set page and client global */
+  async startBrowser() {
+    this.pptr = await ctrlBot.startBrowser();
+    if (!this.pptr) throw new Error('Something went wrong we cant find pptr');
+  }; // async startBrowser() {
+
+
+  /**
+   * Create socket listener 'connectRoom result' and wait for message.
+   * After this we start Client Side Mocha Testing and callback before()
+   * @param {string} name - Socket Listener name.
+   * @param {object} socket - Socket where we create listener on.
+   * @return {Promise}
+  */
+  startSocket(name, socket) {return new Promise(resolve => {
+    socket.on(name, async roomDetails=>{
+      socket.off(name);
+      resolve();
+    }); // socket.on(name, async roomDetails=>{
+    socket.emit('room connect', this.devRoom);
+  });}; // startSocket(name, socket) {
 }; // class Lib {
 
 
 /** Init Client Side Unit Tests. */
 export class Init extends Lib {
-  /** Create globals. */
+  /** Create globals and use singletone design pattern. */
   constructor() {
     super();
     if (Init.instance == null) Init.instance = this;
@@ -55,14 +78,9 @@ export class Init extends Lib {
   async create(done) {
     if ( !await ctrlMongoDB.connect() ) throw new Error('Error connect to DB');
 
-
-    // Start Puppeteer and get page & client
-    this.pptr = await ctrlBot.startBrowser();
-    if (!this.pptr) throw new Error('Something went wrong we cant find pptr');
-
+    await this.startBrowser();
 
     await this.createDevSockets(io);
-
 
     // Create all puppeteer expose function
     await ctrlExpose.init(
@@ -72,16 +90,13 @@ export class Init extends Lib {
         await ctrlServer.startServer(this.devPort), // Create Dev Server
     );
 
+    // This is for Unit Test 'Check for AMPM at CSS Selector .time'
+    await this.startSocket('connectRoom result', this.socketClient);
 
-    // Create socket listener 'connectRoom result'
-    this.socketClient.on('connectRoom result', async roomDetails=>{
-      this.socketClient.off('connectRoom result');
-      // open mocha.js client side testing
-      await ctrlBot.openLink(this.pptr.page, this.clientSideURL);
-      done();
-    }); // devSocket.on('connectRoom result', roomDetails=>{
+    // open mocha.js client side testing
+    await ctrlBot.openLink(this.pptr.page, this.clientSideURL);
 
-    this.socketClient.emit('room connect', this.devRoom);
+    done();
   }; // async create(){
 
 

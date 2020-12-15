@@ -12,7 +12,7 @@ describe('Client Side Services', ()=> {
   before(done=>{(async ()=>{
     await new Init().create(done);
     global.pptr = new Init().getPPTR();
-  })().catch(e=>{log('client.test.mjs - BEFORE() - Error: ' + e);});});
+  })().catch(e=>{log('Client Service test.mjs - BEFORE() - Error: ' + e);});});
 
 
   it('Client Side test success - .finish-test should exist', async ()=>{
