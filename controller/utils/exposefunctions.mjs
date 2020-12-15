@@ -1,7 +1,7 @@
 import {GetData} from '../../services/utils/exposefunctions/GetData.mjs';
 import {DOM} from '../../services/utils/exposefunctions/DOM.mjs';
 import {Listener} from '../../services/utils/exposefunctions/Listener.mjs';
-import {Init} from '../../services/utils/exposefunctions/Lib.mjs';
+import {Init} from '../../services/utils/exposefunctions/Init.mjs';
 
 export default {
   // ---- Service lib - Create all expose functions ----
