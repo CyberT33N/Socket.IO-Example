@@ -11,6 +11,7 @@ import ctrlMongoDB from '../../controller/mongodb.mjs';
 import ctrlExpose from '../../controller/utils/exposefunctions.mjs';
 import ctrlServer from '../../controller/server.mjs';
 import ctrlLib from '../../controller/lib.mjs';
+import ctrlUtilsSocket from '../../controller/utils/socket.mjs';
 
 
 /** Lib functions which will be related to setup Client Side Unit Tests. */
@@ -34,22 +35,6 @@ class Lib {
     this.pptr = await ctrlBot.startBrowser();
     if (!this.pptr) throw new Error('Something went wrong we cant find pptr');
   }; // async startBrowser() {
-
-
-  /**
-   * Create socket listener 'connectRoom result' and wait for message.
-   * After this we start Client Side Mocha Testing and callback before()
-   * @param {string} name - Socket Listener name.
-   * @param {object} socket - Socket where we create listener on.
-   * @return {Promise}
-  */
-  startSocket(name, socket) {return new Promise(resolve => {
-    socket.on(name, async roomDetails=>{
-      socket.off(name);
-      resolve();
-    }); // socket.on(name, async roomDetails=>{
-    socket.emit('room connect', this.devRoom);
-  });}; // startSocket(name, socket) {
 }; // class Lib {
 
 
@@ -82,6 +67,7 @@ export class Init extends Lib {
 
     await this.createDevSockets(io);
 
+
     // Create all puppeteer expose function
     await ctrlExpose.init(
         this.pptr,
@@ -90,8 +76,15 @@ export class Init extends Lib {
         await ctrlServer.startServer(this.devPort), // Create Dev Server
     );
 
+
     // This is for Unit Test 'Check for AMPM at CSS Selector .time'
-    await this.startSocket('connectRoom result', this.socketClient);
+    await ctrlUtilsSocket.testSocket(
+        'connectRoom result', // Socket Listener Name
+        this.socketClient, // Socket
+        'room connect', // Emit Listener name
+        this.devRoom, // Emit msg
+    );
+
 
     // open mocha.js client side testing
     await ctrlBot.openLink(this.pptr.page, this.clientSideURL);
