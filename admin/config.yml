@@ -4,6 +4,7 @@ server:
   website:
     path: ./website
 
+
 MongoDB:
   dbname: socketio-example
   collection:
@@ -14,6 +15,7 @@ MongoDB:
   port: ~
   username: ~
   password: ~
+
 
 test:
   port: 1338

@@ -14,6 +14,7 @@ import ctrlLib from '../../controller/lib.mjs';
 import {Window} from './Window.mjs';
 import {Simulate} from './Simulate.mjs';
 
+
 /** Get launch data like args and exts */
 class Config {
   /** Create puppeteer launch arguments */
