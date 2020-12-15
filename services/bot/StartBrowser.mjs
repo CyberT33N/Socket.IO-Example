@@ -74,14 +74,14 @@ export class StartBrowser extends Config {
     super();
 
     const config = ctrlLib.getConfig();
-    this.profileName = config.bot.profile;
-    this.headless = config.bot.headless;
-    this.windowWidth = config.bot.windowWidth;
-    this.windowHeight = config.bot.windowHeight;
+    this.profileName = config.test.bot.profile;
+    this.headless = config.test.bot.headless;
+    this.windowWidth = config.test.bot.windowWidth;
+    this.windowHeight = config.test.bot.windowHeight;
 
     this.getPath(os.platform());
     this.createArgs();
-    this.createExtensions(config.bot.exts);
+    this.createExtensions(config.test.bot.exts);
   }; // constructor(){
 
   /** launch puppeteer with custom config */

@@ -27,11 +27,10 @@ test:
       name: mocha
     - token: mocha2
       name: mocha2
-
-bot:
-  headless: true
-  profile: TDD
-  windowWidth: 1920
-  windowHeight: 1080
-  exts: ~
+  bot:
+    headless: true
+    profile: TDD
+    windowWidth: 1920
+    windowHeight: 1080
+    exts: ~
 ...
