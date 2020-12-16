@@ -25,6 +25,9 @@ export class DOM extends Lib {
   */
   constructor(pptr) {
     super();
+    if (!pptr?.client || !pptr?.page) {
+      throw new Error(`PPTR page/client was missing at Class DOM constructor`);
+    } // if (!pptr?.client || !pptr?.page) {
 
     this.client = pptr.client;
     this.page = pptr.page;
@@ -32,7 +35,8 @@ export class DOM extends Lib {
     const config = ctrlLib.getConfig();
     this.hostFull = config.test.hostFull;
     this.linkPartner = config.test.linkPartner;
-  };
+  }; // constructor(pptr) {
+
 
   /** create new tab and then check for empty url usertoken */
   async urlParameter() {
@@ -46,6 +50,7 @@ export class DOM extends Lib {
       ); // this.evalScript(
     }); // await pptr.page.exposeFunction('checkURLParameter', async script=>{
   }; // async urlParameter(pptr) {
+
 
   /** Check if message was recieved at partner */
   async partnerMessage() {
