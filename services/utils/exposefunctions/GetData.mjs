@@ -9,21 +9,25 @@ export class GetData {
    * @param {string} page - PPTR Page
   */
   constructor(page) {
+    if (!page) throw new Error(`Page was missing at Class GetData constructor`);
     this.page = page;
-  };
+
+    const config = ctrlLib.getConfig();
+    this.room = config.test.room;
+    this.token = config.test.user[0].token;
+  }; // constructor(page) {
+
 
   /** Read config.yml file and then return testRoomDetails & testUserDetails */
   async details() {
     await this.page.exposeFunction('details', async ()=>{
-      const config = ctrlLib.getConfig();
-      const room = config.test.room;
-      const token = config.test.user[0].token;
       return {
-        testRoomDetails: await ctrlMongoDB.getRoomDetails(room),
-        testUserDetails: await ctrlMongoDB.getUserDetails(token),
-      };
+        testRoomDetails: await ctrlMongoDB.getRoomDetails(this.room),
+        testUserDetails: await ctrlMongoDB.getUserDetails(this.token),
+      }; // return {
     }); // await pptr.this.page.exposeFunction('details', async()=>{
   }; // async details(){
+
 
   /** Expose config.yml to PPTR */
   async config() {
