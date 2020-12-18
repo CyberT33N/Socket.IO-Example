@@ -97,8 +97,8 @@ export class StartBrowser extends Config {
 
       const page = await new Window().newTab(this.client);
 
-      await new Simulate().setViewport(
-          page, this.windowWidth, this.windowHeight,
+      await new Simulate(page).setViewport(
+          this.windowWidth, this.windowHeight,
       ); // await new Simulate().setViewport(
 
       return {'client': this.client, 'page': page};

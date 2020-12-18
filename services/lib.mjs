@@ -12,7 +12,9 @@ export const getConfig = ()=>{
 
 
 export const timeoutAsync = async amount=>{
-  await new Promise(resolve=>setTimeout(resolve, amount));
+  if (typeof amount === 'number') {
+    await new Promise(resolve=>setTimeout(resolve, amount));
+  } // if (typeof amount === 'number') {
 }; // export const timeoutAsync = async amount=>{
 
 

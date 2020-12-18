@@ -16,7 +16,7 @@ export class Window {
   async openLinkNewTab(client, link, delay) {
     const page = await this.newTab(client);
     await this.openLink(page, link);
-    if (delay) await ctrlLib.timeoutAsync(delay);
+    await ctrlLib.timeoutAsync(delay);
     return page;
   }; // async openLinkNewTab(client, link, delay) {
 

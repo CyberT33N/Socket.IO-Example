@@ -19,9 +19,12 @@ export default {
 
   // ---- Service Simulate ----
   click: async (css, page, delay)=>{
-    return await new Simulate().click(css, page, delay);
+    return await new Simulate(page).click(css, delay);
   },
   typeText: async (page, css, msg, delay)=>{
-    return await new Simulate().typeText(page, css, msg, delay);
+    return await new Simulate(page).typeText(css, msg, delay);
+  },
+  setViewport: async (page, windowWidth, windowHeight)=>{
+    return await new Simulate(page).setViewport(windowWidth, windowHeight);
   },
 }; // export default {

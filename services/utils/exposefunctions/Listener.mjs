@@ -75,7 +75,7 @@ class ListenerEvents {
       const newTab = await ctrlBot.newTab(this.client);
 
       // emit sample message to trigger websocket
-      this.emitMsg(
+      await this.emitMsg(
           await this.createDevSocket(newTab),
           'msg',
           'new sample message',
@@ -148,7 +148,7 @@ export class Listener extends ListenerEvents {
    * @param {number} delay - Delay before we do action
   */
   async emitMsg(socket, name, msg, delay) {
-    if (delay) await ctrlLib.timeoutAsync(delay);
+    await ctrlLib.timeoutAsync(delay);
     socket.emit(name, msg);
   }; // async emitMsg(socket, name, msg, delay) {
 }; // class Listener {
