@@ -11,10 +11,6 @@ MongoDB:
     rooms: rooms
     user: user
   url: mongodb://localhost:27017
-  host: ~
-  port: ~
-  username: ~
-  password: ~
 
 
 test:

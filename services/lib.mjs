@@ -6,9 +6,28 @@ import yaml from 'js-yaml';
 import gradient from 'gradient-string';
 import chalk from 'chalk';
 
-export const getConfig = ()=>{
-  return yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8'));
-}; // export const getConfig = ()=>{
+
+/** get config.yml data*/
+export class GetConfig {
+  /** read config.yml, check for NPE and then return*/
+  constructor() {
+    const config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8'));
+    this.checkNPE(config);
+    return config;
+  }; // constructor() {
+
+
+  /**
+   * Iterate through nested config object and check for empty string.
+   * @param {object} obj - nested object
+   */
+  checkNPE(obj) {
+    for (const name in obj) {
+      if (typeof obj[name] === 'object') this.checkNPE(obj[name]);
+      else if (obj[name]?.length < 1) throw new Error('Missing value @config');
+    } // for(const name in obj){
+  }; // checkNPE(obj) {
+}; // export class GetConfig {
 
 
 export const timeoutAsync = async amount=>{

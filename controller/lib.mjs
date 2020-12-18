@@ -1,7 +1,7 @@
 import * as lib from '../services/lib.mjs';
 
 export default {
-  getConfig: ()=>{return lib.getConfig();},
+  getConfig: ()=>{return new lib.GetConfig();},
 
   ads: ()=>{lib.ads();},
 
