@@ -50,6 +50,7 @@ class Config {
    * @param {string} platform - Name of Operating System
   */
   getPath(platform) {
+    if (!platform) throw new Error('platform param missing at getPath()');
     if (platform == 'darwin') {
       this.profilePath = './lib/browserProfiles';
       this.extsPath = './lib/exts';
@@ -64,6 +65,7 @@ class Config {
     }
   }; // getPath(){
 }; // class Config {
+
 
 /** Start Puppeteer */
 export class StartBrowser extends Config {
