@@ -1,6 +1,7 @@
 /* ################ Controller ################ */
 import ctrlMongoDB from '../../controller/mongodb.mjs';
 
+
 /** functions that will get executed when endpoint was called. */
 class Lib {
   /**
@@ -9,6 +10,8 @@ class Lib {
    * @param {object} res - Response from endpoint getUserDetails.
   */
   async getRoomDetails(req, res) {
+    if (!req || !res) throw new Error('Param missing at getRoomDetails()');
+
     const bodyID = req?.body?.id;
     const queryID = req?.query?.id;
 
@@ -32,6 +35,7 @@ export class Room extends Lib {
    * @param {object} app - Express app
   */
   constructor(app) {
+    if (!app) throw new Error('app param missing at Class Room');
     super();
     this.app = app;
   }; // constructor(){
@@ -42,5 +46,5 @@ export class Room extends Lib {
     this.app.post('/api/getRoomDetails', async (req, res)=>{
       await this.getRoomDetails(req, res);
     });
-  }; // getRoomDetailsPOST(app){
+  }; // getRoomDetailsPOST() {
 }; // export class Room extends Lib{
