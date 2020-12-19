@@ -9,10 +9,7 @@ import puppeteer from 'puppeteer';
 
 /* ################ Controller ################ */
 import ctrlLib from '../../controller/lib.mjs';
-
-/* ################ Services ################ */
-import {Window} from './Window.mjs';
-import {Simulate} from './Simulate.mjs';
+import ctrlBot from '../../controller/bot.mjs';
 
 
 /** Get launch data like args and exts */
@@ -95,11 +92,11 @@ export class StartBrowser extends Config {
         args: this.args,
       }); // this.client = await puppeteer.launch({
 
-      const page = await new Window().newTab(this.client);
+      const page = await ctrlBot.newTab(this.client);
 
-      await new Simulate(page).setViewport(
-          this.windowWidth, this.windowHeight,
-      ); // await new Simulate().setViewport(
+      await ctrlBot.setViewport(
+          page, this.windowWidth, this.windowHeight,
+      ); // await ctrlBot.setViewport(
 
       return {'client': this.client, 'page': page};
     } // try {
