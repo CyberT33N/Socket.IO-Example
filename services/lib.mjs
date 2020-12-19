@@ -19,12 +19,16 @@ export class GetConfig {
 
   /**
    * Iterate through nested config object and check for empty string.
+     exts key can be empty cause it is optional and will be skipped.
    * @param {object} obj - nested object
    */
   checkNPE(obj) {
     for (const name in obj) {
-      if (typeof obj[name] === 'object') this.checkNPE(obj[name]);
-      else if (obj[name]?.length < 1) throw new Error('Missing value @config');
+      if (typeof obj[name] === 'object' && obj[name] !== null) {
+        this.checkNPE(obj[name]);
+      } else if (obj[name] === null && name !== 'exts') {
+        throw new Error('Missing value at config.yml');
+      } // if (obj[name] === null && name !== 'exts') {
     } // for(const name in obj){
   }; // checkNPE(obj) {
 }; // export class GetConfig {
