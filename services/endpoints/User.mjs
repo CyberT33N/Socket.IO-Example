@@ -1,6 +1,7 @@
 /* ################ Controller ################ */
 import ctrlMongoDB from '../../controller/mongodb.mjs';
 
+
 /** functions that will get executed when endpoint was called. */
 class Lib {
   /**
@@ -9,6 +10,8 @@ class Lib {
    * @param {object} res - Response from endpoint getUserDetails.
   */
   async getUserDetails(req, res) {
+    if (!req || !res) throw new Error('Param missing at getUserDetails()');
+
     const bodyUserToken = req?.body?.usertoken;
     const queryUserToken = req?.query?.usertoken;
 
@@ -32,6 +35,7 @@ export class User extends Lib {
    * @param {object} app - Express app
   */
   constructor(app) {
+    if (!app) throw new Error('app param missing at Class User');
     super();
     this.app = app;
   };
