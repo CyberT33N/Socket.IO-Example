@@ -20,9 +20,9 @@ export class Store {
    * @param {object} msg - Chat Message which structure is above.
   */
   async roomMsg(msg) {
-    const collection = this.connection.db.collection(this.roomCollection);
-
     if (!msg?.msg || !msg?.room || !msg?.usertoken) return {code: 'NPE'};
+
+    const collection = this.connection.db.collection(this.roomCollection);
 
     // check if room can be found in collection
     const match = await collection.findOne({'id': msg.room});
