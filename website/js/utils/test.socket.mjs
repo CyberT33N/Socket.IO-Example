@@ -10,7 +10,7 @@ AMPM, dateFull;
 
 
 
-describe('socket.js', ()=>{
+describe('socket.mjs', ()=>{
 
   before(done=>{(async()=>{
     const configJSON = await config();

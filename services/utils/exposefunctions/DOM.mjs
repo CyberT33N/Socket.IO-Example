@@ -2,6 +2,7 @@
 import ctrlBot from '../../../controller/bot.mjs';
 import ctrlLib from '../../../controller/lib.mjs';
 
+
 /** Lib functions for class DOM */
 class Lib {
   /**
@@ -24,10 +25,11 @@ export class DOM extends Lib {
    * @param {object} pptr - PPTR client & Page
   */
   constructor(pptr) {
-    super();
     if (!pptr?.client || !pptr?.page) {
       throw new Error(`PPTR page/client was missing at Class DOM constructor`);
     } // if (!pptr?.client || !pptr?.page) {
+
+    super();
 
     this.client = pptr.client;
     this.page = pptr.page;
@@ -41,6 +43,8 @@ export class DOM extends Lib {
   /** create new tab and then check for empty url usertoken */
   async urlParameter() {
     await this.page.exposeFunction('checkURLParameter', async script=>{
+      if (!script) throw new Error('Param script is missing urlParameter()');
+
       return this.evalScript(
           script,
           await ctrlBot.openLinkNewTab(
@@ -49,12 +53,14 @@ export class DOM extends Lib {
           ), // await ctrlBot.openLinkNewTab(
       ); // this.evalScript(
     }); // await pptr.page.exposeFunction('checkURLParameter', async script=>{
-  }; // async urlParameter(pptr) {
+  }; // async urlParameter() {
 
 
   /** Check if message was recieved at partner */
   async partnerMessage() {
-    await this.page.exposeFunction('checkPartnerMessage', async link=>{
+    await this.page.exposeFunction('checkPartnerMessage', async ()=>{
+
+
       const newTab = await ctrlBot.openLinkNewTab(
           this.client,
           this.linkPartner,

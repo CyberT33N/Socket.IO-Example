@@ -6,6 +6,7 @@ import ctrlMongoDB from '../../../controller/mongodb.mjs';
 /** Get Server Side data and expose to DOM */
 export class GetData {
   /**
+   * Read config.yml file and set globals
    * @param {string} page - PPTR Page
   */
   constructor(page) {
@@ -18,7 +19,7 @@ export class GetData {
   }; // constructor(page) {
 
 
-  /** Read config.yml file and then return testRoomDetails & testUserDetails */
+  /** return test room details & test user details */
   async details() {
     await this.page.exposeFunction('details', async ()=>{
       return {

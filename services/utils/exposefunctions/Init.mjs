@@ -1,9 +1,10 @@
 /* ################ Controller ################ */
 import ctrlExpose from '../../../controller/utils/exposefunctions.mjs';
 
+
 /** Expose Functions */
 class Funtions {
-  /** expose config.yml */
+  /** expose config.yml to PPTR*/
   async config() {
     return await ctrlExpose.config(this.pptr.page);
   }; // async config() {

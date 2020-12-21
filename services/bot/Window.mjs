@@ -48,7 +48,10 @@ export class Window {
   */
   async newTab(client) {
     if (!client) throw new Error('client param missing at newTab()');
+
     const newTab = await client.newPage();
+    if (!newTab) throw new Error('Can not create new tab at newTab()');
+
     await newTab.bringToFront();
     return newTab;
   }; // async newTab(client) {
