@@ -1,9 +1,6 @@
-/* ################ Services ################ */
-import {Update} from './Update.mjs';
-import {Init} from './Init.mjs';
-
 /* ################ Controller ################ */
 import ctrlLib from '../../controller/lib.mjs';
+import ctrlMongoDB from '../../controller/mongodb.mjs';
 
 
 /** Store data */
@@ -13,7 +10,7 @@ export class Store {
     const config = ctrlLib.getConfig();
     this.roomCollection = config.MongoDB.collection.rooms;
 
-    this.connection = new Init().getConnection();
+    this.connection = ctrlMongoDB.getConnection();
   }; // constructor(){
 
 
@@ -41,7 +38,7 @@ export class Store {
     });
 
     // update our room field with the new message
-    return await new Update().updateOne(
+    return await ctrlMongoDB.updateOne(
         collection,
         {id: msg.room},
         {$set: {msg: match.msg}},

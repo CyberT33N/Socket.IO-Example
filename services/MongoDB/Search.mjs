@@ -1,8 +1,6 @@
-/* ################ Services ################ */
-import {Init} from './Init.mjs';
-
 /* ################ Controller ################ */
 import ctrlLib from '../../controller/lib.mjs';
+import ctrlMongoDB from '../../controller/mongodb.mjs';
 
 
 /** Subclass of Search which contains lib functions */
@@ -28,7 +26,7 @@ export class Search extends Lib {
     this.userCollection = config.MongoDB.collection.user;
     this.roomCollection = config.MongoDB.collection.rooms;
 
-    this.connection = new Init().getConnection();
+    this.connection = ctrlMongoDB.getConnection();
   }; // constructor(){
 
 

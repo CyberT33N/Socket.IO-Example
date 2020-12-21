@@ -35,7 +35,6 @@ export class Init {
       const client = await this.MongoClient.connect(
           this.MongoURL, {useNewUrlParser: true, useUnifiedTopology: true},
       );
-
       this.connection = {'db': client.db(this.MongoName), 'client': client};
       return this.connection;
     } // try {
