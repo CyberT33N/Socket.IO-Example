@@ -25,9 +25,11 @@ class ListenerEvents {
         await ctrlBot.click('.write-link.send', newTab, 1000),
       ]);
 
+      if (!msg) throw new Error('msg not found at chatMessage()');
       return msg;
     }); // this.page.exposeFunction('listenerChatMessage', async ()=>{
   }; // async chatMessage()
+
 
   /** Create Listener 'room connect' */
   async roomConnect() {
@@ -42,9 +44,11 @@ class ListenerEvents {
         ctrlBot.click('.person', newTab, 1000),
       ]);
 
+      if (!roomID) throw new Error('roomID not found at chatMessage()');
       return roomID;
     }); // this.page.exposeFunction('listenerRoomConnect', async ()=>{
   }; // async roomConnect() {
+
 
   /**
    * Create Listener 'room connect'
@@ -52,6 +56,8 @@ class ListenerEvents {
    * @param {object} socketPartner - Socket Partner
   */
   async checkTimeCSS(socket, socketPartner) {
+    if (!socket || !socketPartner) throw new Error('Param miss checkTimeCSS');
+
     await this.page.exposeFunction('checkTimeCSS', async ()=>{
       const msg = {
         msg: 'sample message22..',
@@ -60,14 +66,16 @@ class ListenerEvents {
         date: '12/34/5678, 12:34 pm',
       };
 
-      const [d] = await Promise.all([
+      const [data] = await Promise.all([
         this.createSocketListener('msg', socket),
         this.emitMsg(socketPartner, 'chat message', msg, 1000),
       ]);
 
-      return d;
+      if (!data) throw new Error('data not found at checkTimeCSS()');
+      return data;
     }); // await this.page.exposeFunction('checkTimeCSS', async ()=>{
   }; // async checkTimeCSS(socket, socketPartner) {
+
 
   /** Emit Message to listener 'msg' */
   async incomeMsg() {
@@ -102,6 +110,7 @@ export class Listener extends ListenerEvents {
    * @param {object} devIO - Socket.io
   */
   constructor(pptr, devIO) {
+    if (!pptr) throw new Error('PPTR Param not found at Class Listener');
     super();
 
     this.client = pptr.client;
@@ -120,10 +129,15 @@ export class Listener extends ListenerEvents {
    * @param {object} page - new PPTR page
   */
   async createDevSocket(page) {
+    if (!page) throw new Error('Page param missing at createDevSocket()');
+
     const [devSocket] = await Promise.all([
       ctrlSocketIO.rootConnect(this.devIO),
       ctrlBot.openLink(page, this.linkClient),
-    ]); return devSocket;
+    ]);
+
+    if (!devSocket) throw new Errror('miss devSocket at createDevSocket()');
+    return devSocket;
   }; // sync createDevSocket(page) {
 
 
@@ -134,6 +148,7 @@ export class Listener extends ListenerEvents {
    * @param {object} socket - Socket where we create Listener at
   */
   createSocketListener(name, socket) {
+    if (!name || !socket) throw new Error('Param miss createSocketListener()');
     return new Promise(resolve=>{
       socket.on(name, data=>{resolve(data);}); // socket.on(name, data=>{
     }); // return new Promise(resolve=>{
@@ -148,6 +163,9 @@ export class Listener extends ListenerEvents {
    * @param {number} delay - Delay before we do action
   */
   async emitMsg(socket, name, msg, delay) {
+    if (!socket || !name || !msg) {
+      throw new Error('Param missing at emitMsg()');
+    }
     await ctrlLib.timeoutAsync(delay);
     socket.emit(name, msg);
   }; // async emitMsg(socket, name, msg, delay) {
