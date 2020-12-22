@@ -25,8 +25,8 @@ class Lib {
     this.app.use((req, res, next)=>{
       const basename = path.basename(req?.url);
       const extname = path.extname(basename);
-      if (extname) log(`The file ${basename} was requested`);// ```
-      else log(`The endpoint ${basename} was requested.`);// ```
+      if (extname) log(`The file ${basename} was requested`);
+      else log(`The endpoint ${basename} was requested.`);
       next();
     }); // this.app.use((req, res, next)=>{
   }; // checkRequests(app){
@@ -38,6 +38,7 @@ class Lib {
    * @return {Promise<boolean>}
   */
   createServer(port) {return new Promise(resolve => {
+    if (!port) throw new Error('Param port missing at method createServer()');
     this.server.listen(port, ()=>{resolve();});
   });}; // createServer() {
 
@@ -75,6 +76,10 @@ export class Init extends Lib {
     ctrlSocketIO.rootConnect(this.io);
 
     this.checkRequests();
+
+    if (!this.app || !this.server) {
+      throw new Error('Can not create globals at Class Init');
+    } // if (!this.app || !this.server || this.io) {
   }; // constructor(){
 
 
@@ -88,7 +93,10 @@ export class Init extends Lib {
     * @param {object} server - HTTP Server
   */
   async startServer(port) {
+    if (!port) throw new Error('Param port missing at method startServer()');
+
     Init.createMiddleware(this.app);
+
     await this.createServer(port);
 
     await ctrlEndpoints.startListener(this.app);
