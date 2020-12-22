@@ -8,6 +8,10 @@
  * @return {Promise}
 */
 export const testSocket = (listerName, socket, emitName, emitMsg)=>{
+  if (!listerName || !socket || !emitName || !emitMsg) {
+    throw new Error('Param missing at testSocket()');
+  } // if (!listerName || !socket || !emitName || !emitMsg) {
+
   return new Promise(resolve => {
     socket.on(listerName, async roomDetails=>{
       socket.off(listerName);
