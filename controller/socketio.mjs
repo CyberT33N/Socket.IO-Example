@@ -1,14 +1,13 @@
-import * as socketIO from '../services/socketio.mjs';
+import {Init} from '../services/socket/Init.mjs';
+import {Room} from '../services/socket/Room.mjs';
 
 export default {
-  rootConnect: async io=>{return await socketIO.rootConnect(io);},
+  // ---- Init ----
+  rootConnect: async io=>{return await new Init().rootConnect(io);},
+  disconnectUser: socket=>{return new Init().disconnectUser(socket);},
 
-  connectRoom: async socket=>{return await socketIO.connectRoom(socket);},
-  messageRoom: async socket=>{return await socketIO.messageRoom(socket);},
 
-  disconnectUser: async socket=>{return await socketIO.disconnectUser(socket);},
-
-  createDevSockets: async io=>{
-    return await socketIO.createDevSockets(io);
-  },
+  // ---- Room ----
+  connectRoom: socket=>{return new Room().connectRoom(socket);},
+  messageRoom: socket=>{return new Room().messageRoom(socket);},
 };

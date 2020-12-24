@@ -5,7 +5,6 @@ import fs from 'fs';
 import io from 'socket.io-client';
 
 /* ################ Controller ################ */
-import ctrlSocketIO from '../../controller/socketio.mjs';
 import ctrlBot from '../../controller/bot.mjs';
 import ctrlMongoDB from '../../controller/mongodb.mjs';
 import ctrlExpose from '../../controller/utils/exposefunctions.mjs';
@@ -18,7 +17,7 @@ import ctrlUtilsSocket from '../../controller/utils/socket.mjs';
 class Lib {
   /** Create Dev Sockets for client and partner and set them gobal */
   async createDevSockets() {
-    const sockets = await ctrlSocketIO.createDevSockets(io);
+    const sockets = await ctrlUtilsSocket.createDevSockets(io);
     this.socketClient = sockets.client;
     this.socketPartner = sockets.partner;
   }; // async createDevSockets(){
@@ -67,7 +66,6 @@ export class Init extends Lib {
     await this.startBrowser();
 
     await this.createDevSockets(io);
-
 
     // Create all puppeteer expose function
     await ctrlExpose.init(

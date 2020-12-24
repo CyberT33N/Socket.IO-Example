@@ -1,5 +1,5 @@
 /*################ Controller ################*/
-import controllerSocketIO from '../controller/socketio.mjs';
+import ctrlSocketDev from '../controller/utils/socket.mjs';
 
 /*################ Socket.io ################*/
 import io from 'socket.io-client';
@@ -20,8 +20,6 @@ const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8'))
      test_client2 = json_config.test.user[1],
         test_room = json_config.test.room;
 
-var devSocket, devSocketPartner;
-
 
 
 
@@ -29,14 +27,13 @@ var devSocket, devSocketPartner;
 
 describe('Socket.io Services', ()=>{
 
-  before(done=>{(async()=>{
+  before(()=>{
     // get dev sockets
-       const sockets = await controllerSocketIO.createDevSockets(io);
-           devSocket = sockets.client;
-    devSocketPartner = sockets.partner;
+    const sockets = ctrlSocketDev.createDevSockets(io);
+    global.devSocket = sockets.client;
+    global.devSocketPartner = sockets.partner;
 
-    done();
-  })()}); // before( async ()=>{
+  }); // before( async ()=>{
 
 
 
