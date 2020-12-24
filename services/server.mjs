@@ -1,5 +1,5 @@
 /* ################ Controller ################ */
-import ctrlSocketIO from '../controller/socketio.mjs';
+import ctrlSocketIO from '../controller/socket.mjs';
 import ctrlEndpoints from '../controller/endpoints.mjs';
 import ctrlLib from '../controller/lib.mjs';
 

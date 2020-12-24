@@ -1,5 +1,5 @@
 /* ################ Controller ################ */
-import ctrlSocket from '../../controller/socketio.mjs';
+import ctrlSocket from '../../controller/socket.mjs';
 
 
 /** Init MongoDB connection */
