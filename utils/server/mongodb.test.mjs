@@ -1,111 +1,119 @@
-/*################ TDD ################*/
+/* ################ Controller ################ */
+import ctrlLib from '../../controller/lib.mjs';
+
+/* ################ TDD ################ */
 import expect from 'expect';
 
-/*################ Controller ################*/
-import controllermongodb from '../../controller/mongodb.mjs';
-
-/*################ Logs ################*/
-import log from 'fancy-log';
-import chalkAnimation from 'chalk-animation';
-import gradient from 'gradient-string';
-import chalk from 'chalk';
-
-/*################ config.json ################*/
-import fs from 'fs';
-import yaml from 'js-yaml';
-const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8')),
-     test_client1 = json_config.test.user[0],
-        test_room = json_config.test.room;
-
-
+/* ################ Controller ################ */
+import ctrlMongoDB from '../../controller/mongodb.mjs';
 
 
 describe('MongoDB Services', ()=>{
+  before(()=>{
+    const config = ctrlLib.getConfig();
 
+    global.clientMe = config.test.user[0];
+    global.testRoom = config.test.room;
+  }); // before(()=>{
 
 
   describe('connect()', ()=>{
-
-    it('Connect to MongoDB Database - Should return true', async()=>{
-      expect( await controllermongodb.connect() ).toEqual(expect.objectContaining({
-        db: expect.any(Object),
-        client: expect.any(Object),
-      }));
-    });
-
-    xit('Error while try to connect to MongoDB Database - Should return false', async()=>{
-      expect( await controllermongodb.connect() ).toBe(false);
-    });
-
-  }); // describe('connect()()', ()=>{
+    it('Connect to MongoDB Database - Should return true', async ()=>{
+      expect(await ctrlMongoDB.connect()).toEqual(
+          expect.objectContaining({
+            db: expect.any(Object),
+            client: expect.any(Object),
+          }), // expect.objectContaining({
+      ); // expect(await ctrlMongoDB.connect()).toEqual(
+    }); // it('Connect to MongoDB Database - Should return true', async ()=>{
 
 
-
+    xit('Error while try to connect to MongoDB Database', async ()=>{
+      expect( await ctrlMongoDB.connect() ).toBe(false);
+    }); // xit('Error while try to connect to MongoDB Database', async ()=>{
+  }); // describe('connect()', ()=>{
 
 
   describe('storeMessages()', ()=>{
+    it('Simulate NPE - Should return {"msg": "NPE"}', async ()=>{
+      expect(
+          await ctrlMongoDB.storeMessages({
+            'msg': null,
+            'room': '1234',
+            'usertoken': 'a',
+          }), // await ctrlMongoDB.storeMessages({
+      ).toStrictEqual( {code: 'NPE'} ); // expect(
+    }); // it('Simulate NPE - Should return {"msg": "NPE"}', async ()=>{
 
-    it('Simulate NPE - Should return {"msg": "NPE"}', async()=>{
-      expect( await controllermongodb.storeMessages({"msg": null,"room": "1234", "usertoken": "a"}) ).toStrictEqual( {code: "NPE"} );
-    });
 
-    it('Simulate not existing Room ID - Should return {"msg": "ROOM ID NOT FOUND"}', async()=>{
-      expect( await controllermongodb.storeMessages({"msg": "sample message..", "room": "wrong_room_ID", "usertoken": test_client1.token}) ).toStrictEqual( {code: "ROOM ID NOT FOUND"} );
-    });
+    it('Simulate not existing Room ID', async ()=>{
+      expect(
+          await ctrlMongoDB.storeMessages({
+            'msg': 'sample message..',
+            'room': 'wrong_room_ID',
+            'usertoken': clientMe.token,
+          }), // await ctrlMongoDB.storeMessages({
+      ).toStrictEqual( {code: 'ROOM ID NOT FOUND'} ); // expect(
+    }); // it('Simulate not existing Room ID', async()=>{
 
-    it('Successfully updating of field - Should return {code : "SUCCESS"}', async()=>{
-      expect( await controllermongodb.storeMessages({"msg": "sample message..", "room": test_room, "usertoken": test_client1.token}) ).toStrictEqual( {code : "SUCCESS"} );
-    });
 
-    xit('Simulate error while updating of field - Should return {code : "ERROR"}', async()=>{
-      expect( await controllermongodb.storeMessages({"msg": "sample message..", "room": test_room, "usertoken": test_client1.token}) ).toStrictEqual( {code : "ERROR"} );
-    });
+    it('Successfully updating of field', async ()=>{
+      expect(
+          await ctrlMongoDB.storeMessages({
+            'msg': 'sample message..',
+            'room': testRoom,
+            'usertoken': clientMe.token,
+          }), // await ctrlMongoDB.storeMessages({
+      ).toStrictEqual( {code: 'SUCCESS'} ); // expect(
+    }); // it('Successfully updating of field', async ()=>{
 
+
+    xit('Simulate error while updating of field', async ()=>{
+      expect(
+          await ctrlMongoDB.storeMessages({
+            'msg': 'sample message..',
+            'room': testRoom,
+            'usertoken': clientMe.token,
+          }), // await ctrlMongoDB.storeMessages({
+      ).toStrictEqual( {code: 'ERROR'} ); // expect(
+    }); // xit('Simulate error while updating of field', async ()=>{
   }); // describe('storeMessages()', ()=>{
 
 
-
-
-
   describe('getUserDetails()', ()=>{
+    it('Check if User can be found by token', async ()=>{
+      expect(
+          typeof await ctrlMongoDB.getUserDetails(clientMe.token),
+      ).toBe('object'); // expect(
+    }); // it('Check if User can be found by token', async ()=>{
 
-    it('Check if User can be found by token - Should return object', async()=>{
-      expect( typeof await controllermongodb.getUserDetails(test_client1.token) ).toBe('object');
-    });
+    it('Simulate User not found by token', async ()=>{
+      expect( await ctrlMongoDB.getUserDetails('wrong_token') ).toBe(null);
+    }); // it('Simulate User not found by token', async ()=>{
 
-    it('Simulate User not found by token - Should return null', async()=>{
-      expect( await controllermongodb.getUserDetails('wrong_token') ).toBe(null);
-    });
-
-    it('Simulate NPE - Should return false', async()=>{
-      expect( await controllermongodb.getUserDetails(null) ).toStrictEqual( {code : "User Token can not be undefined"} );
-    });
-
+    it('Simulate NPE - Should return false', async ()=>{
+      expect(
+          await ctrlMongoDB.getUserDetails(null),
+      ).toStrictEqual({code: 'User Token can not be undefined'}); // expect(
+    }); // it('Simulate NPE - Should return false', async ()=>{
   }); // describe('getUserDetails()', ()=>{
 
 
-
-
-
-
   describe('getRoomDetails()', ()=>{
+    it('Check if User can be found by token', async ()=>{
+      expect(typeof await ctrlMongoDB.getRoomDetails(testRoom)).toBe('object');
+    }); // it('Check if User can be found by token', async ()=>{
 
-    it('Check if User can be found by token - Should return object', async()=>{
-      expect( typeof await controllermongodb.getRoomDetails(test_room) ).toBe('object');
-    });
 
-    it('Simulate User not found by token - Should return null', async()=>{
-      expect( await controllermongodb.getRoomDetails('wrong_roomID') ).toBe(null);
-    });
+    it('Simulate User not found by token', async ()=>{
+      expect( await ctrlMongoDB.getRoomDetails('wrong_roomID') ).toBe(null);
+    }); // it('Simulate User not found by token', async ()=>{
 
-    it('Simulate NPE - Should return false', async()=>{
-      expect( await controllermongodb.getRoomDetails(null) ).toStrictEqual( {code : "Room ID can not be undefined"} );
-    });
 
+    it('Simulate NPE - Should return false', async ()=>{
+      expect(
+          await ctrlMongoDB.getRoomDetails(null),
+      ).toStrictEqual({code: 'Room ID can not be undefined'}); // expect(
+    }); // it('Simulate NPE - Should return false', async ()=>{
   }); // describe('getRoomDetails()', ()=>{
-
-
-
-
-
 }); // describe('mongodb service', ()=>{
