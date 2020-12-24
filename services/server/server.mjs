@@ -1,7 +1,7 @@
 /* ################ Controller ################ */
-import ctrlSocketIO from '../controller/socket.mjs';
-import ctrlEndpoints from '../controller/endpoints.mjs';
-import ctrlLib from '../controller/lib.mjs';
+import ctrlSocket from '../../controller/socket.mjs';
+import ctrlEndpoints from '../../controller/endpoints.mjs';
+import ctrlLib from '../../controller/lib.mjs';
 
 /* ################ Socket.io ################ */
 import socketIO from 'socket.io';
@@ -73,7 +73,7 @@ export class Init extends Lib {
     this.app.use(express.static(websitePath));
 
     this.io = socketIO(this.server);
-    ctrlSocketIO.rootConnect(this.io);
+    ctrlSocket.rootConnect(this.io);
 
     this.checkRequests();
 

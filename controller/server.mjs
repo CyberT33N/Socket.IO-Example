@@ -1,4 +1,4 @@
-import {Init} from '../services/server.mjs';
+import {Init} from '../services/server/server.mjs';
 
 export default {
   startServer: async port=>{return await new Init().startServer(port);},

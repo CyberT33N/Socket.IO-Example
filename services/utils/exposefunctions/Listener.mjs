@@ -1,5 +1,5 @@
 /* ################ Controller ################ */
-import ctrlSocketIO from '../../../controller/socket.mjs';
+import ctrlSocket from '../../../controller/socket.mjs';
 import ctrlBot from '../../../controller/bot.mjs';
 import ctrlLib from '../../../controller/lib.mjs';
 
@@ -132,7 +132,7 @@ export class Listener extends ListenerEvents {
     if (!page) throw new Error('Page param missing at createDevSocket()');
 
     const [devSocket] = await Promise.all([
-      ctrlSocketIO.rootConnect(this.devIO),
+      ctrlSocket.rootConnect(this.devIO),
       ctrlBot.openLink(page, this.linkClient),
     ]);
 
