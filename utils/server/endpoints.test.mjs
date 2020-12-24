@@ -1,87 +1,106 @@
-/*################ API ################*/
+/* ################ Controller ################ */
+import ctrlLib from '../../controller/lib.mjs';
+
+/* ################ API ################ */
 import axios from 'axios';
 
-/*################ TDD ################*/
+/* ################ TDD ################ */
 import expect from 'expect';
 
-/*################ Logs ################*/
+/* ################ Logs ################ */
 import log from 'fancy-log';
-import chalkAnimation from 'chalk-animation';
-import gradient from 'gradient-string';
-import chalk from 'chalk';
-
-/*################ config.json ################*/
-import fs from 'fs';
-import yaml from 'js-yaml';
-const json_config = yaml.safeLoad(fs.readFileSync('./admin/config.yml', 'utf8')),
-          devHost = json_config.test.host + ':' + json_config.test.port,
-     test_client1 = json_config.test.user[0],
-     test_client2 = json_config.test.user[1],
-        test_room = json_config.test.room;
-
 
 
 describe('Endpoints Services', ()=>{
+  before(()=>{
+    const config = ctrlLib.getConfig();
+    global.devHost = `${config.test.host}:${config.test.port}`;
+    global.clientMe = config.test.user[0];
+    global.testRoom = config.test.room;
+  }); // before(()=>{
 
 
   describe('getUserDetails()', ()=>{
+    it('Send POST request with test user token', async ()=>{
+      try {
+        const r = await axios.post(
+            `${devHost}/api/getUserDetails`,
+            {usertoken: clientMe.token},
+            {headers: {authorization: 'sample_auth_token..'}},
+        ); // const r = await axios.post(
 
-    it('Send POST request with User Token - Should return object with _id', async()=>{
-      try{const r = await axios.post(
-          devHost + '/api/getUserDetails', { usertoken: test_client1.token },
-          { headers: { authorization: 'sample_auth_token..'}}
-        ); log( 'getUserDetails() - response: ' + JSON.stringify(r?.data, null, 4) );
-
-        expect( r?.data ).toEqual(expect.objectContaining({ _id: expect.anything() }));
-
-      } catch (e){ log( 'getUserDetails() - error: ' + e ); }
-    }); // it('Send POST request with User Token - Should return object with _id', async()=>{
-
-
-    it('Send POST request with wrong User Token - Should return { msg: "User Token was not found in Database" }', async()=>{
-      try{ r = await axios.post(  devHost + '/api/getUserDetails', { usertoken: "wrong_token" }, { headers: { authorization: 'sample_auth_token..' }});
-      } catch (e){ expect( e.toString() ).toBe( 'Error: Request failed with status code 403' ); }
-    }); // it('Send POST request with wrong User Token - Should return { msg: "User Token was not found in Database" }', async()=>{
+        expect( r?.data ).toEqual(
+            expect.objectContaining({_id: expect.anything()}),
+        ); // expect( r?.data ).toEqual(
+      } catch (e) {log( 'Send POST request with test user token error: ' + e );}
+    }); // it('Send POST request with test user token', async ()=>{
 
 
-    it('Simulate NPE - Should return { msg: "User Token can not be null" }', async()=>{
-      try{ await axios.post(  devHost + '/api/getUserDetails', { usertoken: null }, { headers: { authorization: 'sample_auth_token..' }});
-      } catch (e){ expect( e.toString() ).toBe( 'Error: Request failed with status code 404' ); }
-    }); // it('Simulate NPE - Should return { msg: "User Token can not be null" }', async()=>{
+    it('Send POST request with wrong User Token', async ()=>{
+      try {
+        await axios.post(
+            `${devHost}/api/getUserDetails`,
+            {usertoken: 'wrong_token'},
+            {headers: {authorization: 'sample_auth_token..'}},
+        ); // const r = await axios.post(
+      } catch (e) {
+        expect(e.toString()).toBe('Error: Request failed with status code 403');
+      } // catch (e){
+    }); // it('Send POST request with wrong User Token', async()=>{
 
+
+    it('Simulate NPE', async ()=>{
+      try {
+        await axios.post(
+            devHost + '/api/getUserDetails',
+            {usertoken: null},
+            {headers: {authorization: 'sample_auth_token..'}},
+        ); // await axios.post(
+      } catch (e) {
+        expect(e.toString()).toBe('Error: Request failed with status code 404');
+      } // catch (e){
+    }); // it('Simulate NPE', async()=>{
   }); // describe('getUserDetails', ()=>{
 
 
-
-
-
   describe('getRoomDetails()', ()=>{
+    it('Send POST request with Room ID', async ()=>{
+      try {
+        const r = await axios.post(
+            devHost + '/api/getRoomDetails', {id: testRoom},
+            {headers: {authorization: 'sample_auth_token..'}},
+        ); // const r = await axios.post(
 
-    it('Send POST request with Room ID - Should return object with _id', async()=>{
-      try{const r = await axios.post(
-        devHost + '/api/getRoomDetails', { id: test_room },
-        { headers: { authorization: 'sample_auth_token..' } }
-       );
-        //log( '#1 getRoomDetails() - response: ' + JSON.stringify(r?.data, null, 4) );
-
-        expect( r?.data ).toEqual(expect.objectContaining({ _id: expect.anything() }));
-
-      } catch (e){ log( 'getRoomDetails() - error: ' + e ); }
-    }); // it('Send POST request with Room ID - Should return object with _id', async()=>{
-
-
-    it('Send POST request with wrong Room ID - Should return { msg: "Room ID was not found in Database" }', async()=>{
-      try{ await axios.post(  devHost + '/api/getRoomDetails', { id: test_room }, {headers: { authorization: 'sample_auth_token..' }});
-      } catch (e){ expect( e.toString() ).toBe( 'Error: Request failed with status code 403' ); }
-    }); // it('Send POST request with wrong Room ID - Should return { msg: "Room ID was not found in Database" }', async()=>{
+        expect( r?.data ).toEqual(
+            expect.objectContaining({_id: expect.anything()}),
+        ); // expect( r?.data ).toEqual(
+      } catch (e) {log( 'Send POST request with Room ID - error: ' + e );}
+    }); // it('Send POST request with Room ID', async()=>{
 
 
-    it('Simulate NPE - Should return { msg: "Room ID can not be null" }', async()=>{
-      try{ await axios.post(  devHost + '/api/getRoomDetails', { id: null }, { headers: { authorization: 'sample_auth_token..' }});
-      } catch (e){ expect( e.toString() ).toBe( 'Error: Request failed with status code 404' ); }
-    }); // it('Simulate NPE - Should return { msg: "Room ID can not be null" }', async()=>{
+    it('Send POST request with wrong Room ID', async ()=>{
+      try {
+        await axios.post(
+            devHost + '/api/getRoomDetails',
+            {id: testRoom},
+            {headers: {authorization: 'sample_auth_token..'}},
+        ); // await axios.post(
+      } catch (e) {
+        expect(e.toString()).toBe('Error: Request failed with status code 403');
+      } // catch (e) {
+    }); // it('Send POST request with wrong Room ID', async ()=>{
 
+
+    it('Simulate NPE', async ()=>{
+      try {
+        await axios.post(
+            devHost + '/api/getRoomDetails',
+            {id: null},
+            {headers: {authorization: 'sample_auth_token..'}},
+        ); // await axios.post(
+      } catch (e) {
+        expect(e.toString()).toBe('Error: Request failed with status code 404');
+      } // catch (e){
+    }); // it('Simulate NPE', async ()=>{
   }); // describe('getRoomDetails', ()=>{
-
-
 }); // describe('Endpoints Services', ()=>{

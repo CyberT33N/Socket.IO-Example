@@ -33,7 +33,7 @@ class Lib {
   /** Start Puppeteer and set page and client global */
   async startBrowser() {
     this.pptr = await ctrlBot.startBrowser();
-    if (!this.pptr) throw new Error('Something went wrong we cant find pptr');
+    if (!this.pptr) throw new Error('Can not create pptr at startBrowser()');
   }; // async startBrowser() {
 }; // class Lib {
 
@@ -58,7 +58,7 @@ export class Init extends Lib {
 
   /**
    * Init setup for client side testing
-   * @param {createCallback} done
+   * @param {createCallback} done - Callback from before call test.mjs
   */
   async create(done) {
     if ( !await ctrlMongoDB.connect() ) throw new Error('Error connect to DB');
