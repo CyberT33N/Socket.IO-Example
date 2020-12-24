@@ -2,7 +2,7 @@
 import expect from 'expect';
 
 /*################ Controller ################*/
-import controllermongodb from '../controller/mongodb.mjs';
+import controllermongodb from '../../controller/mongodb.mjs';
 
 /*################ Logs ################*/
 import log from 'fancy-log';

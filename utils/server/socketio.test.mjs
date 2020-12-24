@@ -1,5 +1,5 @@
 /*################ Controller ################*/
-import ctrlSocketDev from '../controller/utils/socket.mjs';
+import ctrlSocketDev from '../../controller/utils/socket.mjs';
 
 /*################ Socket.io ################*/
 import io from 'socket.io-client';
