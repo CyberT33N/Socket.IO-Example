@@ -47,7 +47,8 @@ class Lib {
    * setup middleware for express app
    * @param {object} app - Express app
   */
-  static createMiddleware(app) {
+  createMiddleware(app) {
+    if (!app) throw new Error('Param app missing at method createMiddleware()');
     app.use( bodyParser.json() );
   }; // createMiddleware(app){
 }; // class Lib {
@@ -73,13 +74,9 @@ export class Init extends Lib {
     this.app.use(express.static(websitePath));
 
     this.io = socketIO(this.server);
-    ctrlSocket.rootConnect(this.io);
+    ctrlSocket.userConnect(this.io);
 
     this.checkRequests();
-
-    if (!this.app || !this.server) {
-      throw new Error('Can not create globals at Class Init');
-    } // if (!this.app || !this.server || this.io) {
   }; // constructor(){
 
 
@@ -95,7 +92,7 @@ export class Init extends Lib {
   async startServer(port) {
     if (!port) throw new Error('Param port missing at method startServer()');
 
-    Init.createMiddleware(this.app);
+    this.createMiddleware(this.app);
 
     await this.createServer(port);
 

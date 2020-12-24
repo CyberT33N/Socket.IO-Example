@@ -132,7 +132,7 @@ export class Listener extends ListenerEvents {
     if (!page) throw new Error('Page param missing at createDevSocket()');
 
     const [devSocket] = await Promise.all([
-      ctrlSocket.rootConnect(this.devIO),
+      ctrlSocket.userConnect(this.devIO),
       ctrlBot.openLink(page, this.linkClient),
     ]);
 

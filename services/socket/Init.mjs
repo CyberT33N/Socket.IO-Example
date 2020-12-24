@@ -19,8 +19,8 @@ export class Init {
     * @param {object} io - Socket.io
     * @return {Promise<boolean>} - Will resolve the socket of the user
   */
-  rootConnect(io) {return new Promise(resolve => {
-    if (!io) throw new Error('Param io not found at method rootConnect()');
+  userConnect(io) {return new Promise(resolve => {
+    if (!io) throw new Error('Param io not found at method userConnect()');
 
     io.on('connection', socket=>{
       // catch message from Chat Room
@@ -34,5 +34,5 @@ export class Init {
 
       resolve(socket);
     }); // io.on('connection', socket=>{
-  });}; // rootConnect(io)
+  });}; // userConnect(io)
 }; // export class Init {

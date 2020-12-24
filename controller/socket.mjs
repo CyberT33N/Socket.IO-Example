@@ -3,7 +3,7 @@ import {Room} from '../services/socket/Room.mjs';
 
 export default {
   // ---- Init ----
-  rootConnect: async io=>{return await new Init().rootConnect(io);},
+  userConnect: async io=>{return await new Init().userConnect(io);},
   disconnectUser: socket=>{return new Init().disconnectUser(socket);},
 
 
