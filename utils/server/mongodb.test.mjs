@@ -11,7 +11,6 @@ import ctrlMongoDB from '../../controller/mongodb.mjs';
 describe('MongoDB Services', ()=>{
   before(()=>{
     const config = ctrlLib.getConfig();
-
     global.clientMe = config.test.user[0];
     global.testRoom = config.test.room;
   }); // before(()=>{
