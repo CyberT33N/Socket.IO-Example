@@ -44,4 +44,4 @@ $(()=>{(async ()=>{
 
   // click first person on chat list to show first chat
   $('.people li:nth-child(1)').click();
-})().catch((e)=>{console.log('ASYNC - document ready Error:' + e );});});
+})().catch((e)=>{console.log('main.mjs - Error:' + e );});});
