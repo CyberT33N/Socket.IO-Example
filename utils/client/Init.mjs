@@ -102,7 +102,11 @@ export class Init extends Lib {
       <!DOCTYPE html>
       <html lang="en">
         <head><link rel="stylesheet" href="../css/lib/mocha.css"/></head>
-        <body><div id="mocha" style="background: white;">${HTML}</div></body>
+        <body>
+          <div id="mocha" style="background: white; display:block;">
+            ${HTML}
+          </div>
+        </body>
       </html>
     `;
 

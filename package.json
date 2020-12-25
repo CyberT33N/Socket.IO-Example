@@ -21,7 +21,7 @@
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
-    "eslint": "^7.15.0",
+    "eslint": "^7.16.0",
     "eslint-config-google": "^0.14.0",
     "expect": "^26.6.2",
     "htmllint": "^0.8.0",
