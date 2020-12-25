@@ -7,9 +7,9 @@
 }
 
 .headline{
-  position: absolute;
   color: white;
   font-weight: 300;
+  position: absolute;
 }
 
 
@@ -19,7 +19,7 @@
 
 
 textarea{
-  width: 75%;
+  width: 85%;
   padding-left: .5em;
   padding-top: 1em;
   padding-bottom: .5em;

@@ -1,64 +1,70 @@
 import * as req from '/js/req.mjs';
-var test_client1, test_room;
+
+let clientMe;
+let testRoom;
+
 
 describe('reg.js', ()=>{
-
-  before(done=>{(async()=>{
-    const configJSON = await config();
-    console.log(`config.json: ${JSON.stringify(configJSON)}`);
-
-    test_client1 = configJSON.test.user[0];
-    test_room = configJSON.test.room;
-
+  before(done=>{(async ()=>{
+    const configJSON = await config(); // await because of this.checkNPE
+    clientMe = configJSON.test.user[0];
+    testRoom = configJSON.test.room;
     done();
-  })()}); // before(done=>{(async()=>{
-
+  })();}); // before(done=>{(async()=>{
 
 
   describe('getUserDetails() - POST', ()=>{
-
-    it('Should return data object with key _id', async()=>{
-      const r = await req.getUserDetails(test_client1.token);
-      console.log('Simulate correct token - result: ' + JSON.stringify(r, null, 4));
-      expect( r?.data ).toEqual(expect.objectContaining({ _id: expect.anything() }));
+    it('Should return data object with key _id', async ()=>{
+      const r = await req.getUserDetails(clientMe.token);
+      expect( r?.data ).toEqual(
+          expect.objectContaining({_id: expect.anything()}),
+      ); // expect( r?.data ).toEqual(
     }); // it('Should return object with data key', async()=>{
 
-    it('Simulate wrong token - Should return "User Token was not found in Database"', async()=>{
-      try{ const r = await req.getUserDetails('wrong_token'); } catch (e){ return e }
-      //console.log('Simulate wrong token - result: ' + JSON.stringify(r, null, 4));
-      expect( r?.response?.data?.msg ).toBe( 'User Token was not found in Database' );
-    }); // it('Simulate wrong token - Should return object without data key', async()=>{
 
-    it('Simulate NPE - Should return "User Token can not be null"', async()=>{
-      try{ const r = await req.getUserDetails(mull); } catch (e){ return e }
-      //console.log('Simulate wrong token - result: ' + JSON.stringify(r, null, 4));
-      expect( r?.response?.data?.msg ).toBe( 'User Token can not be null' );
-    }); // it('Simulate wrong token - Should return object without data key', async()=>{
+    it('Simulate wrong token', async ()=>{
+      try {
+        const r = await req.getUserDetails('wrong_token');
+        expect(r?.response?.data?.msg).toBe(
+            'User Token was not found in Database',
+        );
+      } catch (e) {console.log('getUserDetails() - wrong token error: ' + e);}
+    }); // it('Simulate wrong token', async ()=>{
 
+
+    it('Simulate NPE', async ()=>{
+      try {
+        const r = await req.getUserDetails(mull);
+        expect( r?.response?.data?.msg ).toBe( 'User Token can not be null' );
+      } catch (e) {console.log('getUserDetails() - Simulate NPE error: ' + e);}
+    }); // it('Simulate NPE', async ()=>{
   }); // describe('getUserDetails()', ()=>{
 
 
-
   describe('getRoomDetails() - POST', ()=>{
-
-    it('Should return data object with key _id', async()=>{
-      const r = await req.getRoomDetails(test_room);
-      //console.log('Simulate correct room ID - result: ' + JSON.stringify(r, null, 4));
-      expect( r?.data ).toEqual(expect.objectContaining({ _id: expect.anything() }));
+    it('Should return data object with key _id', async ()=>{
+      const r = await req.getRoomDetails(testRoom);
+      expect(r?.data).toEqual(
+          expect.objectContaining({_id: expect.anything()}),
+      ); // expect(r?.data).toEqual(
     }); // it('Should return data object with key _id', async()=>{
 
-    it('Simulate wrong Room ID - Should return "Room ID was not found in Database"', async()=>{
-      try{ const r = await req.getRoomDetails(wrong_roomID); } catch (e){ return e }
-      //console.log('Simulate wrong Room ID - result: ' + JSON.stringify(r, null, 4));
-      expect( r?.response?.data?.msg ).toBe( 'Room ID was not found in Database' );
-    }); // it('Simulate wrong Room ID - Should return "Room ID was not found in Database"', async()=>{
 
-    it('Simulate NPE - Should return "Room ID can not be null"', async()=>{
-      try{ const r = await req.getRoomDetails(null); } catch (e){ return e }
-      //console.log('Simulate wrong Room ID - result: ' + JSON.stringify(r, null, 4));
-      expect( r?.response?.data?.msg ).toBe( 'Room ID can not be null' );
-    }); // it('Simulate NPE - Should return "Room ID can not be null"', async()=>{
+    it('Simulate wrong Room ID', async ()=>{
+      try {
+        const r = await req.getRoomDetails(wrong_roomID);
+        expect(r?.response?.data?.msg).toBe(
+            'Room ID was not found in Database',
+        ); // expect(r?.response?.data?.msg).toBe(
+      } catch (e) {console.log('getRoomDetails() - wrong room error: ' + e);}
+    }); // it('Simulate wrong Room ID', async ()=>{
 
+
+    it('Simulate NPE', async ()=>{
+      try {
+        const r = await req.getRoomDetails(null);
+        expect( r?.response?.data?.msg ).toBe( 'Room ID can not be null' );
+      } catch (e) {console.log('getRoomDetails() - Simulate NPE error: ' + e);}
+    }); // it('Simulate NPE', async ()=>{
   }); // describe('getRoomDetails()', ()=>{
-
 }); // describe('reg.js', ()=>{
