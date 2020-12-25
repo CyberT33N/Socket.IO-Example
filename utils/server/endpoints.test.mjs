@@ -26,7 +26,6 @@ describe('Endpoints Services', ()=>{
         const r = await axios.post(
             `${devHost}/api/getUserDetails`,
             {usertoken: clientMe.token},
-            {headers: {authorization: 'sample_auth_token..'}},
         ); // const r = await axios.post(
 
         expect( r?.data ).toEqual(
@@ -41,7 +40,6 @@ describe('Endpoints Services', ()=>{
         await axios.post(
             `${devHost}/api/getUserDetails`,
             {usertoken: 'wrong_token'},
-            {headers: {authorization: 'sample_auth_token..'}},
         ); // const r = await axios.post(
       } catch (e) {
         expect(e.toString()).toBe('Error: Request failed with status code 403');
@@ -52,9 +50,8 @@ describe('Endpoints Services', ()=>{
     it('Simulate NPE', async ()=>{
       try {
         await axios.post(
-            devHost + '/api/getUserDetails',
+            `${devHost}/api/getUserDetails`,
             {usertoken: null},
-            {headers: {authorization: 'sample_auth_token..'}},
         ); // await axios.post(
       } catch (e) {
         expect(e.toString()).toBe('Error: Request failed with status code 404');
@@ -67,8 +64,8 @@ describe('Endpoints Services', ()=>{
     it('Send POST request with Room ID', async ()=>{
       try {
         const r = await axios.post(
-            devHost + '/api/getRoomDetails', {id: testRoom},
-            {headers: {authorization: 'sample_auth_token..'}},
+            `${devHost}/api/getRoomDetails`,
+            {id: testRoom},
         ); // const r = await axios.post(
 
         expect( r?.data ).toEqual(
@@ -81,9 +78,8 @@ describe('Endpoints Services', ()=>{
     it('Send POST request with wrong Room ID', async ()=>{
       try {
         await axios.post(
-            devHost + '/api/getRoomDetails',
+            `${devHost}/api/getRoomDetails`,
             {id: testRoom},
-            {headers: {authorization: 'sample_auth_token..'}},
         ); // await axios.post(
       } catch (e) {
         expect(e.toString()).toBe('Error: Request failed with status code 403');
@@ -94,9 +90,8 @@ describe('Endpoints Services', ()=>{
     it('Simulate NPE', async ()=>{
       try {
         await axios.post(
-            devHost + '/api/getRoomDetails',
+            `${devHost}/api/getRoomDetails`,
             {id: null},
-            {headers: {authorization: 'sample_auth_token..'}},
         ); // await axios.post(
       } catch (e) {
         expect(e.toString()).toBe('Error: Request failed with status code 404');

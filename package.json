@@ -24,6 +24,7 @@
     "eslint": "^7.15.0",
     "eslint-config-google": "^0.14.0",
     "expect": "^26.6.2",
+    "htmllint": "^0.8.0",
     "jsdom": "^16.4.0",
     "mocha": "^8.2.1",
     "mochawesome": "^6.2.1",
