@@ -6,7 +6,7 @@ let testRoom;
 
 describe('reg.js', ()=>{
   before(done=>{(async ()=>{
-    const configJSON = await config(); // await because of this.checkNPE
+    const configJSON = await config(); // await because of this.checkNPE - bug
     clientMe = configJSON.test.user[0];
     testRoom = configJSON.test.room;
     done();
