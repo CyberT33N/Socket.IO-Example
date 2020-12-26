@@ -1,4 +1,4 @@
-/** Sockets that are related to messages */
+/** Sockets that are related to User */
 export class User {
   /** Catch click on friend in left sidebar, connect to room and change text */
   personClick() {

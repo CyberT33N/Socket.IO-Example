@@ -1,5 +1,4 @@
 import * as web from '/js/web.mjs';
-import * as socket from '/js/socket.mjs';
 import * as req from '/js/req.mjs';
 
 import ctrlSocket from '/js/controller/socket.mjs';
@@ -32,12 +31,17 @@ $(()=>{(async ()=>{
   $('.write-link.send').on('click', e=>{
     const AMPM = web.formatAMPM();
     const dateFull = web.formatDate() + ', ' + AMPM;
-    ctrlSocket.sendMessage(clientDetails.token, socket.ROOM, AMPM, dateFull);
+    ctrlSocket.sendMessage(
+        clientDetails.token,
+        ctrlSocket.ROOM(),
+        AMPM,
+        dateFull,
+    ); // ctrlSocket.sendMessage(
   }); // $(".write-link.send").on("click", (e)=>{
 
 
   // start event to catch room enter
-  socket.connectRoom();
+  ctrlSocket.connectRoom();
 
 
   // start event to catch incoming messages from chat partner

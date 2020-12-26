@@ -1,7 +1,7 @@
 import * as web from '/js/web.mjs';
 import * as main from '/js/main.mjs';
 
-import {ROOM} from '/js/socket.mjs';
+import {ROOM} from '/js/socket/Room.mjs';
 
 /** Sockets that are related to messages */
 export class Msg {
