@@ -9,7 +9,7 @@ class Lib {
    * @return {object}
   */
   getRoomDetails() {
-    return this.ROOM;
+    return this.roomDetails;
   }; // etRoomDetails() {
 }; // class Lib {
 
@@ -37,8 +37,8 @@ export class Room extends Lib {
         ); // return web.errorPage(
       } // if (roomDetails?.code) {
 
-
-      this.ROOM = roomDetails;
+      // set global
+      this.roomDetails = roomDetails;
 
       // load chat animations
       web.chatAnimations();
