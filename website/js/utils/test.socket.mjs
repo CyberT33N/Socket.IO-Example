@@ -1,6 +1,7 @@
-
+/* ################ Services ################ */
 import * as web from '/js/web.mjs';
 
+/* ################ Controller ################ */
 import ctrlSocket from '/js/controller/socket.mjs';
 
 let clientMe;
@@ -29,8 +30,8 @@ describe('socket.mjs', ()=>{
 
 
   describe('sendMessage()', ()=>{
-    it('Simulate empty message', async ()=>{
-      expect(await ctrlSocket.sendMessage(
+    it('Simulate empty message', ()=>{
+      expect(ctrlSocket.sendMessage(
           clientMe.token,
           testRoomDetails,
           AMPM,
@@ -39,10 +40,10 @@ describe('socket.mjs', ()=>{
     }); // it('Simulate empty message', async ()=>{
 
 
-    it('Simulate send Message', async ()=>{
+    it('Simulate send Message', ()=>{
       document.querySelector('textarea').value = 'sample_message123';
 
-      expect(await ctrlSocket.sendMessage(
+      expect(ctrlSocket.sendMessage(
           clientMe.token,
           testRoomDetails,
           AMPM,
@@ -51,10 +52,10 @@ describe('socket.mjs', ()=>{
     }); // it('Simulate send Message', async()=>{
 
 
-    it('Simulate NPE', async ()=>{
+    it('Simulate NPE', ()=>{
       document.querySelector('textarea').value = 'sample_message123';
 
-      expect(await ctrlSocket.sendMessage(
+      expect(ctrlSocket.sendMessage(
           null,
           testRoomDetails,
           AMPM,
@@ -62,7 +63,7 @@ describe('socket.mjs', ()=>{
     }); // it('Simulate NPE', async ()=>{
 
 
-    it('Verify client message', async ()=>{
+    it('Verify client message', ()=>{
       const lastElement = document.querySelector('.chat div:last-child');
 
       let d;
