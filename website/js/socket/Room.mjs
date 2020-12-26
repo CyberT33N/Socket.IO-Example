@@ -3,8 +3,29 @@ import * as main from '/js/main.mjs';
 
 export let ROOM;
 
+
+/** Lib methods */
+class Lib {
+  /**
+   * return details about the room
+   * @return {object}
+  */
+  getRoomDetails() {
+    return this.ROOM;
+  }; // etRoomDetails() {
+}; // class Lib {
+
+
 /** Sockets that are related to Rooms */
-export class Room {
+export class Room extends Lib {
+  /** load subclass and create singleton */
+  constructor() {
+    super();
+    if (Room.instance == null) Room.instance = this;
+    return Room.instance;
+  }; // constructor(){
+
+
   /**
    * connect to room and do related stuff
    * roomDetails --> {"roomdetails": r[0], "userdetails": UserDetails[0]}
@@ -19,7 +40,7 @@ export class Room {
       } // if (roomDetails?.code) {
 
 
-      ROOM = roomDetails;
+      this.ROOM = roomDetails;
 
       // load chat animations
       web.chatAnimations();

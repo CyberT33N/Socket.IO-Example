@@ -1,6 +1,6 @@
 import {Msg} from '/js/socket/Msg.mjs';
 import {User} from '/js/socket/User.mjs';
-import {Room, ROOM} from '/js/socket/Room.mjs';
+import {Room} from '/js/socket/Room.mjs';
 
 export default {
   // ---- Msg ----
@@ -22,7 +22,7 @@ export default {
   connectRoom: ()=>{
     return new Room().connectRoom();
   },
-  ROOM: ()=>{
-    return ROOM;
+  getRoomDetails: ()=>{
+    return new Room().getRoomDetails();
   },
 };

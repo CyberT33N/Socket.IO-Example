@@ -1,7 +1,7 @@
 import * as web from '/js/web.mjs';
 import * as main from '/js/main.mjs';
 
-import {ROOM} from '/js/socket/Room.mjs';
+import ctrlSocket from '/js/controller/socket.mjs';
 
 /** Sockets that are related to messages */
 export class Msg {
@@ -57,7 +57,7 @@ export class Msg {
       // update times in chat APP
       const AMPM = web.formatAMPM();
       web.updateTimes(
-          ROOM,
+          ctrlSocket.getRoomDetails(),
           main.clientDetails.token,
           AMPM,
           `${web.formatDate()}, ${AMPM}`,

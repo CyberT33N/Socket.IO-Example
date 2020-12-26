@@ -33,7 +33,7 @@ $(()=>{(async ()=>{
     const dateFull = web.formatDate() + ', ' + AMPM;
     ctrlSocket.sendMessage(
         clientDetails.token,
-        ctrlSocket.ROOM(),
+        ctrlSocket.getRoomDetails(),
         AMPM,
         dateFull,
     ); // ctrlSocket.sendMessage(
