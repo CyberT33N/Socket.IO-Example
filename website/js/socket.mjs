@@ -6,23 +6,6 @@ export let ROOM;
 
 
 
-export const personClick = ()=>{ console.log( 'personClick()' );
-  $(document).on('click', '.person', function(){ console.log( '.person was clicked..' );
-
-    socketIO.emit('room connect', $(this).attr('data-room'));
-
-    $('.top .name').text(this.querySelector('.name').textContent);
-
-    // mark current active person li as active and all other as inactive
-    $('.person').attr('data-active', 'false');
-    $(this).attr('data-active', 'true');
-
-  }); // $(document).on('click', '.person', function(){
-}; // export const personClick = ()=>{
-
-
-
-
 
 
 

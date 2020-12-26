@@ -25,7 +25,7 @@ $(()=>{(async ()=>{
 
 
   // start event to catch left sidebar contact choosing
-  socket.personClick();
+  ctrlSocket.personClick();
 
 
   // start event for sending message
