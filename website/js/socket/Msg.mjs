@@ -1,10 +1,16 @@
 import * as web from '/js/web.mjs';
-import * as main from '/js/main.mjs';
+
 
 import ctrlSocket from '/js/controller/socket.mjs';
 
 /** Sockets that are related to messages */
 export class Msg {
+  /** load subclass and create singleton */
+  constructor() {
+    this.clientDetails = web.getURLParams();
+  }; // constructor(){
+
+
   /**
    * get config.yml and set global variables
    * @param {string} clientToken - User Token
@@ -58,7 +64,7 @@ export class Msg {
       const AMPM = web.formatAMPM();
       web.updateTimes(
           ctrlSocket.getRoomDetails(),
-          main.clientDetails.token,
+          this.clientDetails.token,
           AMPM,
           `${web.formatDate()}, ${AMPM}`,
       );

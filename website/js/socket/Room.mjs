@@ -20,6 +20,9 @@ export class Room extends Lib {
   constructor() {
     super();
     if (Room.instance == null) Room.instance = this;
+
+    this.clientDetails = web.getURLParams();
+
     return Room.instance;
   }; // constructor(){
 
@@ -57,7 +60,7 @@ export class Room extends Lib {
         web.chatAnimations();
 
         for (const d of roomDetails.msg) {
-          if (main.clientDetails.token == d.usertoken) web.bubble(d.msg, 'me');
+          if (this.clientDetails.token == d.usertoken) web.bubble(d.msg, 'me');
           else web.bubble(d.msg, 'you');
         } // for( const d of roomDetails.msg ){
 

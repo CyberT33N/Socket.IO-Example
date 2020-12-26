@@ -3,11 +3,10 @@ import * as req from '/js/req.mjs';
 
 import ctrlSocket from '/js/controller/socket.mjs';
 
-// get URL paramater (http://localhost:1337/?usertoken=xxxx)
-export const clientDetails = web.getURLParams();
-
 
 $(()=>{(async ()=>{
+  const clientDetails = web.getURLParams();
+
   // POST request with User Token to get User Details Object
   const UserDetails = await req.getUserDetails(clientDetails.token);
   if (!UserDetails?.data) return web.errorPage('Can not get User Data');
