@@ -1,8 +1,6 @@
 import * as web from '/js/web.mjs';
 import * as main from '/js/main.mjs';
 
-export let ROOM;
-
 
 /** Lib methods */
 class Lib {
