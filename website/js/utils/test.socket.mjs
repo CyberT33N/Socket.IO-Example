@@ -1,5 +1,7 @@
-import * as socket from '/js/socket.mjs';
+
 import * as web from '/js/web.mjs';
+
+import ctrlSocket from '/js/controller/socket.mjs';
 
 let clientMe;
 let clientPartner;
@@ -28,7 +30,7 @@ describe('socket.mjs', ()=>{
 
   describe('sendMessage()', ()=>{
     it('Simulate empty message', async ()=>{
-      expect(await socket.sendMessage(
+      expect(await ctrlSocket.sendMessage(
           clientMe.token,
           testRoomDetails,
           AMPM,
@@ -40,7 +42,7 @@ describe('socket.mjs', ()=>{
     it('Simulate send Message', async ()=>{
       document.querySelector('textarea').value = 'sample_message123';
 
-      expect(await socket.sendMessage(
+      expect(await ctrlSocket.sendMessage(
           clientMe.token,
           testRoomDetails,
           AMPM,
@@ -52,7 +54,7 @@ describe('socket.mjs', ()=>{
     it('Simulate NPE', async ()=>{
       document.querySelector('textarea').value = 'sample_message123';
 
-      expect(await socket.sendMessage(
+      expect(await ctrlSocket.sendMessage(
           null,
           testRoomDetails,
           AMPM,

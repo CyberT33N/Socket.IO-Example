@@ -2,6 +2,8 @@ import * as web from '/js/web.mjs';
 import * as socket from '/js/socket.mjs';
 import * as req from '/js/req.mjs';
 
+import ctrlSocket from '/js/controller/socket.mjs';
+
 // get URL paramater (http://localhost:1337/?usertoken=xxxx)
 export const clientDetails = web.getURLParams();
 
@@ -30,7 +32,7 @@ $(()=>{(async ()=>{
   $('.write-link.send').on('click', e=>{
     const AMPM = web.formatAMPM();
     const dateFull = web.formatDate() + ', ' + AMPM;
-    socket.sendMessage(clientDetails.token, socket.ROOM, AMPM, dateFull);
+    ctrlSocket.sendMessage(clientDetails.token, socket.ROOM, AMPM, dateFull);
   }); // $(".write-link.send").on("click", (e)=>{
 
 
@@ -39,7 +41,7 @@ $(()=>{(async ()=>{
 
 
   // start event to catch incoming messages from chat partner
-  socket.socketMSG();
+  ctrlSocket.socketMSG();
 
 
   // click first person on chat list to show first chat
