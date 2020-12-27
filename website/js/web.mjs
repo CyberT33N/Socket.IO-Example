@@ -5,11 +5,7 @@ export const scrollBottom = css=>{
   document.querySelector(css).scrollTop = document.querySelector(css).scrollHeight;
 }; // export const scrollBottom = (css)=>{
 
-export const getURLParams = ()=>{
-  const token = window.location.search.match( /usertoken=([a-z0-9]+)/gmi );
-  if(!token) return false;
-  return {"token": token[0].replace('usertoken=', '')};
-}; // export const getURLParams = ()=>{
+
 
 
 export const getChatPartner = (roomDetails, userToken)=>{

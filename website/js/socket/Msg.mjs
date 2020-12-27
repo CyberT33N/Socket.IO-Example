@@ -2,12 +2,13 @@ import * as web from '/js/web.mjs';
 
 
 import ctrlSocket from '/js/controller/socket.mjs';
+import ctrlWeb from '/js/controller/web.mjs';
 
 /** Sockets that are related to messages */
 export class Msg {
   /** load subclass and create singleton */
   constructor() {
-    this.clientDetails = web.getURLParams();
+    this.clientDetails = ctrlWeb.getUserToken();
   }; // constructor(){
 
 

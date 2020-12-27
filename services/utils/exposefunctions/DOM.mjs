@@ -3,23 +3,8 @@ import ctrlBot from '../../../controller/bot.mjs';
 import ctrlLib from '../../../controller/lib.mjs';
 
 
-/** Lib functions for class DOM */
-class Lib {
-  /**
-   * Execute script inside of DOM by creating new function and run it
-   * @param {string} script - Script we want to execute
-   * @param {object} page - PPTR page
-  */
-  async evalScript(script, page) {
-    return await page.evaluate(async script=>{
-      return new Function('return ' + script)()();
-    }, script); // return await page.evaluate(async script=>{
-  }; // async evalScript(script) {
-}; // class Lib {
-
-
 /** Check or execute stuff in DOM */
-export class DOM extends Lib {
+export class DOM {
   /**
    * get config.yml and set global variables
    * @param {object} pptr - PPTR client & Page
@@ -28,8 +13,6 @@ export class DOM extends Lib {
     if (!pptr?.client || !pptr?.page) {
       throw new Error(`PPTR page/client was missing at Class DOM constructor`);
     } // if (!pptr?.client || !pptr?.page) {
-
-    super();
 
     this.client = pptr.client;
     this.page = pptr.page;
@@ -42,16 +25,15 @@ export class DOM extends Lib {
 
   /** create new tab and then check for empty url usertoken */
   async urlParameter() {
-    await this.page.exposeFunction('checkURLParameter', async script=>{
-      if (!script) throw new Error('Param script is missing urlParameter()');
+    await this.page.exposeFunction('checkURLParameter', async ()=>{
+      const page = await ctrlBot.openLinkNewTab(
+          this.client,
+          this.hostFull + '/?usertoken=',
+      ); // return await ctrlBot.openLinkNewTab(
 
-      return this.evalScript(
-          script,
-          await ctrlBot.openLinkNewTab(
-              this.client,
-              this.hostFull + '/?usertoken=',
-          ), // await ctrlBot.openLinkNewTab(
-      ); // this.evalScript(
+      const token = page.url().match( /usertoken=([a-z0-9]+)/gmi );
+      if (!token) return false;
+      return {'token': token[0].replace('usertoken=', '')};
     }); // await pptr.page.exposeFunction('checkURLParameter', async script=>{
   }; // async urlParameter() {
 
@@ -59,8 +41,6 @@ export class DOM extends Lib {
   /** Check if message was recieved at partner */
   async partnerMessage() {
     await this.page.exposeFunction('checkPartnerMessage', async ()=>{
-
-
       const newTab = await ctrlBot.openLinkNewTab(
           this.client,
           this.linkPartner,
@@ -77,4 +57,4 @@ export class DOM extends Lib {
       }, 'sample_message123');
     }); // await newTab.evaluate(msg=>{
   }; // async partnerMessage(pptr) {
-}; // class DOM extends Lib{
+}; // export class DOM {

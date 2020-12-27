@@ -1,6 +1,6 @@
 import * as web from '/js/web.mjs';
-import * as main from '/js/main.mjs';
 
+import ctrlWeb from '/js/controller/web.mjs';
 
 /** Lib methods */
 class Lib {
@@ -21,7 +21,7 @@ export class Room extends Lib {
     super();
     if (Room.instance == null) Room.instance = this;
 
-    this.clientDetails = web.getURLParams();
+    this.clientDetails = ctrlWeb.getUserToken();
 
     return Room.instance;
   }; // constructor(){

@@ -2,10 +2,11 @@ import * as web from '/js/web.mjs';
 import * as req from '/js/req.mjs';
 
 import ctrlSocket from '/js/controller/socket.mjs';
+import ctrlWeb from '/js/controller/web.mjs';
 
 
 $(()=>{(async ()=>{
-  const clientDetails = web.getURLParams();
+  const clientDetails = ctrlWeb.getUserToken();
 
   // POST request with User Token to get User Details Object
   const UserDetails = await req.getUserDetails(clientDetails.token);

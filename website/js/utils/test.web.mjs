@@ -1,5 +1,7 @@
 import * as web from '/js/web.mjs';
 
+import ctrlWeb from '/js/controller/web.mjs';
+
 let clientMe;
 let ChatPartner;
 let testRoom;
@@ -177,18 +179,18 @@ describe('web.js', ()=>{
   }); // describe('updateTimes()', ()=>{
 
 
-  describe('getURLParams()', ()=>{
-    it('Should return token from URL paramater', async ()=>{
-      expect(await web.getURLParams()).toEqual(
+  describe('getUserToken()', ()=>{
+    it('Should return token from URL paramater', ()=>{
+      expect(ctrlWeb.getUserToken()).toEqual(
           expect.objectContaining({token: expect.anything()}),
-      ); // expect(await web.getURLParams()).toEqual(
+      ); // expect(await web.getUserToken()).toEqual(
     }); // it('Should return token from URL paramater', async()=>{
 
 
     it('Simulate no user token paramater inside of URL found', async ()=>{
-      expect(await checkURLParameter(web.getURLParams.toString())).toBe(false);
+      expect(await checkURLParameter()).toBe(false);
     }).timeout(10000); // it('Should return token', async()=>{
-  }); // describe('getURLParams()', ()=>{
+  }); // describe('getUserToken()', ()=>{
 
 
   after(()=>{
