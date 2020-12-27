@@ -47,7 +47,7 @@ export class Msg {
     web.updateTimes(roomDetails, clientToken, AMPM, dateFull);
 
     // scroll to bottom of chat window
-    web.scrollBottom('.chat');
+    ctrlWeb.scrollBottom('.chat');
 
     return true;
   }; // sendMessage(clientToken, roomDetails, AMPM, dateFull){
@@ -71,7 +71,7 @@ export class Msg {
       );
 
       // scroll to bottom of chat window
-      web.scrollBottom('.chat');
+      ctrlWeb.scrollBottom('.chat');
     }); // socketIO.on('msg', (msg)=>{
   }; // socketMSG(){
 }; // export class Msg{

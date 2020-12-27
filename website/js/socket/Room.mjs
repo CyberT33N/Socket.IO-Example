@@ -65,7 +65,7 @@ export class Room extends Lib {
         } // for( const d of roomDetails.msg ){
 
         // scroll to bottom of chat window
-        web.scrollBottom('.chat');
+        ctrlWeb.scrollBottom('.chat');
       } // if(roomDetails?.msg){
     }); // socketIO.on('connectRoom result', (roomDetails)=>{
   }; // connectRoom() {

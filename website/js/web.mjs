@@ -1,9 +1,7 @@
 import * as req from '/js/req.mjs';
 
 
-export const scrollBottom = css=>{
-  document.querySelector(css).scrollTop = document.querySelector(css).scrollHeight;
-}; // export const scrollBottom = (css)=>{
+
 
 
 

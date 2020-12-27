@@ -189,7 +189,7 @@ describe('web.js', ()=>{
 
     it('Simulate no user token paramater inside of URL found', async ()=>{
       expect(await checkURLParameter()).toBe(false);
-    }).timeout(10000); // it('Should return token', async()=>{
+    }).timeout(10000); // it('Simulate no user token paramater', async ()=>{
   }); // describe('getUserToken()', ()=>{
 
 
