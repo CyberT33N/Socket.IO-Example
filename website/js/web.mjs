@@ -14,10 +14,7 @@ if(!roomDetails || !userToken ) return false;
 }; // export const getChatPartner = (roomDetails, userToken)=>{
 
 
-export const errorPage = e=>{
-  $('.wrapper').remove();
-  $('body').append(`<div class="error usertoken">Error: ${e}</div>`);
-}; // export const errorPage = (e)=>{
+
 
 export const addConversationStart = date=>{
   $('.right .top').after(`

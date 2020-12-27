@@ -10,7 +10,7 @@ $(()=>{(async ()=>{
 
   // POST request with User Token to get User Details Object
   const UserDetails = await req.getUserDetails(clientDetails.token);
-  if (!UserDetails?.data) return web.errorPage('Can not get User Data');
+  if (!UserDetails?.data) return ctrlWeb.errorPage('Can not get User Data');
 
 
   // set welcome back text to headline
@@ -19,7 +19,7 @@ $(()=>{(async ()=>{
 
   // load friends sidebar
   if (!await web.getFriends(UserDetails.data)) {
-    return web.errorPage('Can not get Friend List');
+    return ctrlWeb.errorPage('Can not get Friend List');
   } // if (!await web.getFriends(UserDetails.data)) {
 
 

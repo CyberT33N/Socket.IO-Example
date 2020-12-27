@@ -7,8 +7,12 @@ export default {
     return new Window().getUserToken();
   }, // getUserToken: ()=>{
 
+
   // ---- Lib ----
   scrollBottom: css=>{
     return new Lib().scrollBottom(css);
   }, // scrollBottom: css=>{
+  errorPage: e=>{
+    return new Lib().errorPage(e);
+  }, // errorPage: e=>{
 }; // export default {

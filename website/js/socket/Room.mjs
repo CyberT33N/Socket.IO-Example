@@ -35,7 +35,7 @@ export class Room extends Lib {
     socketIO.on('connectRoom result', roomDetails=>{
       if (!roomDetails) return false;
       if (roomDetails?.code) {
-        return web.errorPage(
+        return ctrlWeb.errorPage(
             `Can not connect to Room - Code: ${roomDetails.code}`,
         ); // return web.errorPage(
       } // if (roomDetails?.code) {
