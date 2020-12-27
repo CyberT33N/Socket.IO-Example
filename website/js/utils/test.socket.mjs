@@ -3,6 +3,8 @@ import * as web from '/js/web.mjs';
 
 /* ################ Controller ################ */
 import ctrlSocket from '/js/controller/socket.mjs';
+import ctrlWeb from '/js/controller/web.mjs';
+
 
 let clientMe;
 let clientPartner;
@@ -23,7 +25,7 @@ describe('socket.mjs', ()=>{
     testRoomDetails = d.testRoomDetails;
 
     AMPM = web.formatAMPM();
-    dateFull = web.formatDate() + ', ' + AMPM;
+    dateFull = ctrlWeb.formatDate() + ', ' + AMPM;
 
     done();
   })();}); // before(done=>{(async ()=>{

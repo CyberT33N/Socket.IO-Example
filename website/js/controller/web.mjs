@@ -15,4 +15,7 @@ export default {
   errorPage: e=>{
     return new Lib().errorPage(e);
   }, // errorPage: e=>{
+  formatDate: ()=>{
+    return new Lib().formatDate();
+  }, // formatDate: ()=>{
 }; // export default {

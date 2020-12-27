@@ -1,4 +1,5 @@
 import * as req from '/js/req.mjs';
+import ctrlWeb from '/js/controller/web.mjs';
 
 
 
@@ -105,7 +106,7 @@ if(client !== 'you' && client !== 'me' || !msg) return false;
 
   chatAnimations();
 
-  if( !$('.conversation-start').html() ) addConversationStart(`${formatDate()}, ${formatAMPM()}`);
+  if( !$('.conversation-start').html() ) addConversationStart(`${ctrlWeb.formatDate()}, ${formatAMPM()}`);
 
   $('.chat').append(`<div class="bubble ${client}">${msg}</div>`);
 
@@ -135,13 +136,6 @@ return true;
 
 
 
-export const formatDate = ()=>{ console.log('formatDate()');
-  var today = new Date();
-  var dd = String(today.getDate()).padStart(2, '0');
-  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-  var yyyy = today.getFullYear();
-  return mm + '/' + dd + '/' + yyyy;
-}; // export const formatDate = ()=>{
 
 
 export const formatAMPM = ()=>{ console.log('formatAMPM()');

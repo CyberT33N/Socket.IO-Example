@@ -67,7 +67,7 @@ export class Msg {
           ctrlSocket.getRoomDetails(),
           this.clientDetails.token,
           AMPM,
-          `${web.formatDate()}, ${AMPM}`,
+          `${ctrlWeb.formatDate()}, ${AMPM}`,
       );
 
       // scroll to bottom of chat window

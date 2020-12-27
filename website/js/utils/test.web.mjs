@@ -135,7 +135,7 @@ describe('web.js', ()=>{
 
   describe('formatDate()', ()=>{
     it('Should return mm/dd/yyyy', async ()=>{
-      const date = web.formatDate();
+      const date = ctrlWeb.formatDate();
       dateFull = date + ', ' + AMPM;
       expect( date ).toMatch(/\d\d\/\d\d\/\d\d\d\d/gmi);
     }); // it('Should return mm/dd/yyyy', async()=>{
