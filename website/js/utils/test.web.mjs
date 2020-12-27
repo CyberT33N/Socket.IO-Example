@@ -127,7 +127,7 @@ describe('web.js', ()=>{
 
   describe('formatAMPM()', ()=>{
     it('Should return xx:xx am/pm', async ()=>{
-      AMPM = web.formatAMPM();
+      AMPM = ctrlWeb.formatAMPM();
       expect(AMPM).toMatch(/([0-1]?[0-9]|2[0-3]):[0-5][0-9] (am|pm)/gmi);
     }); // it('Should return xx:xx am/pm', async()=>{
   }); // describe('formatAMPM()', ()=>{

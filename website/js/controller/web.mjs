@@ -18,4 +18,7 @@ export default {
   formatDate: ()=>{
     return new Lib().formatDate();
   }, // formatDate: ()=>{
+  formatAMPM: ()=>{
+    return new Lib().formatAMPM();
+  }, // formatAMPM: ()=>{
 }; // export default {

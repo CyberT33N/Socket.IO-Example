@@ -24,7 +24,7 @@ describe('socket.mjs', ()=>{
     const d = await details();
     testRoomDetails = d.testRoomDetails;
 
-    AMPM = web.formatAMPM();
+    AMPM = ctrlWeb.formatAMPM();
     dateFull = ctrlWeb.formatDate() + ', ' + AMPM;
 
     done();

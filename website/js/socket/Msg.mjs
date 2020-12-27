@@ -62,7 +62,7 @@ export class Msg {
       web.bubble(msg, 'you');
 
       // update times in chat APP
-      const AMPM = web.formatAMPM();
+      const AMPM = ctrlWeb.formatAMPM();
       web.updateTimes(
           ctrlSocket.getRoomDetails(),
           this.clientDetails.token,

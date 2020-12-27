@@ -29,7 +29,7 @@ $(()=>{(async ()=>{
 
   // start event for sending message
   $('.write-link.send').on('click', e=>{
-    const AMPM = web.formatAMPM();
+    const AMPM = ctrlWeb.formatAMPM();
     const dateFull = ctrlWeb.formatDate() + ', ' + AMPM;
     ctrlSocket.sendMessage(
         clientDetails.token,
