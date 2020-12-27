@@ -7,12 +7,7 @@ import ctrlWeb from '/js/controller/web.mjs';
 
 
 
-export const getChatPartner = (roomDetails, userToken)=>{
-if(!roomDetails || !userToken ) return false;
-  for( const d of roomDetails.user ){
-    if( userToken !== d.usertoken ) return d;
-  } // for( const d of roomDetails.user ){
-}; // export const getChatPartner = (roomDetails, userToken)=>{
+
 
 
 
@@ -148,7 +143,7 @@ if( !roomDetails?._id || !userToken || !AMPM || !dateFULL ) return false;
   $('.conversation-start span').text(dateFULL);
 
   // get chatpartner
-  const ChatPartner = getChatPartner(roomDetails, userToken);
+  const ChatPartner = ctrlWeb.getChatPartner(roomDetails, userToken);
   if(!ChatPartner) return false;
 
   // update time left sidebar

@@ -2,6 +2,7 @@ import * as web from '/js/web.mjs';
 
 import ctrlWeb from '/js/controller/web.mjs';
 
+
 let clientMe;
 let ChatPartner;
 let testRoom;
@@ -21,7 +22,7 @@ describe('web.js', ()=>{
     testRoomDetails = d.testRoomDetails;
     testUserDetails = d.testUserDetails;
 
-    ChatPartner = await web.getChatPartner(testRoomDetails, clientMe.token);
+    ChatPartner = await ctrlWeb.getChatPartner(testRoomDetails, clientMe.token);
 
     done();
   })();}); // before(done=>{
@@ -48,7 +49,7 @@ describe('web.js', ()=>{
 
 
     it('Simulate NPE - Should return false', async ()=>{
-      expect(await web.getChatPartner(null, clientMe.token)).toBe(false);
+      expect(await ctrlWeb.getChatPartner(null, clientMe.token)).toBe(false);
     }); // it('Simulate NPE - Should return false', async()=>{
   }); // describe('getChatPartner()', ()=>{
 
