@@ -12,14 +12,7 @@ import ctrlWeb from '/js/controller/web.mjs';
 
 
 
-export const addConversationStart = date=>{
-  $('.right .top').after(`
-  <div class="chat" data-active="true">
-    <div class="conversation-start">
-      <span>${date}</span>
-    </div>
-  </div>`);
-}; // export const addConversationStart = (date)=>{
+
 
 
 
@@ -46,7 +39,7 @@ if(client !== 'you' && client !== 'me' || !msg) return false;
 
   ctrlWeb.chatAnimations();
 
-  if( !$('.conversation-start').html() ) addConversationStart(`${ctrlWeb.formatDate()}, ${ctrlWeb.formatAMPM()}`);
+  if( !$('.conversation-start').html() ) ctrlWeb.addConversationStart(`${ctrlWeb.formatDate()}, ${ctrlWeb.formatAMPM()}`);
 
   $('.chat').append(`<div class="bubble ${client}">${msg}</div>`);
 

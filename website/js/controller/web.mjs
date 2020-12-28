@@ -1,16 +1,23 @@
 import {Window} from '/js/web/Window.mjs';
 import {Lib} from '/js/web/Lib.mjs';
 import {User} from '/js/web/User.mjs';
+import {Chat} from '/js/web/Chat.mjs';
 
 
 export default {
+  // ---- Chat ----
+  addConversationStart: date=>{
+    return new Chat().addConversationStart(date);
+  }, // addConversationStart: date=>{
+
+
   // ---- User ----
   getChatPartner: (roomDetails, userToken)=>{
     return new User().getChatPartner(roomDetails, userToken);
-  }, // getChatPartner: ()=>{
+  }, // etChatPartner: (roomDetails, userToken)=>{
   getFriends: async userDetails=>{
     return await new User().getFriends(userDetails);
-  }, // getFriends: ()=>{
+  }, // getFriends: async userDetails=>{
 
 
   // ---- Window ----

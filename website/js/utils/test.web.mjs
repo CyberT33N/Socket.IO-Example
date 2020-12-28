@@ -29,9 +29,9 @@ describe('web.js', ()=>{
 
 
   describe('addConversationStart()', ()=>{
-    it('Should find date at CSS Selector .conversation-start span', async ()=>{
+    it('Should find date at CSS Selector .conversation-start span', ()=>{
       const date = testRoomDetails?.msg?.slice(-1)[0]?.date;
-      await web.addConversationStart(date);
+      ctrlWeb.addConversationStart(date);
 
       expect(
           document.querySelector('.conversation-start span').textContent,

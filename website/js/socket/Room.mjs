@@ -54,7 +54,7 @@ export class Room extends Lib {
       if (roomDetails?.msg) {
         if (!$('.conversation-start').html()) {
           const date = `${roomDetails.msg?.slice(-1)[0]?.date}`; // ```
-          web.addConversationStart(date);
+          ctrlWeb.addConversationStart(date);
         } // if(!$('.conversation-start').html()) {
 
         // load chat animations
