@@ -35,39 +35,7 @@ export const addConversationStart = date=>{
 
 
 
-export const chatAnimations = ()=>{ //console.log('chatAnimations()');
-  document.querySelector('.chat[data-active="true"]')?.classList?.add('active-chat');
-  document.querySelector('.person[data-active="true"]')?.classList?.add('active');
 
-  let friends = {
-    list: document.querySelector('ul.people'),
-    all: document.querySelectorAll('.left .person'),
-    name: '' },
-
-  chat = {
-    container: document.querySelector('.container .right'),
-    current: null,
-    person: null,
-    name: document.querySelector('.container .right .top .name') };
-
-
-  friends.all.forEach(f=>{
-    f.addEventListener('mousedown', ()=>{
-      f?.classList?.contains('active') || setAciveChat(f);
-    });
-  });
-
-  function setAciveChat(f) {
-    friends.list?.querySelector('.active')?.classList.remove('active');
-    f.classList?.add('active');
-    chat.current = chat?.container?.querySelector('.active-chat');
-    chat.person = f?.getAttribute('data-user');
-    chat.current?.classList?.remove('active-chat');
-    chat.container?.querySelector('[data-user="' + chat.person + '"]')?.classList?.add('active-chat');
-    friends.name = f?.querySelector('.name')?.innerText;
-    chat.name.innerHTML = friends.name;
-  }
-}; // export const chatAnimations = ()=>{
 
 
 
@@ -76,7 +44,7 @@ export const chatAnimations = ()=>{ //console.log('chatAnimations()');
 export const bubble = (msg, client)=>{ //console.log( 'bubble() - client: ' + client + '\nmsg: ' + JSON.stringify(msg, null, 4) );
 if(client !== 'you' && client !== 'me' || !msg) return false;
 
-  chatAnimations();
+  ctrlWeb.chatAnimations();
 
   if( !$('.conversation-start').html() ) addConversationStart(`${ctrlWeb.formatDate()}, ${ctrlWeb.formatAMPM()}`);
 

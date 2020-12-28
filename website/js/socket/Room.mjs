@@ -44,7 +44,7 @@ export class Room extends Lib {
       this.roomDetails = roomDetails;
 
       // load chat animations
-      web.chatAnimations();
+      ctrlWeb.chatAnimations();
 
       // clear chat from DOM cause we are switching between friends
       $('.chat').remove();
@@ -57,7 +57,7 @@ export class Room extends Lib {
         } // if(!$('.conversation-start').html()) {
 
         // load chat animations
-        web.chatAnimations();
+        ctrlWeb.chatAnimations();
 
         for (const d of roomDetails.msg) {
           if (this.clientDetails.token == d.usertoken) web.bubble(d.msg, 'me');

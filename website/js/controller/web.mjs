@@ -32,4 +32,7 @@ export default {
   formatAMPM: ()=>{
     return new Lib().formatAMPM();
   }, // formatAMPM: ()=>{
+  chatAnimations: ()=>{
+    return new Lib().chatAnimations();
+  }, // chatAnimations: ()=>{
 }; // export default {
