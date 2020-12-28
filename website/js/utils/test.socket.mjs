@@ -94,7 +94,7 @@ describe('socket.mjs', ()=>{
   }); // describe('sendMessage()', ()=>{
 
 
-  describe('personClick()', ()=>{
+  describe('friendClick()', ()=>{
     it('Simulate click on first friend', async ()=> {
       const checkElement = async selector => {
         const css = document.querySelector(selector);
@@ -139,7 +139,7 @@ describe('socket.mjs', ()=>{
     it('Check listener "room connect" for getting the Room ID', async ()=>{
       expect(await listenerRoomConnect()).toBe(testRoom);
     }).timeout(20000); // it('Check listener "room connect"', async ()=>{
-  }); // describe('personClick()', ()=>{
+  }); // describe('friendClick()', ()=>{
 
 
   describe('socketMSG()', ()=>{

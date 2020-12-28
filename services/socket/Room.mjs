@@ -28,7 +28,7 @@ export class Room {
     * @param {object} socket - User socket
   */
   connectRoom(socket) {
-    socket.on('room connect', roomID=>{(async ()=>{
+    socket.on('room connect', async roomID=>{
       if ( !roomID ) return socket.emit('connectRoom result', {code: 'NPE'});
 
       const r = await ctrlMongoDB.getRoomDetails(roomID);
@@ -40,6 +40,6 @@ export class Room {
             {code: 'Can not find Room ID in Database'},
         ); // socket.emit(
       } // else {
-    })().catch((e)=>{log('connectRoom Error:' + e );});});
+    }); // socket.on('room connect', async roomID=>{
   }; // connectRoom(socket){
 }; // export class Room {

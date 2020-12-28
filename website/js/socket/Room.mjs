@@ -2,6 +2,7 @@ import * as web from '/js/web.mjs';
 
 import ctrlWeb from '/js/controller/web.mjs';
 
+
 /** Lib methods */
 class Lib {
   /**

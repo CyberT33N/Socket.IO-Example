@@ -13,8 +13,8 @@ export default {
 
 
   // ---- User ----
-  personClick: ()=>{
-    return new User().personClick();
+  friendClick: ()=>{
+    return new User().friendClick();
   },
 
 

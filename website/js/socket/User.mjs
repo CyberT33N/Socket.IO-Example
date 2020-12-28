@@ -1,19 +1,22 @@
 /** Sockets that are related to User */
 export class User {
   /** Catch click on friend in left sidebar, connect to room and change text */
-  personClick() {
-    $(document).on('click', '.person', function(event) {
-      const elem = event.target;
+  friendClick() {
+    const friends = document.querySelectorAll('.person');
+    friends.forEach(elem => elem.addEventListener('click', event => {
+      const friend = event.currentTarget;
 
       // connect to room
-      socketIO.emit('room connect', $(elem).attr('data-room'));
+      const roomID = friend.dataset.room;
+      socketIO.emit('room connect', roomID);
 
       // change header name
-      $('.top .name').text(elem.querySelector('.name').textContent);
+      const name = friend.querySelector('.name')?.textContent;
+      document.querySelector('.top .name').textContent = name;
 
       // mark current active person li as active and all other as inactive
-      $('.person').attr('data-active', 'false');
-      $(elem).attr('data-active', 'true');
-    }); // $(document).on('click', '.person', function(){
-  }; // personClick() {
+      friends.forEach(elem => elem.dataset.active = 'false');
+      friend.dataset.active = 'true';
+    })); // $(document).on('click', '.person', event=>{
+  }; // friendClick() {
 }; // export class User{

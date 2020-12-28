@@ -1,4 +1,3 @@
-import * as web from '/js/web.mjs';
 import * as req from '/js/req.mjs';
 
 import ctrlSocket from '/js/controller/socket.mjs';
@@ -24,7 +23,7 @@ $(()=>{(async ()=>{
 
 
   // start event to catch left sidebar contact choosing
-  ctrlSocket.personClick();
+  ctrlSocket.friendClick();
 
 
   // start event for sending message
