@@ -56,7 +56,7 @@ describe('web.js', ()=>{
 
   describe('getFriends()', ()=>{
     it('Should return object with key _id', async ()=>{
-      expect(await web.getFriends(testUserDetails)).toBe(true);
+      expect(await ctrlWeb.getFriends(testUserDetails)).toBe(true);
     }); // it('Should return object with key _id', async()=>{
 
 
@@ -68,7 +68,7 @@ describe('web.js', ()=>{
 
 
     it('Simulate NPE - Should return false', async ()=>{
-      expect( await web.getFriends(null) ).toBe(false);
+      expect( await ctrlWeb.getFriends(null) ).toBe(false);
     }); // it('Simulate NPE - Should return false', async()=>{
   }); // describe('getFriends()', ()=>{
 

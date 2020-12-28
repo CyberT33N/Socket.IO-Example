@@ -18,9 +18,9 @@ $(()=>{(async ()=>{
 
 
   // load friends sidebar
-  if (!await web.getFriends(UserDetails.data)) {
+  if (!await ctrlWeb.getFriends(UserDetails.data)) {
     return ctrlWeb.errorPage('Can not get Friend List');
-  } // if (!await web.getFriends(UserDetails.data)) {
+  } // if (!await ctrlWeb.getFriends(UserDetails.data)) {
 
 
   // start event to catch left sidebar contact choosing

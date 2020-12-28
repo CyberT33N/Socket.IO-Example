@@ -1,4 +1,4 @@
-import * as req from '/js/req.mjs';
+
 import ctrlWeb from '/js/controller/web.mjs';
 
 
@@ -29,29 +29,6 @@ export const addConversationStart = date=>{
 
 
 
-export const getFriends = async UserDetails=>{ console.log( 'getFriends()' );
-if(!UserDetails?.friends) return false;
-
-  for( const d of UserDetails.friends ){
-
-    const UserDetails = await req.getUserDetails(d.token);
-    //console.log( 'getFriends() - UserDetails: ' + JSON.stringify(UserDetails, null, 4) );
-
-    const roomDetails = await req.getRoomDetails(d.room);
-    //console.log( 'getFriends() - roomDetails: ' + JSON.stringify(roomDetails, null, 4) );
-
-    if( !UserDetails?.data?._id || !roomDetails?.data?._id ) return false;
-
-      $('.people').append(`
-      <li class="person" data-room="${d.room}" data-user="${d.token}" data-active="false">
-        <img src="img/female.webp" alt="" />
-        <span class="name">${UserDetails.data?.name}</span>
-        <span class="time">${roomDetails.data?.msg?.slice(-1)[0]?.date?.replace(/(\d+)\/(\d+)\/(\d+),/gmi, '') || ''}</span>
-        <span class="preview"></span>
-      </li> `); //```
-
-  } return true;
-} // export const getFriends = async (UserDetails)=>{ console.log( 'getFriends()' );
 
 
 

@@ -8,6 +8,9 @@ export default {
   getChatPartner: (roomDetails, userToken)=>{
     return new User().getChatPartner(roomDetails, userToken);
   }, // getChatPartner: ()=>{
+  getFriends: async userDetails=>{
+    return await new User().getFriends(userDetails);
+  }, // getFriends: ()=>{
 
 
   // ---- Window ----
