@@ -1,5 +1,3 @@
-import * as web from '/js/web.mjs';
-
 import ctrlWeb from '/js/controller/web.mjs';
 
 
@@ -144,9 +142,9 @@ describe('web.js', ()=>{
 
 
   describe('updateTimes()', ()=>{
-    it('Simulate successfully update times', async ()=>{
+    it('Simulate successfully update times', ()=>{
       expect(
-          await web.updateTimes(
+          ctrlWeb.updateTimes(
               testRoomDetails,
               testUserDetails,
               AMPM,
@@ -174,13 +172,13 @@ describe('web.js', ()=>{
     }).timeout(10000); // it(`Check for AMPM(${AMPM})`, ()=>{
 
 
-    it('Simulate NPE', async ()=>{
-      expect(await web.updateTimes(null, null)).toBe(false);
+    it('Simulate NPE', () => {
+      expect(ctrlWeb.updateTimes(null, null)).toBe(false);
     }); // it('Simulate NPE', async()=>{
   }); // describe('updateTimes()', ()=>{
 
 
-  describe('getUserToken()', ()=>{
+  describe('getUserToken()', () => {
     it('Should return token from URL paramater', ()=>{
       expect(ctrlWeb.getUserToken()).toEqual(
           expect.objectContaining({token: expect.anything()}),

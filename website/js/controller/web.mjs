@@ -17,7 +17,10 @@ export default {
   // ---- User ----
   getChatPartner: (roomDetails, userToken) => {
     return new User().getChatPartner(roomDetails, userToken);
-  }, // etChatPartner: (roomDetails, userToken)=>{
+  }, // getChatPartner: (roomDetails, userToken)=>{
+  updateTimes: (roomDetails, userToken, AMPM, dateFull) => {
+    return new User().updateTimes(roomDetails, userToken, AMPM, dateFull);
+  }, // updateTimes: (roomDetails, userToken, AMPM, dateFull)=>{
   getFriends: async userDetails => {
     return await new User().getFriends(userDetails);
   }, // getFriends: async userDetails=>{

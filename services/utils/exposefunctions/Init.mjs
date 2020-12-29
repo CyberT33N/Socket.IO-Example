@@ -10,7 +10,7 @@ class Funtions {
   }; // async config() {
 
 
-  /** website/js/web.mjs */
+  /** website/js/web */
   async web() {
     return await Promise.all([
       // Verify that partner recieve message

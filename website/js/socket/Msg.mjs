@@ -1,8 +1,6 @@
-import * as web from '/js/web.mjs';
-
-
 import ctrlSocket from '/js/controller/socket.mjs';
 import ctrlWeb from '/js/controller/web.mjs';
+
 
 /** Sockets that are related to messages */
 export class Msg {
@@ -44,7 +42,7 @@ export class Msg {
     ctrlWeb.bubble(msg, 'me');
 
     // update times in chat APP
-    web.updateTimes(roomDetails, clientToken, AMPM, dateFull);
+    ctrlWeb.updateTimes(roomDetails, clientToken, AMPM, dateFull);
 
     // scroll to bottom of chat window
     ctrlWeb.scrollBottom('.chat');
@@ -63,7 +61,7 @@ export class Msg {
 
       // update times in chat APP
       const AMPM = ctrlWeb.formatAMPM();
-      web.updateTimes(
+      ctrlWeb.updateTimes(
           ctrlSocket.getRoomDetails(),
           this.clientDetails.token,
           AMPM,

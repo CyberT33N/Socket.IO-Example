@@ -53,4 +53,33 @@ export class User {
 
     return true;
   }; // async getFriends(userDetails) {
+
+
+  /**
+   * update times of chat partner from side bar
+   * @param {object} roomDetails - Details of the room
+   * @param {string} userToken - Auth url token
+   * @param {string} AMPM - time am/pm only
+   * @param {string} dateFull - full date with am/pm
+   * @return {boolean}
+  */
+  updateTimes(roomDetails, userToken, AMPM, dateFull) {
+    if (!roomDetails?._id || !userToken || !AMPM || !dateFull) return false;
+
+    // update time header
+    $('.conversation-start span').text(dateFull);
+
+    // get chatpartner
+    const ChatPartner = this.getChatPartner(roomDetails, userToken);
+    if (!ChatPartner) return false;
+
+    // update time left sidebar
+    for (const d of document.querySelectorAll('.people li')) {
+      if ($(d).attr('data-user') == ChatPartner.usertoken) {
+        $(d).find('.time').text(AMPM);
+      } // if ($(d).attr('data-user') == ChatPartner.usertoken) {
+    } // for (const d of document.querySelectorAll('.people li')) {
+
+    return true;
+  }; // updateTimes(roomDetails, userToken, AMPM, dateFull) {
 }; // export class User{

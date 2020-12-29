@@ -1,6 +1,3 @@
-/* ################ Services ################ */
-import * as web from '/js/web.mjs';
-
 /* ################ Controller ################ */
 import ctrlSocket from '/js/controller/socket.mjs';
 import ctrlWeb from '/js/controller/web.mjs';
