@@ -1,3 +1,6 @@
+import ctrlWeb from '/js/controller/web.mjs';
+
+
 /** stuff that is related to the chat */
 export class Chat {
   /**
@@ -13,4 +16,27 @@ export class Chat {
       </div>
     `); // $('.right .top').after(`
   }; // addConversationStart(date) {
+
+
+  /**
+   * add chat header that with date details
+   * @param {string} msg - message
+   * @param {string} client - client or partner
+   * @return {boolean}
+  */
+  bubble(msg, client) {
+    if (client !== 'you' && client !== 'me' || !msg) return false;
+
+    ctrlWeb.chatAnimations();
+
+    if (!$('.conversation-start').html()) {
+      ctrlWeb.addConversationStart(
+          `${ctrlWeb.formatDate()}, ${ctrlWeb.formatAMPM()}`,
+      ); // ctrlWeb.addConversationStart(
+    } // if (!$('.conversation-start').html()) {
+
+    $('.chat').append(`<div class="bubble ${client}">${msg}</div>`);
+
+    return true;
+  }; // bubble(msg, client) {
 }; // export class Chat{

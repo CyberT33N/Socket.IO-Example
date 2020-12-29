@@ -41,7 +41,7 @@ export class Msg {
     });
 
     // send text to chat
-    web.bubble(msg, 'me');
+    ctrlWeb.bubble(msg, 'me');
 
     // update times in chat APP
     web.updateTimes(roomDetails, clientToken, AMPM, dateFull);
@@ -59,7 +59,7 @@ export class Msg {
       if (msg?.code || !msg) return false;
 
       // import messages from chat partner to chat
-      web.bubble(msg, 'you');
+      ctrlWeb.bubble(msg, 'you');
 
       // update times in chat APP
       const AMPM = ctrlWeb.formatAMPM();

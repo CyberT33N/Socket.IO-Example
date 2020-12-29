@@ -61,8 +61,9 @@ export class Room extends Lib {
         ctrlWeb.chatAnimations();
 
         for (const d of roomDetails.msg) {
-          if (this.clientDetails.token == d.usertoken) web.bubble(d.msg, 'me');
-          else web.bubble(d.msg, 'you');
+          if (this.clientDetails.token == d.usertoken) {
+            ctrlWeb.bubble(d.msg, 'me');
+          } else ctrlWeb.bubble(d.msg, 'you');
         } // for( const d of roomDetails.msg ){
 
         // scroll to bottom of chat window

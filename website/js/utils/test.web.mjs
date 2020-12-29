@@ -74,18 +74,18 @@ describe('web.js', ()=>{
 
 
   describe('bubble()', ()=>{
-    it('Simulate message NPE', async ()=>{
-      expect(await web.bubble(null, 'you')).toBe(false);
-    }); // it('Simulate message NPE', async ()=>{
+    it('Simulate message NPE', ()=>{
+      expect(ctrlWeb.bubble(null, 'you')).toBe(false);
+    }); // it('Simulate message NPE', ()=>{
 
 
-    it('Simulate wrong client', async ()=>{
-      expect(await web.bubble('sample message', 'wrong_data')).toBe(false);
-    }); // it('Simulate wrong client', async()=>{
+    it('Simulate wrong client', ()=>{
+      expect(ctrlWeb.bubble('sample message', 'wrong_data')).toBe(false);
+    }); // it('Simulate wrong client', ()=>{
 
 
-    it('Simulate client message', async ()=>{
-      expect(await web.bubble('sample message', 'me')).toBe(true);
+    it('Simulate client message', ()=>{
+      expect(ctrlWeb.bubble('sample message', 'me')).toBe(true);
     }); // it('Simulate client message', async()=>{
 
 
@@ -102,8 +102,8 @@ describe('web.js', ()=>{
     }); // it(`Search for CSS Selector .bubble.me`, async()=>{
 
 
-    it('Simulate partner message', async ()=>{
-      expect( await web.bubble('sample message', 'you') ).toBe(true);
+    it('Simulate partner message', ()=>{
+      expect(ctrlWeb.bubble('sample message', 'you')).toBe(true);
     }); // it('Simulate partner message', async()=>{
 
 

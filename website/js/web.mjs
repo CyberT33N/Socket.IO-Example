@@ -34,17 +34,7 @@ import ctrlWeb from '/js/controller/web.mjs';
 
 
 
-export const bubble = (msg, client)=>{ //console.log( 'bubble() - client: ' + client + '\nmsg: ' + JSON.stringify(msg, null, 4) );
-if(client !== 'you' && client !== 'me' || !msg) return false;
 
-  ctrlWeb.chatAnimations();
-
-  if( !$('.conversation-start').html() ) ctrlWeb.addConversationStart(`${ctrlWeb.formatDate()}, ${ctrlWeb.formatAMPM()}`);
-
-  $('.chat').append(`<div class="bubble ${client}">${msg}</div>`);
-
-return true;
-}; // export const bubble = (msg, client)=>{
 
 
 
